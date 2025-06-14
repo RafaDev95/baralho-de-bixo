@@ -1,0 +1,16 @@
+import configureOpenApi from '@/lib/configure-openapi';
+import createApp from '@/lib/create-app';
+import index from '@/routes/index.route';
+import cards from '@/routes/cards';
+const app = createApp();
+
+const routes = [index, cards] as const;
+
+configureOpenApi(app);
+routes.forEach((route) => {
+  app.route('/', route);
+});
+
+export type AppType = (typeof routes)[number];
+
+export default app;

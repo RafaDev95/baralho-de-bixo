@@ -1,0 +1,31 @@
+services:
+  db:
+    container_name: baralho-de-bixo-db
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - ${DATABASE_PORT}:5432
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      target: development # Explicitly specify development target
+    container_name: baralho-de-bixo-api
+    depends_on:
+      - db
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - .:/usr/src/app # Mount current directory for live reloading
+      - /usr/src/app/node_modules # Preserve node_modules volume
+    environment:
+      - DATABASE_URL=postgresql://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@db:5432/${DATABASE_NAME}
+    command: pnpm dev
+
+volumes:
+  postgres_data:
