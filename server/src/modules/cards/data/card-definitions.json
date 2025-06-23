@@ -1,0 +1,542 @@
+{
+	"cards": [
+		{
+			"name": "Flame Imp",
+			"rarity": "common",
+			"attribute": "fire",
+			"description": "A small but aggressive imp that deals 2 damage when played",
+			"manaCost": { "fire": 1, "generic": 0 },
+			"power": 2,
+			"health": 1,
+			"abilities": [
+				{
+					"name": "Quick Strike",
+					"description": "When played, deal 2 damage to target player",
+					"trigger": "on_enter_battlefield",
+					"effect": {
+						"type": "damage",
+						"target": "player",
+						"value": 2
+					}
+				}
+			]
+		},
+		{
+			"name": "Fire Elemental",
+			"rarity": "uncommon",
+			"attribute": "fire",
+			"description": "A powerful elemental that deals 1 damage to all enemies when played",
+			"manaCost": { "fire": 2, "generic": 1 },
+			"power": 3,
+			"health": 3,
+			"abilities": [
+				{
+					"name": "Burning Presence",
+					"description": "When played, deal 1 damage to all enemy creatures",
+					"trigger": "on_enter_battlefield",
+					"effect": {
+						"type": "damage",
+						"target": "all_enemy_creatures",
+						"value": 1
+					}
+				}
+			]
+		},
+		{
+			"name": "Dragon Hatchling",
+			"rarity": "rare",
+			"attribute": "fire",
+			"description": "Grows stronger each turn, gaining +1/+1",
+			"manaCost": { "fire": 1, "generic": 1 },
+			"power": 1,
+			"health": 1,
+			"abilities": [
+				{
+					"name": "Growth",
+					"description": "At the beginning of your turn, this creature gets +1/+1",
+					"trigger": "on_turn_start",
+					"effect": {
+						"type": "modify_stats",
+						"power": 1,
+						"health": 1
+					}
+				}
+			]
+		},
+		{
+			"name": "Fireball",
+			"rarity": "common",
+			"attribute": "fire",
+			"description": "Deal 3 damage to target creature or player",
+			"manaCost": { "fire": 1, "generic": 2 },
+			"type": "spell",
+			"effect": {
+				"type": "damage",
+				"target": "any",
+				"value": 3
+			}
+		},
+		{
+			"name": "Inferno",
+			"rarity": "epic",
+			"attribute": "fire",
+			"description": "Deal 5 damage to all creatures and players",
+			"manaCost": { "fire": 3, "generic": 2 },
+			"type": "spell",
+			"effect": {
+				"type": "damage",
+				"target": "all",
+				"value": 5
+			}
+		},
+		{
+			"name": "Flame Shield",
+			"rarity": "uncommon",
+			"attribute": "fire",
+			"description": "Give a creature +2/+0 and 'Deal 1 damage to attacker when blocked'",
+			"manaCost": { "fire": 1, "generic": 1 },
+			"type": "spell",
+			"effect": {
+				"type": "modify_creature",
+				"power": 2,
+				"health": 0,
+				"abilities": [
+					{
+						"name": "Counter Strike",
+						"description": "Deal 1 damage to attacker when blocked",
+						"trigger": "on_blocked",
+						"effect": {
+							"type": "damage",
+							"target": "attacker",
+							"value": 1
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "Water Sprite",
+			"rarity": "common",
+			"attribute": "water",
+			"description": "Can return to hand when targeted",
+			"manaCost": { "water": 1, "generic": 0 },
+			"power": 1,
+			"health": 2,
+			"abilities": [
+				{
+					"name": "Evasive",
+					"description": "When targeted by a spell or ability, return this creature to your hand",
+					"trigger": "on_targeted",
+					"effect": {
+						"type": "return_to_hand"
+					}
+				}
+			]
+		},
+		{
+			"name": "Tidal Guardian",
+			"rarity": "uncommon",
+			"attribute": "water",
+			"description": "Can block an additional creature each turn",
+			"manaCost": { "water": 2, "generic": 1 },
+			"power": 2,
+			"health": 4,
+			"abilities": [
+				{
+					"name": "Multiple Block",
+					"description": "This creature can block an additional creature each turn",
+					"trigger": "on_block",
+					"effect": {
+						"type": "additional_block"
+					}
+				}
+			]
+		},
+		{
+			"name": "Leviathan",
+			"rarity": "epic",
+			"attribute": "water",
+			"description": "Can't be blocked by creatures with power 2 or less",
+			"manaCost": { "water": 3, "generic": 2 },
+			"power": 5,
+			"health": 5,
+			"abilities": [
+				{
+					"name": "Intimidating Presence",
+					"description": "This creature can't be blocked by creatures with power 2 or less",
+					"trigger": "on_block",
+					"effect": {
+						"type": "block_restriction",
+						"condition": "power_greater_than_2"
+					}
+				}
+			]
+		},
+		{
+			"name": "Tidal Wave",
+			"rarity": "common",
+			"attribute": "water",
+			"description": "Return target creature to its owner's hand",
+			"manaCost": { "water": 1, "generic": 1 },
+			"type": "spell",
+			"effect": {
+				"type": "return_to_hand",
+				"target": "creature"
+			}
+		},
+		{
+			"name": "Tsunami",
+			"rarity": "rare",
+			"attribute": "water",
+			"description": "Return all creatures to their owners' hands",
+			"manaCost": { "water": 2, "generic": 2 },
+			"type": "spell",
+			"effect": {
+				"type": "return_to_hand",
+				"target": "all_creatures"
+			}
+		},
+		{
+			"name": "Water Shield",
+			"rarity": "uncommon",
+			"attribute": "water",
+			"description": "Prevent all damage to target creature this turn",
+			"manaCost": { "water": 1, "generic": 1 },
+			"type": "spell",
+			"effect": {
+				"type": "prevent_damage",
+				"target": "creature",
+				"duration": "until_end_of_turn"
+			}
+		},
+		{
+			"name": "Wind Sprite",
+			"rarity": "common",
+			"attribute": "wind",
+			"description": "Can't be blocked by creatures with power 3 or greater",
+			"manaCost": { "wind": 1, "generic": 0 },
+			"power": 1,
+			"health": 1,
+			"abilities": [
+				{
+					"name": "Elusive",
+					"description": "This creature can't be blocked by creatures with power 3 or greater",
+					"trigger": "on_block",
+					"effect": {
+						"type": "block_restriction",
+						"condition": "power_less_than_3"
+					}
+				}
+			]
+		},
+		{
+			"name": "Storm Caller",
+			"rarity": "uncommon",
+			"attribute": "wind",
+			"description": "When played, draw a card",
+			"manaCost": { "wind": 1, "generic": 1 },
+			"power": 2,
+			"health": 2,
+			"abilities": [
+				{
+					"name": "Wind's Favor",
+					"description": "When played, draw a card",
+					"trigger": "on_enter_battlefield",
+					"effect": {
+						"type": "draw_cards",
+						"value": 1
+					}
+				}
+			]
+		},
+		{
+			"name": "Thunder Bird",
+			"rarity": "rare",
+			"attribute": "wind",
+			"description": "Can attack twice each turn",
+			"manaCost": { "wind": 2, "generic": 1 },
+			"power": 3,
+			"health": 2,
+			"abilities": [
+				{
+					"name": "Double Strike",
+					"description": "This creature can attack twice each turn",
+					"trigger": "on_attack",
+					"effect": {
+						"type": "additional_attack"
+					}
+				}
+			]
+		},
+		{
+			"name": "Gust",
+			"rarity": "common",
+			"attribute": "wind",
+			"description": "Return target creature to the top of its owner's library",
+			"manaCost": { "wind": 1, "generic": 1 },
+			"type": "spell",
+			"effect": {
+				"type": "return_to_library",
+				"target": "creature",
+				"position": "top"
+			}
+		},
+		{
+			"name": "Cyclone",
+			"rarity": "rare",
+			"attribute": "wind",
+			"description": "Shuffle all creatures into their owners' libraries",
+			"manaCost": { "wind": 2, "generic": 2 },
+			"type": "spell",
+			"effect": {
+				"type": "shuffle_into_library",
+				"target": "all_creatures"
+			}
+		},
+		{
+			"name": "Wind Walk",
+			"rarity": "uncommon",
+			"attribute": "wind",
+			"description": "Target creature can't be blocked this turn",
+			"manaCost": { "wind": 1, "generic": 1 },
+			"type": "spell",
+			"effect": {
+				"type": "unblockable",
+				"target": "creature",
+				"duration": "until_end_of_turn"
+			}
+		},
+		{
+			"name": "Eternal Flame",
+			"rarity": "rare",
+			"attribute": "fire",
+			"description": "At the start of your turn, deal 1 damage to each player",
+			"manaCost": { "fire": 2, "generic": 1 },
+			"type": "enchantment",
+			"abilities": [
+				{
+					"name": "Burning Cycle",
+					"description": "At the start of your turn, deal 1 damage to each player",
+					"trigger": "on_turn_start",
+					"effect": {
+						"type": "damage",
+						"target": "all_players",
+						"value": 1
+					}
+				}
+			]
+		},
+		{
+			"name": "Ocean's Blessing",
+			"rarity": "rare",
+			"attribute": "water",
+			"description": "Your creatures get +0/+1",
+			"manaCost": { "water": 2, "generic": 1 },
+			"type": "enchantment",
+			"abilities": [
+				{
+					"name": "Tidal Protection",
+					"description": "Your creatures get +0/+1",
+					"trigger": "static",
+					"effect": {
+						"type": "modify_stats",
+						"target": "your_creatures",
+						"health": 1
+					}
+				}
+			]
+		},
+		{
+			"name": "Wind's Guidance",
+			"rarity": "rare",
+			"attribute": "wind",
+			"description": "Draw an additional card each turn",
+			"manaCost": { "wind": 2, "generic": 1 },
+			"type": "enchantment",
+			"abilities": [
+				{
+					"name": "Wind's Favor",
+					"description": "Draw an additional card each turn",
+					"trigger": "on_turn_start",
+					"effect": {
+						"type": "draw_cards",
+						"value": 1
+					}
+				}
+			]
+		},
+		{
+			"name": "Flame Sword",
+			"rarity": "uncommon",
+			"attribute": "fire",
+			"description": "Equipped creature gets +2/+0 and deals 1 damage to target creature when it attacks",
+			"manaCost": { "fire": 1, "generic": 1 },
+			"type": "artifact",
+			"abilities": [
+				{
+					"name": "Flame Strike",
+					"description": "When equipped creature attacks, deal 1 damage to target creature",
+					"trigger": "on_attack",
+					"effect": {
+						"type": "damage",
+						"target": "creature",
+						"value": 1
+					}
+				}
+			],
+			"equipEffect": {
+				"power": 2,
+				"health": 0
+			}
+		},
+		{
+			"name": "Water Amulet",
+			"rarity": "uncommon",
+			"attribute": "water",
+			"description": "Equipped creature gets +0/+2 and can't be targeted by spells",
+			"manaCost": { "water": 1, "generic": 1 },
+			"type": "artifact",
+			"abilities": [
+				{
+					"name": "Spell Ward",
+					"description": "Equipped creature can't be targeted by spells",
+					"trigger": "static",
+					"effect": {
+						"type": "spell_immunity"
+					}
+				}
+			],
+			"equipEffect": {
+				"power": 0,
+				"health": 2
+			}
+		},
+		{
+			"name": "Wind Boots",
+			"rarity": "uncommon",
+			"attribute": "wind",
+			"description": "Equipped creature can't be blocked",
+			"manaCost": { "wind": 1, "generic": 1 },
+			"type": "artifact",
+			"abilities": [
+				{
+					"name": "Wind Walk",
+					"description": "Equipped creature can't be blocked",
+					"trigger": "static",
+					"effect": {
+						"type": "unblockable"
+					}
+				}
+			]
+		},
+		{
+			"name": "Firestorm Phoenix",
+			"rarity": "epic",
+			"attribute": "fire",
+			"description": "When this creature dies, return it to your hand",
+			"manaCost": { "fire": 2, "generic": 2 },
+			"power": 4,
+			"health": 3,
+			"abilities": [
+				{
+					"name": "Rebirth",
+					"description": "When this creature dies, return it to your hand",
+					"trigger": "on_death",
+					"effect": {
+						"type": "return_to_hand"
+					}
+				}
+			]
+		},
+		{
+			"name": "Tidal Dragon",
+			"rarity": "epic",
+			"attribute": "water",
+			"description": "Can't be blocked by creatures with power less than 3",
+			"manaCost": { "water": 3, "generic": 1 },
+			"power": 4,
+			"health": 4,
+			"abilities": [
+				{
+					"name": "Tidal Force",
+					"description": "This creature can't be blocked by creatures with power less than 3",
+					"trigger": "on_block",
+					"effect": {
+						"type": "block_restriction",
+						"condition": "power_greater_than_3"
+					}
+				}
+			]
+		},
+		{
+			"name": "Storm Elemental",
+			"rarity": "epic",
+			"attribute": "wind",
+			"description": "Can attack the turn it comes into play",
+			"manaCost": { "wind": 2, "generic": 2 },
+			"power": 3,
+			"health": 3,
+			"abilities": [
+				{
+					"name": "Haste",
+					"description": "This creature can attack the turn it comes into play",
+					"trigger": "static",
+					"effect": {
+						"type": "haste"
+					}
+				}
+			]
+		},
+		{
+			"name": "Elemental Fusion",
+			"rarity": "epic",
+			"attribute": "fire",
+			"description": "Combine two creatures into one with combined power and health",
+			"manaCost": { "fire": 2, "generic": 2 },
+			"type": "spell",
+			"effect": {
+				"type": "fuse_creatures",
+				"target": "two_creatures"
+			}
+		},
+		{
+			"name": "Master of Elements",
+			"rarity": "epic",
+			"attribute": "water",
+			"description": "Can use abilities from any attribute",
+			"manaCost": { "water": 3, "generic": 2 },
+			"power": 5,
+			"health": 5,
+			"abilities": [
+				{
+					"name": "Elemental Mastery",
+					"description": "This creature can use abilities from any attribute",
+					"trigger": "static",
+					"effect": {
+						"type": "attribute_versatility"
+					}
+				}
+			]
+		},
+		{
+			"name": "Elemental Nexus",
+			"rarity": "epic",
+			"attribute": "wind",
+			"description": "Your spells cost 1 less to cast",
+			"manaCost": { "wind": 2, "generic": 2 },
+			"type": "enchantment",
+			"abilities": [
+				{
+					"name": "Cost Reduction",
+					"description": "Your spells cost 1 less to cast",
+					"trigger": "static",
+					"effect": {
+						"type": "reduce_cost",
+						"value": 1,
+						"target": "your_spells"
+					}
+				}
+			]
+		}
+	]
+}

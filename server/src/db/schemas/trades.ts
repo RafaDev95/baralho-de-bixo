@@ -13,16 +13,16 @@ import type { z } from "zod";
 
 export const tradesTable = pgTable("trades", {
 	id: serial("id").primaryKey(),
-	seller_id: integer("seller_id"),
-	buyer_id: integer("buyer_id"),
-	card_id: integer("card_id"),
+	sellerId: integer("seller_id"),
+	buyerId: integer("buyer_id"),
+	cardId: integer("card_id"),
 	price: integer("price").notNull(),
 	status: varchar("status", { length: 50 }).notNull().default("open"),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp({ mode: "date", precision: 3 }).$onUpdate(
 		() => new Date(),
 	),
-	completedAt: timestamp("completed_at"),
+	completedAt: timestamp({ mode: "date", precision: 3 }),
 });
 
 export const tradesSchema = createSelectSchema(tradesTable);
@@ -35,15 +35,15 @@ export const insertTradeSchema = createInsertSchema(tradesTable).omit({
 
 export const tradesRelations = relations(tradesTable, ({ one }) => ({
 	seller: one(playersTable, {
-		fields: [tradesTable.seller_id],
+		fields: [tradesTable.sellerId],
 		references: [playersTable.id],
 	}),
 	buyer: one(playersTable, {
-		fields: [tradesTable.buyer_id],
+		fields: [tradesTable.buyerId],
 		references: [playersTable.id],
 	}),
 	card: one(cardsTable, {
-		fields: [tradesTable.card_id],
+		fields: [tradesTable.cardId],
 		references: [cardsTable.id],
 	}),
 }));
