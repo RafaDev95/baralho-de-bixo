@@ -4,13 +4,13 @@ import { CardFactoryCreator, type CardFactoryData } from "./cards-factory";
 import type { CardBase, CardAbility, CardEffect, ManaCost } from "./types";
 import type { CardType, CardRarity, CardAttribute } from "@/db/schemas";
 
-interface CardDefinition {
+export interface CardDefinition {
 	name: string;
 	rarity: CardRarity;
 	attribute: CardAttribute;
 	description: string;
 	manaCost: ManaCost;
-	type?: CardType;
+	type: CardType;
 	power?: number;
 	health?: number;
 	abilities?: CardAbility[];
@@ -53,12 +53,8 @@ export class CardLoader {
 		}
 	}
 
-	public loadAllCards(): CardBase[] {
-		return this.cardDefinitions.map((def) => this.createCard(def));
-	}
-
 	private createCard(definition: CardDefinition): CardBase {
-		const cardType = definition.type || this.determineCardType(definition);
+		const cardType = definition.type;
 		const baseCardData = {
 			id: this.nextId++,
 			name: definition.name,
@@ -69,6 +65,7 @@ export class CardLoader {
 		};
 
 		let cardData: CardFactoryData;
+		// Dar uma olhada em strategy parttern
 		switch (cardType) {
 			case "creature":
 				if (!definition.power || !definition.health) {
@@ -127,20 +124,7 @@ export class CardLoader {
 		return factory.create();
 	}
 
-	private determineCardType(definition: CardDefinition): CardType {
-		if (definition.power !== undefined && definition.health !== undefined) {
-			return "creature";
-		}
-		if (definition.effect) {
-			if (definition.equipEffect) {
-				return "artifact";
-			}
-			return "spell";
-		}
-		throw new Error(`Could not determine card type for ${definition.name}`);
+	public loadAllCards(): CardBase[] {
+		return this.cardDefinitions.map((def) => this.createCard(def));
 	}
 }
-
-// Example usage:
-// const cardLoader = CardLoader.getInstance();
-// const allCards = cardLoader.loadAllCards();

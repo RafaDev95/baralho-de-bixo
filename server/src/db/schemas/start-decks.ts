@@ -27,8 +27,8 @@ export const starterDecksTable = pgTable("starter_decks", {
 	id: serial("id").primaryKey(),
 	name: text("name").notNull(),
 	description: text("description").notNull(),
-	strategy_type: strategyTypeEnum(),
-	difficulty_level: difficultyLevelEnum(),
+	strategyType: strategyTypeEnum(),
+	difficultyLevel: difficultyLevelEnum(),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp({ mode: "date", precision: 3 }).$onUpdate(
 		() => new Date(),
@@ -37,10 +37,10 @@ export const starterDecksTable = pgTable("starter_decks", {
 
 export const starterDeckCardsTable = pgTable("starter_deck_cards", {
 	id: serial("id").primaryKey(),
-	starter_deck_id: integer("starter_deck_id").notNull(),
-	card_id: integer("card_id").notNull(),
+	starterDeckId: integer("starter_deck_id").notNull(),
+	cardId: integer("card_id").notNull(),
 	quantity: integer("quantity").notNull().default(1),
-	createdAt: timestamp("created_at").notNull().defaultNow(),
+	createdAt: timestamp("created_aAt").notNull().defaultNow(),
 });
 
 // Relations
@@ -55,11 +55,11 @@ export const starterDeckCardsRelations = relations(
 	starterDeckCardsTable,
 	({ one }) => ({
 		starterDeck: one(starterDecksTable, {
-			fields: [starterDeckCardsTable.starter_deck_id],
+			fields: [starterDeckCardsTable.starterDeckId],
 			references: [starterDecksTable.id],
 		}),
 		card: one(cardsTable, {
-			fields: [starterDeckCardsTable.card_id],
+			fields: [starterDeckCardsTable.cardId],
 			references: [cardsTable.id],
 		}),
 	}),

@@ -7,6 +7,7 @@ import cards from "@/modules/cards";
 import decks from "@/modules/decks";
 import players from "@/modules/players";
 import trades from "@/modules/trades";
+import auth from "@/modules/auth";
 
 const router = createRouter()
 	.openapi(
@@ -33,6 +34,7 @@ const router = createRouter()
 	.route("/", cards)
 	.route("/", decks)
 	.route("/", players)
-	.route("/", trades);
+	.route("/", trades)
+	.route("/auth", auth);
 
 export default router;

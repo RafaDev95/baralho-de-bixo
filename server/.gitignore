@@ -2,3 +2,4 @@ node_modules
 .dist
 .build
 pg_data
+.env

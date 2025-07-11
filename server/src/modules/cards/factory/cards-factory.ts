@@ -120,6 +120,7 @@ export class ArtifactCardFactory extends CardFactory {
 
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class CardFactoryCreator {
+	// Strategy pattern
 	static createFactory(type: CardType, cardData: CardFactoryData): CardFactory {
 		switch (type) {
 			case CardFactoryType.CREATURE:

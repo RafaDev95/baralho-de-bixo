@@ -3,3 +3,5 @@ export * from "./players";
 export * from "./decks";
 export * from "./deck-cards";
 export * from "./trades";
+export * from "./auth-challenges";
+export * from "./enums";

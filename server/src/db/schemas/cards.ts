@@ -4,7 +4,6 @@ import {
 	serial,
 	text,
 	timestamp,
-	pgEnum,
 	integer,
 	boolean,
 	jsonb,
@@ -15,29 +14,7 @@ import type { z } from "zod";
 import { deckCards } from "./deck-cards";
 import { tradesTable } from "./trades";
 import { cardPositionsTable, stackTable } from "./games";
-import { attachmentsTable } from "./attachmentsTable";
-
-export const attributeEnum = pgEnum("attribute", ["fire", "water", "wind"]);
-export const typeEnum = pgEnum("type", [
-	"creature",
-	"spell",
-	"enchantment",
-	"artifact",
-]);
-export const rarityEnum = pgEnum("rarity", [
-	"common",
-	"uncommon",
-	"rare",
-	"epic",
-]);
-export const cardZoneEnum = pgEnum("card_zone", [
-	"library",
-	"hand",
-	"battlefield",
-	"graveyard",
-	"exile",
-	"stack",
-]);
+import { attributeEnum, typeEnum, rarityEnum } from "./enums";
 
 export const cardsTable = pgTable("cards", {
 	id: serial("id").primaryKey(),
@@ -48,14 +25,14 @@ export const cardsTable = pgTable("cards", {
 	attributes: attributeEnum().notNull(),
 	power: integer("power"),
 	health: integer("health"),
-	mana_cost: jsonb("mana_cost").notNull(), // Store as {fire: 1, water: 0, wind: 0, generic: 2}
+	manaCost: jsonb("mana_cost").notNull(), // Store as {fire: 1, water: 0, wind: 0, generic: 2}
 	abilities: jsonb("abilities"), // Store card abilities
 	isLegendary: boolean("is_legendary").default(false),
 	isToken: boolean("is_token").default(false),
 	// Add fields for creature-specific properties
-	can_attack: boolean("can_attack").default(true),
-	can_block: boolean("can_block").default(true),
-	has_summoning_sickness: boolean("has_summoning_sickness").default(true),
+	canAttack: boolean("can_attack").default(true),
+	canBlock: boolean("can_block").default(true),
+	hasSummoningSickness: boolean("has_summoning_sickness").default(true),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp({ mode: "date", precision: 3 }).$onUpdate(
 		() => new Date(),
@@ -69,8 +46,8 @@ export const cardCountersTable = pgTable("card_counters", {
 	cardId: integer("card_id").notNull(),
 	counter_type: text("counter_type").notNull(),
 	amount: integer("amount").notNull(),
-	createdAt: timestamp("created_at").notNull().defaultNow(),
-	updatedAt: timestamp({ mode: "date", precision: 3 }).$onUpdate(
+	created_at: timestamp("created_at").notNull().defaultNow(),
+	updated_at: timestamp({ mode: "date", precision: 3 }).$onUpdate(
 		() => new Date(),
 	),
 });
@@ -87,7 +64,6 @@ export const cardsRelations = relations(cardsTable, ({ many }) => ({
 	trades: many(tradesTable),
 	positions: many(cardPositionsTable),
 	counters: many(cardCountersTable),
-	attachments: many(attachmentsTable),
 	stack: many(stackTable),
 }));
 

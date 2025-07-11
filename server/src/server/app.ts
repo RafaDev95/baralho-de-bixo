@@ -7,6 +7,7 @@ const app = createApp();
 const routes = [index, cards] as const;
 
 configureOpenApi(app);
+// biome-ignore lint/complexity/noForEach: <explanation>
 routes.forEach((route) => {
 	app.route("/", route);
 });

@@ -14,9 +14,9 @@ import type { z } from "zod";
 
 export const decksTable = pgTable("decks", {
 	id: serial("id").primaryKey(),
-	player_id: integer("player_id"),
+	playerId: integer("player_id"),
 	name: varchar("name", { length: 255 }).notNull(),
-	is_active: boolean("is_active").default(false),
+	isActive: boolean("is_active").default(false),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp({ mode: "date", precision: 3 }).$onUpdate(
 		() => new Date(),
@@ -32,7 +32,7 @@ export const insertDeckSchema = createInsertSchema(decksTable).omit({
 
 export const decksRelations = relations(decksTable, ({ one, many }) => ({
 	player: one(playersTable, {
-		fields: [decksTable.player_id],
+		fields: [decksTable.playerId],
 		references: [playersTable.id],
 	}),
 	cards: many(deckCards),
