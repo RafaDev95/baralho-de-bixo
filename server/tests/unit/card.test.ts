@@ -6,7 +6,6 @@ import {
 	CardLoader,
 } from "@/modules/cards/factory/card-loader";
 import type {
-	CardAbility,
 	CardEffect,
 	ManaCost,
 	CreatureCard,
@@ -223,7 +222,7 @@ describe("CardLoader", () => {
 			const cards = loader.loadAllCards();
 
 			expect(cards).toHaveLength(1);
-			console.log(cards);
+
 			const card = cards[0] as ArtifactCard;
 			expect(card.type).toBe("artifact");
 			expect(card.name).toBe(mockArtifactCardDefinition.name);

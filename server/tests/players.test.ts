@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import { setupTestDatabase, teardownTestDatabase } from "./utils/testSetup";
+import { setupTestDatabase } from "./utils/testSetup";
 
 import app from "../src/server/app";
+import { cleanupTestDatabase } from "@/db/config/drizzle.config";
 
 describe("Player Registration", () => {
 	beforeAll(async () => {
@@ -9,11 +10,11 @@ describe("Player Registration", () => {
 	});
 
 	afterAll(async () => {
-		await teardownTestDatabase();
+		await cleanupTestDatabase();
 	});
 
 	describe("POST /players", () => {
-		it("should successfully register a new player with valid data", async () => {
+		it("should successfully register a new player and vinculate with a starter deck", async () => {
 			const playerData = {
 				walletAddress: "0x1234567890123456789012345678901234567890",
 				username: "testplayer",

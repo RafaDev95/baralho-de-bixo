@@ -21,10 +21,22 @@ services:
     ports:
       - ${PORT}:${PORT}
     volumes:
-      - .:/usr/src/app # Mount current directory for live reloading
-      - /usr/src/app/node_modules # Preserve node_modules volume
+      - ./src:/usr/src/app/src # Mount only source code for live reloading
+      - ./package.json:/usr/src/app/package.json # Mount package.json
+      - ./pnpm-lock.yaml:/usr/src/app/pnpm-lock.yaml # Mount lock file
     environment:
-      - DATABASE_URL=postgresql://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@db:5432/${DATABASE_NAME}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_URL=${DATABASE_URL}
+      - PORT=${PORT}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - NODE_ENV=${NODE_ENV}
+      - TEST_MODE=${TEST_MODE}
+      - FUEL_NETWORK_URL=${FUEL_NETWORK_URL}
+      - FUEL_CHAIN_ID=${FUEL_CHAIN_ID}
     command: pnpm dev
 
 volumes:

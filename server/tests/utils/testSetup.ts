@@ -2,7 +2,6 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import {
 	initializeTestDatabase,
 	testDb,
-	cleanupTestDatabase,
 	updateDatabase,
 } from "@/db/config/drizzle.config";
 import drizzleConfig from "$/drizzle.config";
@@ -22,10 +21,4 @@ export const setupTestDatabase = async () => {
 
 	await migrate(testDb, { migrationsFolder: drizzleConfig.out });
 	console.info("Test database migration completed");
-};
-
-export const teardownTestDatabase = async () => {
-	await cleanupTestDatabase();
-
-	console.info("Test database cleanup completed");
 };
