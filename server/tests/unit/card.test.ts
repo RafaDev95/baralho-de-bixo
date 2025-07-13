@@ -39,10 +39,8 @@ describe("CardLoader", () => {
 	let mockJoin: ReturnType<typeof vi.fn>;
 
 	beforeEach(() => {
-		// Reset all mocks before each test
 		vi.clearAllMocks();
 
-		// Get the mocked functions
 		mockReadFileSync = vi.mocked(readFileSync);
 		mockJoin = vi.mocked(join);
 

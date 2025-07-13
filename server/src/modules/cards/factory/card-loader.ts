@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { CardFactoryCreator } from "./cards-factory";
+import { CardFactory } from "./cards-factory";
 import type { CardBase, CardDefinition } from "./types";
 
 interface CardDefinitions {
@@ -41,11 +41,7 @@ export class CardLoader {
 			...definition,
 		};
 
-		const factory = CardFactoryCreator.createFactory(
-			definition.type,
-			baseCardData,
-		);
-		return factory.create();
+		return CardFactory.createCard(baseCardData);
 	}
 
 	public loadAllCards(): CardBase[] {

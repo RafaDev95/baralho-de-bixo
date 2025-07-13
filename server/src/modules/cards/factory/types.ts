@@ -22,7 +22,6 @@ export type EffectType =
 	| "attack";
 
 export interface CardBase {
-	id: number;
 	name: string;
 	type: CardType;
 	rarity: CardRarity;
@@ -97,3 +96,10 @@ export interface CardDefinition {
 	duration?: EffectDuration;
 	isEquipment?: boolean;
 }
+
+export type CardFactoryData =
+	| Omit<CardBase, "type">
+	| Omit<CreatureCard, "type">
+	| Omit<SpellCard, "type">
+	| Omit<EnchantmentCard, "type">
+	| Omit<ArtifactCard, "type">;
