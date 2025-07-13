@@ -1,5 +1,5 @@
 import type { CardBase } from "./factory/types";
-import { STARTER_DECKS } from "./data/starter-decks";
+import { STARTER_DECKS } from "../../lib/starter-decks-definition";
 
 export interface Deck {
 	name: string;
@@ -17,23 +17,19 @@ export async function initializeStarterDecks(
 		for (const deckDefinition of STARTER_DECKS) {
 			const deckCards: CardBase[] = [];
 
-			// For each card in the deck definition
 			for (const [cardName, count] of Object.entries(
 				deckDefinition.cardCounts,
 			)) {
-				// Find the card in the card pool
 				const card = cardPool.find((c) => c.name === cardName);
 				if (!card) {
 					throw new Error(`Card not found in pool: ${cardName}`);
 				}
 
-				// Add the card the specified number of times
 				for (let i = 0; i < count; i++) {
 					deckCards.push(card);
 				}
 			}
 
-			// Create the deck
 			decks.push({
 				name: deckDefinition.name,
 				attribute: deckDefinition.attribute,
@@ -49,7 +45,3 @@ export async function initializeStarterDecks(
 		throw error;
 	}
 }
-
-// Example usage:
-// const cardPool = await initializeCardPool();
-// const starterDecks = await initializeStarterDecks(cardPool);

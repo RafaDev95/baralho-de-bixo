@@ -1,10 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import {
-	type CardDefinition,
-	CardLoader,
-} from "@/modules/cards/factory/card-loader";
+import { CardLoader } from "@/modules/cards/factory/card-loader";
 import type {
 	CardEffect,
 	ManaCost,
@@ -12,6 +9,7 @@ import type {
 	SpellCard,
 	EnchantmentCard,
 	ArtifactCard,
+	CardDefinition,
 } from "@/modules/cards/factory/types";
 import type { CardType, CardRarity, CardAttribute } from "@/db/schemas";
 import {
@@ -241,8 +239,8 @@ describe("CardLoader", () => {
 				cards: [
 					{
 						name: "Invalid Creature",
-						rarity: "common" as CardRarity,
-						attribute: "fire" as CardAttribute,
+						rarity: "common",
+						attribute: "fire",
 						description: "Missing power",
 						manaCost: { fire: 1, generic: 0 },
 						type: "creature",
@@ -265,8 +263,8 @@ describe("CardLoader", () => {
 				cards: [
 					{
 						name: "Invalid Creature",
-						rarity: "common" as CardRarity,
-						attribute: "fire" as CardAttribute,
+						rarity: "common",
+						attribute: "fire",
 						description: "Missing health",
 						manaCost: { fire: 1, generic: 0 },
 						type: "creature",
@@ -289,8 +287,8 @@ describe("CardLoader", () => {
 				cards: [
 					{
 						name: "Invalid Spell",
-						rarity: "common" as CardRarity,
-						attribute: "fire" as CardAttribute,
+						rarity: "common",
+						attribute: "fire",
 						description: "Missing effect",
 						manaCost: { fire: 1, generic: 0 },
 						type: "spell",

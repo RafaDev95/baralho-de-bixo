@@ -10,13 +10,6 @@ export type AbilityTrigger =
 	| "onDamage"
 	| "onHeal"
 	| "onDraw"
-	| "onDiscard"
-	| "onSummon"
-	| "onAttack"
-	| "onBlock"
-	| "onDamage"
-	| "onHeal"
-	| "onDraw"
 	| "onDiscard";
 
 export type EffectType =
@@ -84,4 +77,23 @@ export interface CardAbility {
 	description: string;
 	trigger: AbilityTrigger;
 	effect: CardEffect;
+}
+
+export interface CardDefinition {
+	name: string;
+	rarity: CardRarity;
+	attribute: CardAttribute;
+	description: string;
+	manaCost: ManaCost;
+	type: CardType;
+	power?: number;
+	health?: number;
+	abilities?: CardAbility[];
+	effect?: CardEffect;
+	equipEffect?: {
+		power: number;
+		health: number;
+	};
+	duration?: EffectDuration;
+	isEquipment?: boolean;
 }

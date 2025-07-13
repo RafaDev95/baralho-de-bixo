@@ -43,7 +43,6 @@ export const starterDeckCardsTable = pgTable("starter_deck_cards", {
 	createdAt: timestamp("created_aAt").notNull().defaultNow(),
 });
 
-// Relations
 export const starterDecksRelations = relations(
 	starterDecksTable,
 	({ many }) => ({
@@ -65,7 +64,6 @@ export const starterDeckCardsRelations = relations(
 	}),
 );
 
-// Zod schemas
 export const starterDecksSchema = createSelectSchema(starterDecksTable);
 export const insertStarterDeckSchema = createInsertSchema(
 	starterDecksTable,

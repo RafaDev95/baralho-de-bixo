@@ -1,11 +1,19 @@
-import type { CardType } from "@/db/schemas";
+import type { CardType, CardRarity, CardAttribute } from "@/db/schemas";
 import type {
 	CardBase,
 	CreatureCard,
 	SpellCard,
 	EnchantmentCard,
 	ArtifactCard,
+	ManaCost,
+	CardEffect,
 } from "./types";
+import {
+	CreatureCardStrategy,
+	SpellCardStrategy,
+	EnchantmentCardStrategy,
+	ArtifactCardStrategy,
+} from "../strategy/card-creation-strategy";
 
 export type CardFactoryData =
 	| Omit<CardBase, "type">
@@ -19,6 +27,11 @@ export enum CardFactoryType {
 	SPELL = "spell",
 	ENCHANTMENT = "enchantment",
 	ARTIFACT = "artifact",
+}
+
+export interface CardFactoryStategy {
+	createCard(): CardBase;
+	validateCard(card: CardBase): void;
 }
 
 // Abstract class for creating cards: Abstract keyword is used to prevent instantiation of the class eg.: new CardFactory() is not allowed
@@ -41,129 +54,26 @@ export abstract class CardFactory {
 	}
 }
 
-export class CreatureCardFactory extends CardFactory {
-	constructor(private readonly cardData: Omit<CreatureCard, "type">) {
-		super();
-	}
-
-	protected createCard(): CreatureCard {
-		return {
-			...this.cardData,
-			type: "creature",
-			canAttack: true,
-			canBlock: true,
-			hasSummoningSickness: true,
-			abilities: this.cardData.abilities || [],
-		};
-	}
-
-	protected validateCard(card: CreatureCard): void {
-		super.validateCard(card);
-		if (card.power < 0) throw new Error("Power cannot be negative");
-		if (card.health < 1) throw new Error("Health must be at least 1");
-	}
-}
-
-export class SpellCardFactory extends CardFactory {
-	constructor(private readonly cardData: Omit<SpellCard, "type">) {
-		super();
-	}
-
-	protected createCard(): SpellCard {
-		return {
-			...this.cardData,
-			type: "spell",
-		};
-	}
-
-	protected validateCard(card: SpellCard): void {
-		super.validateCard(card);
-		if (!card.effect) throw new Error("Spell must have an effect");
-	}
-}
-
-export class EnchantmentCardFactory extends CardFactory {
-	constructor(private readonly cardData: Omit<EnchantmentCard, "type">) {
-		super();
-	}
-
-	protected createCard(): EnchantmentCard {
-		return {
-			...this.cardData,
-			type: "enchantment",
-		};
-	}
-
-	protected validateCard(card: EnchantmentCard): void {
-		super.validateCard(card);
-		if (!card.effect) throw new Error("Enchantment must have an effect");
-	}
-}
-
-export class ArtifactCardFactory extends CardFactory {
-	constructor(private readonly cardData: Omit<ArtifactCard, "type">) {
-		super();
-	}
-
-	protected createCard(): ArtifactCard {
-		return {
-			...this.cardData,
-			type: "artifact",
-		};
-	}
-
-	protected validateCard(card: ArtifactCard): void {
-		super.validateCard(card);
-		if (!card.effect) throw new Error("Artifact must have an effect");
-	}
-}
+const strategyRegistry = {
+	creature: (cardData: CardFactoryData) =>
+		new CreatureCardStrategy(cardData as Omit<CreatureCard, "type">),
+	spell: (cardData: CardFactoryData) =>
+		new SpellCardStrategy(cardData as Omit<SpellCard, "type">),
+	enchantment: (cardData: CardFactoryData) =>
+		new EnchantmentCardStrategy(cardData as Omit<EnchantmentCard, "type">),
+	artifact: (cardData: CardFactoryData) =>
+		new ArtifactCardStrategy(cardData as Omit<ArtifactCard, "type">),
+} satisfies Record<CardType, (cardData: CardFactoryData) => CardFactory>;
 
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class CardFactoryCreator {
-	// Strategy pattern
 	static createFactory(type: CardType, cardData: CardFactoryData): CardFactory {
-		switch (type) {
-			case CardFactoryType.CREATURE:
-				return new CreatureCardFactory(cardData as Omit<CreatureCard, "type">);
-			case CardFactoryType.SPELL:
-				return new SpellCardFactory(cardData as Omit<SpellCard, "type">);
-			case CardFactoryType.ENCHANTMENT:
-				return new EnchantmentCardFactory(
-					cardData as Omit<EnchantmentCard, "type">,
-				);
-			case CardFactoryType.ARTIFACT:
-				return new ArtifactCardFactory(cardData as Omit<ArtifactCard, "type">);
-			default:
-				throw new Error(`Card type ${type} not supported`);
+		const strategyFactory = strategyRegistry[type];
+
+		if (!strategyFactory) {
+			throw new Error(`Card type ${type} not supported`);
 		}
+
+		return strategyFactory(cardData);
 	}
 }
-
-// Example usage:
-const flameImpData = {
-	name: "Flame Imp",
-	rarity: "common",
-	attribute: "fire",
-	description: "A small but aggressive imp that deals 2 damage when played",
-	manaCost: { fire: 1, generic: 0 },
-	power: 2,
-	health: 1,
-	abilities: [
-		{
-			name: "Quick Strike",
-			description: "When played, deal 2 damage to target player",
-			trigger: "on_enter_battlefield",
-			effect: {
-				type: "damage",
-				target: "player",
-				value: 2,
-			},
-		},
-	],
-};
-
-// const flameImpFactory = CardFactoryCreator.createFactory(
-// 	"creature",
-// 	flameImpData,
-// );
-// const flameImp = flameImpFactory.create();

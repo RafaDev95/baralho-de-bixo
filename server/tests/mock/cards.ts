@@ -1,5 +1,3 @@
-import type { CreatureCard } from "@/modules/cards/factory/types";
-
 export const mockCreatureCardDefinition = {
 	name: "Flame Imp",
 	rarity: "common",
