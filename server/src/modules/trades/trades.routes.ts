@@ -1,10 +1,9 @@
+import { insertTradeSchema, tradesSchema } from '@/db/schemas';
+import { notFoundSchema } from '@/lib/constants';
 import { createRoute } from '@hono/zod-openapi';
-import { tradesSchema, insertTradeSchema } from '../../db/schemas/trades';
-import { jsonContent } from 'stoker/openapi/helpers';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
-import { createErrorSchema, IdParamsSchema } from 'stoker/openapi/schemas';
-import { notFoundSchema } from '../../lib/constants';
-import { createGenericPatchRoute, createGenericPostRoute } from '../handlers';
+import { jsonContent } from 'stoker/openapi/helpers';
+import { IdParamsSchema, createErrorSchema } from 'stoker/openapi/schemas';
 
 const tags = ['Trades'];
 
@@ -34,19 +33,48 @@ export const getById = createRoute({
   },
 });
 
-export const create = createGenericPostRoute({
+export const create = createRoute({
   path: '/trades',
-  insertSchema: insertTradeSchema,
-  responseSchema: tradesSchema,
-  description: 'Create a trade',
-  tag: tags[0],
+  method: 'post',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: insertTradeSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    [HttpStatusCodes.CREATED]: jsonContent(tradesSchema, 'Created'),
+    [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
+      createErrorSchema(insertTradeSchema),
+      'Invalid trade data'
+    ),
+  },
 });
 
-export const update = createGenericPatchRoute({
-  tag: tags[0],
+export const update = createRoute({
   path: '/trades/{id}',
-  responseSchema: tradesSchema,
-  updateSchema: insertTradeSchema.partial(),
+  method: 'patch',
+  request: {
+    params: IdParamsSchema,
+    body: {
+      content: {
+        'application/json': {
+          schema: insertTradeSchema.partial(),
+        },
+      },
+    },
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(tradesSchema, 'Updated'),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(notFoundSchema, 'Not found'),
+    [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
+      createErrorSchema(IdParamsSchema),
+      'Invalid Id Error'
+    ),
+  },
 });
 
 export const remove = createRoute({

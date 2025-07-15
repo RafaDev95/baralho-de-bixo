@@ -1,9 +1,9 @@
-import { createRoute } from '@hono/zod-openapi';
-import { tradesSchema, insertTradeSchema } from '@/db/schemas/trades';
-import { jsonContent } from 'stoker/openapi/helpers';
-import * as HttpStatusCodes from 'stoker/http-status-codes';
-import { createErrorSchema, IdParamsSchema } from 'stoker/openapi/schemas';
+import { insertTradeSchema, tradesSchema } from '@/db/schemas/trades';
 import { notFoundSchema } from '@/lib/constants';
+import { createRoute } from '@hono/zod-openapi';
+import * as HttpStatusCodes from 'stoker/http-status-codes';
+import { jsonContent } from 'stoker/openapi/helpers';
+import { IdParamsSchema, createErrorSchema } from 'stoker/openapi/schemas';
 import { createGenericPatchRoute, createGenericPostRoute } from './handlers';
 
 const tags = ['Trades'];

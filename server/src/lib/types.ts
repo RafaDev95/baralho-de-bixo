@@ -7,6 +7,9 @@ export type AppBindings = {
   };
 };
 
-export type AppRouteHandler<R extends RouteConfig> = RouteHandler<R, AppBindings>;
+export type AppRouteHandler<R extends RouteConfig> = RouteHandler<
+  R,
+  AppBindings
+>;
 
 export type AppOpenApi = OpenAPIHono<AppBindings>;

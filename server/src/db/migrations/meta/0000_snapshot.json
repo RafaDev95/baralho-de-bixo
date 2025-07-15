@@ -247,16 +247,12 @@
         "players_wallet_address_unique": {
           "name": "players_wallet_address_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "wallet_address"
-          ]
+          "columns": ["wallet_address"]
         },
         "players_email_unique": {
           "name": "players_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -478,9 +474,7 @@
         "auth_challenges_nonce_unique": {
           "name": "auth_challenges_nonce_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "nonce"
-          ]
+          "columns": ["nonce"]
         }
       },
       "policies": {},
@@ -492,11 +486,7 @@
     "public.attribute": {
       "name": "attribute",
       "schema": "public",
-      "values": [
-        "fire",
-        "water",
-        "wind"
-      ]
+      "values": ["fire", "water", "wind"]
     },
     "public.card_zone": {
       "name": "card_zone",
@@ -513,22 +503,12 @@
     "public.rarity": {
       "name": "rarity",
       "schema": "public",
-      "values": [
-        "common",
-        "uncommon",
-        "rare",
-        "epic"
-      ]
+      "values": ["common", "uncommon", "rare", "epic"]
     },
     "public.type": {
       "name": "type",
       "schema": "public",
-      "values": [
-        "creature",
-        "spell",
-        "enchantment",
-        "artifact"
-      ]
+      "values": ["creature", "spell", "enchantment", "artifact"]
     }
   },
   "schemas": {},

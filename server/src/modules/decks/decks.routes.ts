@@ -1,10 +1,9 @@
-import { createRoute } from '@hono/zod-openapi';
 import { decksSchema, insertDeckSchema } from '@/db/schemas';
-import { jsonContent } from 'stoker/openapi/helpers';
-import * as HttpStatusCodes from 'stoker/http-status-codes';
-import { createErrorSchema, IdParamsSchema } from 'stoker/openapi/schemas';
 import { notFoundSchema } from '@/lib/constants';
-import { createGenericPatchRoute, createGenericPostRoute } from '../handlers';
+import { createRoute } from '@hono/zod-openapi';
+import * as HttpStatusCodes from 'stoker/http-status-codes';
+import { jsonContent } from 'stoker/openapi/helpers';
+import { IdParamsSchema, createErrorSchema } from 'stoker/openapi/schemas';
 
 const tags = ['Decks'];
 
@@ -17,12 +16,25 @@ export const list = createRoute({
   },
 });
 
-export const create = createGenericPostRoute({
+export const create = createRoute({
   path: '/decks',
-  insertSchema: insertDeckSchema,
-  responseSchema: decksSchema,
-  description: 'Create a deck',
-  tag: tags[0],
+  method: 'post',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: insertDeckSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    [HttpStatusCodes.CREATED]: jsonContent(decksSchema, 'Created'),
+    [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
+      createErrorSchema(insertDeckSchema),
+      'Invalid deck data'
+    ),
+  },
 });
 
 export const getById = createRoute({
@@ -40,11 +52,27 @@ export const getById = createRoute({
   },
 });
 
-export const update = createGenericPatchRoute({
-  tag: tags[0],
+export const update = createRoute({
   path: '/decks/{id}',
-  responseSchema: decksSchema,
-  updateSchema: insertDeckSchema.partial(),
+  method: 'patch',
+  request: {
+    params: IdParamsSchema,
+    body: {
+      content: {
+        'application/json': {
+          schema: insertDeckSchema.partial(),
+        },
+      },
+    },
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(decksSchema, 'Updated'),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(notFoundSchema, 'Not found'),
+    [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
+      createErrorSchema(IdParamsSchema),
+      'Invalid Id Error'
+    ),
+  },
 });
 
 export const remove = createRoute({

@@ -1,6 +1,6 @@
-import * as routes from './decks.routes';
-import * as handlers from './decks.handlers';
 import { createRouter } from '@/lib/create-app';
+import * as handlers from './decks.handlers';
+import * as routes from './decks.routes';
 
 const decksRouter = createRouter()
   .openapi(routes.list, handlers.list)
