@@ -13,3 +13,74 @@ Beleza, agora preciso setar algumas prioridades e retomar o desenvolvimento:
 - Lembrando que um dos objetivos inicais era estudar sobre design pattern, nada melhor do que pensar em um para resolver os 2 pontos citados acima. Onde cheguei na conclusão de: 
  - Criar uma *Factory* para criar cartas e outra para criar os decks
  - *Builder pattern* também me parece bem interessante caso eu pretendar deixar com que o usuário consiga criar alguma carta. 
+- Após entender um pouco mais sobre factory e build, criei testes para vailidar esses dois patterns e recebi uma sugestão para ver sobre **Strategy Patter**.
+- Strategy Pattern trata-se de criar vários algorítimos, normalmente classes, para tratar/executar determinada lógica, sendo cada um deles tendo apenas uma responsabilidade. (Criar cartas apenas do tipo criatura, por exemplo.) E aí decidi fazer isso: Criei uma classe para ser responsável para criação de cada tipo de carta mas ainda não estava me agradando por conta dos switch's. 
+Daí então decidi pesquisar por formas melhores de direcionar a criação de cada carta.
+Um exemplo visual de como estava com switch:
+`
+abstract Class CardFactory {
+    protected abstract createCard(): CardBase;
+
+    create(): CardBase {
+		const card = this.createCard();
+		this.validateCard(card);
+		return card;
+	}
+
+    protected validateCard(card:CardBase):void {
+        validações :thumbsup
+    }
+}
+
+Class CreateCreatureCardStrategy extends CardFactory {
+    ... lógica pra criar uma criatura :thumbsup
+}
+
+... CreateSpellCardStrategy, CreateArtifactCardStrategy, EnchantmentCardStrategy (4 classes no total)
+
+static createFactory(type: CardType, cardData: CardFactoryData): CardFactory {
+	switch (type) {
+		case CardFactoryType.CREATURE:
+			return new CreatureCardStrategy(cardData as Omit<CreatureCard, "type">);
+		case CardFactoryType.SPELL:
+			return new SpellCardStrategy(cardData as Omit<SpellCard, "type">);
+		case CardFactoryType.ENCHANTMENT:
+			return new EnchantmentCardStrategy(cardData as Omit<EnchantmentCard, "type">);
+		case CardFactoryType.ARTIFACT:
+			return new ArtifactCardStrategy(cardData as Omit<ArtifactCard, "type">);
+		default:
+			throw new Error(`Card type ${type} not supported`);
+	}
+}
+`
+
+- Estava funcionando? Sim, tecnicamente simples de entender? também. Mas ainda sim estava incomodando. Encontrei um conceito chamado **Lookup table** que nada mais é do que uma tabela de consulta. É uma estratégia usada para simplificar a busca de dados ao invés de criar algum cáculo ou algum if/switch. E existe um Design Pattern chamado de **Registry** que literalmente usa esse conceito. E aplicando esse carinha, ficou muito mais limpo e legível. 
+
+
+```
+const strategyRegistry = {
+	creature: (cardData: CardFactoryData) =>
+		new CreatureCardStrategy(cardData as Omit<CreatureCard, "type">),
+	spell: (cardData: CardFactoryData) =>
+		new SpellCardStrategy(cardData as Omit<SpellCard, "type">),
+	enchantment: (cardData: CardFactoryData) =>
+		new EnchantmentCardStrategy(cardData as Omit<EnchantmentCard, "type">),
+	artifact: (cardData: CardFactoryData) =>
+		new ArtifactCardStrategy(cardData as Omit<ArtifactCard, "type">),
+} satisfies Record<CardType, (cardData: CardFactoryData) => CardFactory>;
+
+
+class CardFactoryCreator {
+	static createFactory(type: CardType, cardData: CardFactoryData): CardFactory {
+		const strategyFactory = strategyRegistry[type];
+
+		if (!strategyFactory) {
+			throw new Error(`Card type ${type} not supported`);
+		}
+
+		return strategyFactory(cardData);
+	}
+}
+```
+
+- Além disso, com essa implementação de strategy e registry patterns eu pude também melhorar minha classe `card-loader`
