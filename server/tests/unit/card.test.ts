@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { CardAttribute, CardRarity, CardType } from '@/db/schemas';
+import type { CardColor, CardRarity, CardType } from '@/db/schemas';
 import { CardLoader } from '@/modules/cards/factory/card-loader';
 import type {
   ArtifactCard,
@@ -86,7 +86,7 @@ describe('CardLoader', () => {
           {
             name: 'Test Creature',
             rarity: 'common' as CardRarity,
-            attribute: 'fire' as CardAttribute,
+            colors: ['red'] as CardColor[],
             description: 'A test creature',
             manaCost: { fire: 1, generic: 0 } as ManaCost,
             type: 'creature' as CardType,
@@ -151,7 +151,7 @@ describe('CardLoader', () => {
       expect(card.type).toBe('creature');
       expect(card.name).toBe('Flame Imp');
       expect(card.rarity).toBe('common');
-      expect(card.attribute).toBe('fire');
+      expect(card.colors).toBe('fire');
       expect(card.manaCost).toEqual({ fire: 1, generic: 0 });
       expect(card.power).toBe(2);
       expect(card.health).toBe(1);
@@ -238,7 +238,7 @@ describe('CardLoader', () => {
           {
             name: 'Invalid Creature',
             rarity: 'common',
-            attribute: 'fire',
+            colors: ['red'],
             description: 'Missing power',
             manaCost: { fire: 1, generic: 0 },
             type: 'creature',
@@ -262,7 +262,7 @@ describe('CardLoader', () => {
           {
             name: 'Invalid Creature',
             rarity: 'common',
-            attribute: 'fire',
+            colors: ['red'],
             description: 'Missing health',
             manaCost: { fire: 1, generic: 0 },
             type: 'creature',
@@ -286,7 +286,7 @@ describe('CardLoader', () => {
           {
             name: 'Invalid Spell',
             rarity: 'common',
-            attribute: 'fire',
+            colors: ['red'],
             description: 'Missing effect',
             manaCost: { fire: 1, generic: 0 },
             type: 'spell',
@@ -309,7 +309,7 @@ describe('CardLoader', () => {
           {
             name: 'Invalid Enchantment',
             rarity: 'common',
-            attribute: 'fire',
+            colors: ['red'],
             description: 'Missing effect',
             manaCost: { fire: 1, generic: 0 },
             type: 'enchantment',
@@ -332,7 +332,7 @@ describe('CardLoader', () => {
           {
             name: 'Invalid Artifact',
             rarity: 'common',
-            attribute: 'fire',
+            colors: ['red'],
             description: 'Missing effect',
             manaCost: { fire: 1, generic: 0 },
             type: 'artifact',
@@ -355,7 +355,7 @@ describe('CardLoader', () => {
           {
             name: 'Invalid Card',
             rarity: 'common',
-            attribute: 'fire',
+            colors: ['red'],
             description: 'Unsupported type',
             manaCost: { fire: 1, generic: 0 },
             type: 'invalid_type' as CardType,
@@ -392,7 +392,7 @@ describe('CardLoader', () => {
           {
             name: 'Simple Creature',
             rarity: 'common',
-            attribute: 'fire',
+            colors: ['red'],
             description: 'No abilities',
             manaCost: { fire: 1, generic: 0 },
             type: 'creature',
@@ -420,7 +420,7 @@ describe('CardLoader', () => {
           {
             name: 'Simple Artifact',
             rarity: 'common' as CardRarity,
-            attribute: 'fire' as CardAttribute,
+            colors: ['red'] as CardColor[],
             description: 'No equip effect',
             manaCost: { fire: 1, generic: 0 } as ManaCost,
             type: 'artifact' as CardType,
@@ -451,7 +451,7 @@ describe('CardLoader', () => {
           {
             name: 'Equipment Artifact',
             rarity: 'common',
-            attribute: 'fire',
+            colors: ['red'],
             description: 'With equip effect',
             manaCost: { fire: 1, generic: 0 },
             type: 'artifact',

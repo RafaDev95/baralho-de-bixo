@@ -12,7 +12,7 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 import { deckCards } from './deck-cards';
-import { attributeEnum, rarityEnum, typeEnum } from './enums';
+import { type colorEnum, rarityEnum, typeEnum } from './enums';
 import { cardPositionsTable, stackTable } from './games';
 import { tradesTable } from './trades';
 
@@ -22,13 +22,12 @@ export const cardsTable = pgTable('cards', {
   type: typeEnum().notNull(),
   rarity: rarityEnum().notNull(),
   description: text('description').notNull(),
-  attributes: attributeEnum().notNull(),
+  colors: jsonb('colors').notNull(), // Store as array of color strings
   power: integer('power'),
   health: integer('health'),
-  manaCost: jsonb('mana_cost').notNull(), // Store as {fire: 1, water: 0, wind: 0, generic: 2}
+  manaCost: jsonb('mana_cost').notNull(), // Store as {red: 1, blue: 0, green: 0, generic: 2}
   abilities: jsonb('abilities'), // Store card abilities
   isLegendary: boolean('is_legendary').default(false),
-  isToken: boolean('is_token').default(false),
   // Add fields for creature-specific properties
   canAttack: boolean('can_attack').default(true),
   canBlock: boolean('can_block').default(true),
@@ -72,4 +71,4 @@ export const updateCardSchema = insertCardSchema.partial();
 export type CardSchema = z.infer<typeof cardsSchema>;
 export type CardType = (typeof typeEnum.enumValues)[number];
 export type CardRarity = (typeof rarityEnum.enumValues)[number];
-export type CardAttribute = (typeof attributeEnum.enumValues)[number];
+export type CardColor = (typeof colorEnum.enumValues)[number];

@@ -4,13 +4,25 @@ import { createRoute } from '@hono/zod-openapi';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
 import { jsonContent } from 'stoker/openapi/helpers';
 import { IdParamsSchema, createErrorSchema } from 'stoker/openapi/schemas';
+import { z } from 'zod';
 
 const tags = ['Decks'];
+
+// Schema for creating a deck with cards
+const createDeckWithCardsSchema = z.object({
+  ...insertDeckSchema.shape,
+  cardIds: z.array(z.number()).min(1, 'Deck must contain at least one card'),
+});
 
 export const list = createRoute({
   tags,
   path: '/decks',
   method: 'get',
+  request: {
+    query: z.object({
+      includeCards: z.string().optional(),
+    }),
+  },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(decksSchema.array(), `${tags[0]} List`),
   },
@@ -23,15 +35,22 @@ export const create = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: insertDeckSchema,
+          schema: createDeckWithCardsSchema,
         },
       },
     },
   },
   responses: {
     [HttpStatusCodes.CREATED]: jsonContent(decksSchema, 'Created'),
+    [HttpStatusCodes.BAD_REQUEST]: jsonContent(
+      z.object({
+        message: z.string(),
+        missingCardIds: z.array(z.number()),
+      }),
+      'Invalid card IDs'
+    ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(insertDeckSchema),
+      createErrorSchema(createDeckWithCardsSchema),
       'Invalid deck data'
     ),
   },

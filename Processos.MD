@@ -37,7 +37,7 @@ Class CreateCreatureCardStrategy extends CardFactory {
 }
 
 ... CreateSpellCardStrategy, CreateArtifactCardStrategy, EnchantmentCardStrategy (4 classes no total)
-
+```
 static createFactory(type: CardType, cardData: CardFactoryData): CardFactory {
 	switch (type) {
 		case CardFactoryType.CREATURE:
@@ -52,7 +52,7 @@ static createFactory(type: CardType, cardData: CardFactoryData): CardFactory {
 			throw new Error(`Card type ${type} not supported`);
 	}
 }
-`
+```
 
 - Estava funcionando? Sim, tecnicamente simples de entender? também. Mas ainda sim estava incomodando. Encontrei um conceito chamado **Lookup table** que nada mais é do que uma tabela de consulta. É uma estratégia usada para simplificar a busca de dados ao invés de criar algum cáculo ou algum if/switch. E existe um Design Pattern chamado de **Registry** que literalmente usa esse conceito. E aplicando esse carinha, ficou muito mais limpo e legível. 
 

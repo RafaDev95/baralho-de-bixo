@@ -1,4 +1,4 @@
-import type { CardAttribute, CardRarity, CardType } from '@/db/schemas';
+import type { CardRarity, CardType } from '@/db/schemas';
 
 export type EffectTarget = 'self' | 'enemy' | 'all' | 'random';
 export type EffectCondition = 'if' | 'unless';
@@ -25,7 +25,7 @@ export interface CardBase {
   name: string;
   type: CardType;
   rarity: CardRarity;
-  attribute: CardAttribute;
+  colors: string[]; // Array of color strings
   description: string;
   manaCost: ManaCost;
 }
@@ -47,14 +47,12 @@ export interface SpellCard extends CardBase {
 
 export interface EnchantmentCard extends CardBase {
   type: 'enchantment';
-  effect: CardEffect;
-  duration: EffectDuration;
+  abilities: CardAbility[];
 }
 
 export interface ArtifactCard extends CardBase {
   type: 'artifact';
-  effect: CardEffect;
-  isEquipment: boolean;
+  abilities: CardAbility[];
 }
 
 export interface ManaCost {
@@ -81,7 +79,7 @@ export interface CardAbility {
 export interface CardDefinition {
   name: string;
   rarity: CardRarity;
-  attribute: CardAttribute;
+  colors: string[]; // Array of color strings
   description: string;
   manaCost: ManaCost;
   type: CardType;

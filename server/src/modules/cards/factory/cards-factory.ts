@@ -30,7 +30,9 @@ export class CardFactory {
   static createCard(cardData: CardDefinition) {
     const cardDefinition = CardFactory.cardTypeDefinitions[cardData.type];
     if (!cardDefinition) {
-      throw new Error(`Card type ${cardData.type} not supported`);
+      throw new Error(
+        `Card type ${cardData.type} not supported. Card name: ${cardData.name}`
+      );
     }
     return cardDefinition(cardData);
   }
@@ -39,7 +41,7 @@ export class CardFactory {
     if (!card.name) throw new Error('Card must have a name');
     if (!card.type) throw new Error('Card must have a type');
     if (!card.rarity) throw new Error('Card must have a rarity');
-    if (!card.attribute) throw new Error('Card must have an attribute');
+    if (!card.colors) throw new Error('Card must have a color');
     if (!card.manaCost) throw new Error('Card must have a mana cost');
   }
 }

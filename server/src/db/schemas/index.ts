@@ -5,3 +5,4 @@ export * from './deck-cards';
 export * from './trades';
 export * from './auth-challenges';
 export * from './enums';
+export * from './games';

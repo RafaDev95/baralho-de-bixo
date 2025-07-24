@@ -14,7 +14,7 @@ describe('Player Registration', () => {
   });
 
   describe('POST /players', () => {
-    it('should successfully register a new player and vinculate with a starter deck', async () => {
+    it('should successfully register a new player', async () => {
       const playerData = {
         walletAddress: '0x1234567890123456789012345678901234567890',
         username: 'testplayer',

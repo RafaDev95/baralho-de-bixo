@@ -3,9 +3,10 @@
     {
       "name": "Flame Imp",
       "rarity": "common",
-      "attribute": "fire",
+      "colors": ["red"],
+      "type": "creature",
       "description": "A small but aggressive imp that deals 2 damage when played",
-      "manaCost": { "fire": 1, "generic": 0 },
+      "manaCost": { "red": 1, "generic": 0 },
       "power": 2,
       "health": 1,
       "abilities": [
@@ -24,7 +25,8 @@
     {
       "name": "Fire Elemental",
       "rarity": "uncommon",
-      "attribute": "fire",
+      "colors": ["red"],
+      "type": "creature",
       "description": "A powerful elemental that deals 1 damage to all enemies when played",
       "manaCost": { "fire": 2, "generic": 1 },
       "power": 3,
@@ -45,7 +47,8 @@
     {
       "name": "Dragon Hatchling",
       "rarity": "rare",
-      "attribute": "fire",
+      "colors": ["red"],
+      "type": "creature",
       "description": "Grows stronger each turn, gaining +1/+1",
       "manaCost": { "fire": 1, "generic": 1 },
       "power": 1,
@@ -66,7 +69,7 @@
     {
       "name": "Fireball",
       "rarity": "common",
-      "attribute": "fire",
+      "colors": ["red"],
       "description": "Deal 3 damage to target creature or player",
       "manaCost": { "fire": 1, "generic": 2 },
       "type": "spell",
@@ -78,8 +81,8 @@
     },
     {
       "name": "Inferno",
-      "rarity": "epic",
-      "attribute": "fire",
+      "rarity": "mythic",
+      "colors": ["red"],
       "description": "Deal 5 damage to all creatures and players",
       "manaCost": { "fire": 3, "generic": 2 },
       "type": "spell",
@@ -92,7 +95,7 @@
     {
       "name": "Flame Shield",
       "rarity": "uncommon",
-      "attribute": "fire",
+      "colors": ["red"],
       "description": "Give a creature +2/+0 and 'Deal 1 damage to attacker when blocked'",
       "manaCost": { "fire": 1, "generic": 1 },
       "type": "spell",
@@ -117,7 +120,8 @@
     {
       "name": "Water Sprite",
       "rarity": "common",
-      "attribute": "water",
+      "colors": ["blue"],
+      "type": "creature",
       "description": "Can return to hand when targeted",
       "manaCost": { "water": 1, "generic": 0 },
       "power": 1,
@@ -136,7 +140,8 @@
     {
       "name": "Tidal Guardian",
       "rarity": "uncommon",
-      "attribute": "water",
+      "colors": ["blue"],
+      "type": "creature",
       "description": "Can block an additional creature each turn",
       "manaCost": { "water": 2, "generic": 1 },
       "power": 2,
@@ -154,8 +159,9 @@
     },
     {
       "name": "Leviathan",
-      "rarity": "epic",
-      "attribute": "water",
+      "rarity": "mythic",
+      "colors": ["blue"],
+      "type": "creature",
       "description": "Can't be blocked by creatures with power 2 or less",
       "manaCost": { "water": 3, "generic": 2 },
       "power": 5,
@@ -175,7 +181,7 @@
     {
       "name": "Tidal Wave",
       "rarity": "common",
-      "attribute": "water",
+      "colors": ["blue"],
       "description": "Return target creature to its owner's hand",
       "manaCost": { "water": 1, "generic": 1 },
       "type": "spell",
@@ -187,7 +193,7 @@
     {
       "name": "Tsunami",
       "rarity": "rare",
-      "attribute": "water",
+      "colors": ["blue"],
       "description": "Return all creatures to their owners' hands",
       "manaCost": { "water": 2, "generic": 2 },
       "type": "spell",
@@ -199,7 +205,7 @@
     {
       "name": "Water Shield",
       "rarity": "uncommon",
-      "attribute": "water",
+      "colors": ["blue"],
       "description": "Prevent all damage to target creature this turn",
       "manaCost": { "water": 1, "generic": 1 },
       "type": "spell",
@@ -212,7 +218,8 @@
     {
       "name": "Wind Sprite",
       "rarity": "common",
-      "attribute": "wind",
+      "colors": ["blue"],
+      "type": "creature",
       "description": "Can't be blocked by creatures with power 3 or greater",
       "manaCost": { "wind": 1, "generic": 0 },
       "power": 1,
@@ -232,7 +239,8 @@
     {
       "name": "Storm Caller",
       "rarity": "uncommon",
-      "attribute": "wind",
+      "colors": ["blue"],
+      "type": "creature",
       "description": "When played, draw a card",
       "manaCost": { "wind": 1, "generic": 1 },
       "power": 2,
@@ -252,7 +260,8 @@
     {
       "name": "Thunder Bird",
       "rarity": "rare",
-      "attribute": "wind",
+      "colors": ["blue"],
+      "type": "creature",
       "description": "Can attack twice each turn",
       "manaCost": { "wind": 2, "generic": 1 },
       "power": 3,
@@ -271,7 +280,7 @@
     {
       "name": "Gust",
       "rarity": "common",
-      "attribute": "wind",
+      "colors": ["blue"],
       "description": "Return target creature to the top of its owner's library",
       "manaCost": { "wind": 1, "generic": 1 },
       "type": "spell",
@@ -284,7 +293,7 @@
     {
       "name": "Cyclone",
       "rarity": "rare",
-      "attribute": "wind",
+      "colors": ["blue"],
       "description": "Shuffle all creatures into their owners' libraries",
       "manaCost": { "wind": 2, "generic": 2 },
       "type": "spell",
@@ -296,7 +305,7 @@
     {
       "name": "Wind Walk",
       "rarity": "uncommon",
-      "attribute": "wind",
+      "colors": ["blue"],
       "description": "Target creature can't be blocked this turn",
       "manaCost": { "wind": 1, "generic": 1 },
       "type": "spell",
@@ -309,7 +318,7 @@
     {
       "name": "Eternal Flame",
       "rarity": "rare",
-      "attribute": "fire",
+      "colors": ["red"],
       "description": "At the start of your turn, deal 1 damage to each player",
       "manaCost": { "fire": 2, "generic": 1 },
       "type": "enchantment",
@@ -329,7 +338,7 @@
     {
       "name": "Ocean's Blessing",
       "rarity": "rare",
-      "attribute": "water",
+      "colors": ["blue"],
       "description": "Your creatures get +0/+1",
       "manaCost": { "water": 2, "generic": 1 },
       "type": "enchantment",
@@ -349,7 +358,7 @@
     {
       "name": "Wind's Guidance",
       "rarity": "rare",
-      "attribute": "wind",
+      "colors": ["blue"],
       "description": "Draw an additional card each turn",
       "manaCost": { "wind": 2, "generic": 1 },
       "type": "enchantment",
@@ -368,7 +377,7 @@
     {
       "name": "Flame Sword",
       "rarity": "uncommon",
-      "attribute": "fire",
+      "colors": ["red"],
       "description": "Equipped creature gets +2/+0 and deals 1 damage to target creature when it attacks",
       "manaCost": { "fire": 1, "generic": 1 },
       "type": "artifact",
@@ -392,7 +401,7 @@
     {
       "name": "Water Amulet",
       "rarity": "uncommon",
-      "attribute": "water",
+      "colors": ["blue"],
       "description": "Equipped creature gets +0/+2 and can't be targeted by spells",
       "manaCost": { "water": 1, "generic": 1 },
       "type": "artifact",
@@ -414,7 +423,7 @@
     {
       "name": "Wind Boots",
       "rarity": "uncommon",
-      "attribute": "wind",
+      "colors": ["blue"],
       "description": "Equipped creature can't be blocked",
       "manaCost": { "wind": 1, "generic": 1 },
       "type": "artifact",
@@ -431,8 +440,9 @@
     },
     {
       "name": "Firestorm Phoenix",
-      "rarity": "epic",
-      "attribute": "fire",
+      "rarity": "mythic",
+      "colors": ["red"],
+      "type": "creature",
       "description": "When this creature dies, return it to your hand",
       "manaCost": { "fire": 2, "generic": 2 },
       "power": 4,
@@ -450,8 +460,9 @@
     },
     {
       "name": "Tidal Dragon",
-      "rarity": "epic",
-      "attribute": "water",
+      "rarity": "mythic",
+      "colors": ["blue"],
+      "type": "creature",
       "description": "Can't be blocked by creatures with power less than 3",
       "manaCost": { "water": 3, "generic": 1 },
       "power": 4,
@@ -470,8 +481,9 @@
     },
     {
       "name": "Storm Elemental",
-      "rarity": "epic",
-      "attribute": "wind",
+      "rarity": "mythic",
+      "colors": ["blue"],
+      "type": "creature",
       "description": "Can attack the turn it comes into play",
       "manaCost": { "wind": 2, "generic": 2 },
       "power": 3,
@@ -489,8 +501,8 @@
     },
     {
       "name": "Elemental Fusion",
-      "rarity": "epic",
-      "attribute": "fire",
+      "rarity": "mythic",
+      "colors": ["red"],
       "description": "Combine two creatures into one with combined power and health",
       "manaCost": { "fire": 2, "generic": 2 },
       "type": "spell",
@@ -501,27 +513,28 @@
     },
     {
       "name": "Master of Elements",
-      "rarity": "epic",
-      "attribute": "water",
-      "description": "Can use abilities from any attribute",
+      "rarity": "mythic",
+      "colors": ["blue"],
+      "type": "creature",
+      "description": "Can use abilities from any color",
       "manaCost": { "water": 3, "generic": 2 },
       "power": 5,
       "health": 5,
       "abilities": [
         {
           "name": "Elemental Mastery",
-          "description": "This creature can use abilities from any attribute",
+          "description": "This creature can use abilities from any color",
           "trigger": "static",
           "effect": {
-            "type": "attribute_versatility"
+            "type": "color_versatility"
           }
         }
       ]
     },
     {
       "name": "Elemental Nexus",
-      "rarity": "epic",
-      "attribute": "wind",
+      "rarity": "mythic",
+      "colors": ["blue"],
       "description": "Your spells cost 1 less to cast",
       "manaCost": { "wind": 2, "generic": 2 },
       "type": "enchantment",

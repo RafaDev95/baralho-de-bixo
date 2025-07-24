@@ -1,8 +1,8 @@
-import type { CardAttribute } from '@/db/schemas';
+import type { CardColor } from '@/db/schemas';
 
 export interface StarterDeckDefinition {
   name: string;
-  attribute: CardAttribute;
+  colors: CardColor[];
   description: string;
   cardCounts: {
     [cardName: string]: number;
@@ -11,7 +11,7 @@ export interface StarterDeckDefinition {
 
 export const MONO_RED_DECK: StarterDeckDefinition = {
   name: 'Mono Red Aggro',
-  attribute: 'fire',
+  colors: ['red'],
   description:
     'An aggressive deck focused on dealing quick damage with fire creatures and spells',
   cardCounts: {
@@ -30,7 +30,7 @@ export const MONO_RED_DECK: StarterDeckDefinition = {
 
 export const MONO_GREEN_DECK: StarterDeckDefinition = {
   name: 'Mono Green Control',
-  attribute: 'water',
+  colors: ['green'],
   description:
     'A control deck that focuses on managing the board with water creatures and spells',
   cardCounts: {

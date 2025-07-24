@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm';
 import {
   boolean,
   integer,
+  pgEnum,
   pgTable,
   serial,
   timestamp,
@@ -12,11 +13,15 @@ import type { z } from 'zod';
 import { deckCards } from './deck-cards';
 import { playersTable } from './players';
 
+export const deckTypeEnum = pgEnum('deck_type', ['starter', 'custom']);
+
 export const decksTable = pgTable('decks', {
   id: serial('id').primaryKey(),
   playerId: integer('player_id'),
   name: varchar('name', { length: 255 }).notNull(),
   isActive: boolean('is_active').default(false),
+  cardCount: integer('card_count').notNull().default(0),
+  type: integer('type').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp({ mode: 'date', precision: 3 }).$onUpdate(
     () => new Date()

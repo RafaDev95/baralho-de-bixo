@@ -1,6 +1,6 @@
 {
-  "id": "0bdf9d28-cabc-4d97-8a0b-d59aba548845",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "87b6b1ea-b476-4db4-9df9-e59d7fbb93db",
+  "prevId": "0bdf9d28-cabc-4d97-8a0b-d59aba548845",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1064,7 +1064,7 @@
         "common",
         "uncommon",
         "rare",
-        "epic"
+        "mythic"
       ]
     },
     "public.type": {

@@ -59,29 +59,24 @@ export class CreateCardByTypeStrategy {
   }
 
   static enchantmentCard(cardDefinition: CardDefinition): EnchantmentCard {
-    validateRequiredFields(cardDefinition, ['effect', 'duration']);
+    validateRequiredFields(cardDefinition, ['abilities']);
 
     const card: EnchantmentCard = {
       ...cardDefinition,
       type: 'enchantment',
-      effect: cardDefinition.effect!,
-      duration: cardDefinition.duration!,
+      abilities: cardDefinition.abilities!,
     };
 
     return card;
   }
 
   static artifactCard(cardDefinition: CardDefinition): ArtifactCard {
-    validateRequiredFields(cardDefinition, ['effect']);
-
-    const isEquipment =
-      cardDefinition.isEquipment ?? !!cardDefinition.equipEffect;
+    validateRequiredFields(cardDefinition, ['abilities']);
 
     const card: ArtifactCard = {
       ...cardDefinition,
       type: 'artifact',
-      effect: cardDefinition.effect!,
-      isEquipment,
+      abilities: cardDefinition.abilities!,
     };
 
     return card;
