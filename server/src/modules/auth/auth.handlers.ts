@@ -1,6 +1,6 @@
 import { db } from '@/db/config';
 import { playersTable } from '@/db/schemas';
-import { isValidFuelAddress, verifySignature } from '@/lib/fuel-utils';
+import { isValidFuelAddress, verifySignature } from '@/utils/fuel-utils';
 import { eq } from 'drizzle-orm';
 import type { Context } from 'hono';
 import { z } from 'zod';

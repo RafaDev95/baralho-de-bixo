@@ -4,13 +4,12 @@ import type { CardDefinition } from './factory/types';
 
 export class CardService {
   async insertMany(cards: CardDefinition[]) {
-    const [result] = await db
+    const result = await db
       .insert(cardsTable)
       .values(cards)
       .onConflictDoNothing()
       .returning();
 
-    console.log('result', result);
     return result;
   }
 }

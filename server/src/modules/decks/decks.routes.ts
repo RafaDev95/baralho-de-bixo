@@ -1,5 +1,5 @@
 import { decksSchema, insertDeckSchema } from '@/db/schemas';
-import { notFoundSchema } from '@/lib/constants';
+import { notFoundSchema } from '@/utils/constants';
 import { createRoute } from '@hono/zod-openapi';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
 import { jsonContent } from 'stoker/openapi/helpers';

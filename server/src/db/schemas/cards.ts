@@ -52,6 +52,7 @@ export const cardCountersTable = pgTable('card_counters', {
 });
 
 export const cardsSchema = createSelectSchema(cardsTable);
+export type Card = z.infer<typeof cardsSchema>;
 export const insertCardSchema = createInsertSchema(cardsTable).omit({
   createdAt: true,
   updatedAt: true,
