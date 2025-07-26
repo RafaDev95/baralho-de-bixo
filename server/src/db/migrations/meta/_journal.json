@@ -15,6 +15,13 @@
       "when": 1753317784862,
       "tag": "0001_narrow_ma_gnuci",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1753541522351,
+      "tag": "0002_salty_chimera",
+      "breakpoints": true
     }
   ]
 }

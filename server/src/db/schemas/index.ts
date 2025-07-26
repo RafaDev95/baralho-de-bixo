@@ -6,3 +6,4 @@ export * from './trades';
 export * from './auth-challenges';
 export * from './enums';
 export * from './games';
+export * from './game-rooms';

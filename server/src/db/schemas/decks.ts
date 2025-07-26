@@ -11,6 +11,7 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 import { deckCards } from './deck-cards';
+import { gameRoomPlayersTable } from './game-rooms';
 import { playersTable } from './players';
 
 export const deckTypeEnum = pgEnum('deck_type', ['starter', 'custom']);
@@ -41,6 +42,7 @@ export const decksRelations = relations(decksTable, ({ one, many }) => ({
     references: [playersTable.id],
   }),
   cards: many(deckCards),
+  gameRooms: many(gameRoomPlayersTable),
 }));
 
 export type DeckSchema = z.infer<typeof decksSchema>;

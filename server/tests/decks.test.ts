@@ -43,7 +43,7 @@ describe('Deck Creation', () => {
 
       const data = await res.json();
 
-      console.log('data', data);
+      expect(data.cards.length).toBe(15);
 
       expect(res.status).toBe(201);
       expect(data.id).toBeDefined();
