@@ -25,7 +25,7 @@ export interface CardBase {
   name: string;
   type: CardType;
   rarity: CardRarity;
-  colors: string[]; // Array of color strings
+  colors: string[];
   description: string;
   manaCost: ManaCost;
 }
@@ -76,23 +76,11 @@ export interface CardAbility {
   effect: CardEffect;
 }
 
-export interface CardDefinition {
-  name: string;
-  rarity: CardRarity;
-  colors: string[]; // Array of color strings
-  description: string;
-  manaCost: ManaCost;
-  type: CardType;
+export interface CardDefinition extends CardBase {
   power?: number;
   health?: number;
   abilities?: CardAbility[];
   effect?: CardEffect;
-  equipEffect?: {
-    power: number;
-    health: number;
-  };
-  duration?: EffectDuration;
-  isEquipment?: boolean;
 }
 
 export type CardFactoryData =
@@ -101,3 +89,7 @@ export type CardFactoryData =
   | Omit<SpellCard, 'type'>
   | Omit<EnchantmentCard, 'type'>
   | Omit<ArtifactCard, 'type'>;
+
+export interface CardFactoryStrategy {
+  createCard(cardData: CardDefinition): CardDefinition;
+}

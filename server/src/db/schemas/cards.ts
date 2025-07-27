@@ -27,7 +27,7 @@ export const cardsTable = pgTable('cards', {
   health: integer('health'),
   manaCost: jsonb('mana_cost').notNull(), // Store as {red: 1, blue: 0, green: 0, generic: 2}
   abilities: jsonb('abilities'), // Store card abilities
-  isLegendary: boolean('is_legendary').default(false),
+  effect: jsonb('effect'), // Store card effect
   // Add fields for creature-specific properties
   canAttack: boolean('can_attack').default(true),
   canBlock: boolean('can_block').default(true),
