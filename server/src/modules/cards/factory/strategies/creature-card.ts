@@ -10,15 +10,18 @@ import type {
 
 export class CreatureCardFactory implements CardFactoryStrategy {
   createCard(cardDefinition: CardDefinition): CreatureCard {
-    validateRequiredFields(cardDefinition, ['power', 'health']);
+    validateRequiredFields(cardDefinition, ['power', 'toughness']);
     const power = validatePositiveNumber(cardDefinition.power, 'Power');
-    const health = validatePositiveNumber(cardDefinition.health, 'Health');
+    const toughness = validatePositiveNumber(
+      cardDefinition.toughness,
+      'Toughness'
+    );
 
     const card: CreatureCard = {
       ...cardDefinition,
       type: 'creature',
       power,
-      health,
+      toughness,
       abilities: cardDefinition.abilities || [],
       canAttack: true,
       canBlock: true,

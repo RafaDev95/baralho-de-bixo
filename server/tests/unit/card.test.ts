@@ -91,7 +91,7 @@ describe('CardLoader', () => {
             manaCost: { fire: 1, generic: 0 } as ManaCost,
             type: 'creature' as CardType,
             power: 2,
-            health: 2,
+            toughness: 2,
             abilities: [],
             canAttack: true,
             canBlock: true,
@@ -154,7 +154,7 @@ describe('CardLoader', () => {
       expect(card.colors).toBe('fire');
       expect(card.manaCost).toEqual({ fire: 1, generic: 0 });
       expect(card.power).toBe(2);
-      expect(card.health).toBe(1);
+      expect(card.toughness).toBe(1);
       expect(card.canAttack).toBe(true);
       expect(card.canBlock).toBe(true);
       expect(card.hasSummoningSickness).toBe(true);
@@ -242,7 +242,7 @@ describe('CardLoader', () => {
             description: 'Missing power',
             manaCost: { fire: 1, generic: 0 },
             type: 'creature',
-            health: 1,
+            toughness: 1,
           },
         ],
       };
@@ -256,14 +256,14 @@ describe('CardLoader', () => {
       );
     });
 
-    it('should throw error for creature card without health', () => {
+    it('should throw error for creature card without toughness', () => {
       const mockCardData: { cards: CardDefinition[] } = {
         cards: [
           {
             name: 'Invalid Creature',
             rarity: 'common',
             colors: ['red'],
-            description: 'Missing health',
+            description: 'Missing toughness',
             manaCost: { fire: 1, generic: 0 },
             type: 'creature',
             power: 2,
@@ -276,7 +276,7 @@ describe('CardLoader', () => {
 
       const loader = CardLoader.getInstance();
       expect(() => loader.loadAllCards()).toThrow(
-        'Missing health for creature card Invalid Creature'
+        'Missing toughness for creature card Invalid Creature'
       );
     });
 
@@ -397,7 +397,7 @@ describe('CardLoader', () => {
             manaCost: { fire: 1, generic: 0 },
             type: 'creature',
             power: 2,
-            health: 2,
+            toughness: 2,
             abilities: [],
           },
         ],
@@ -462,7 +462,7 @@ describe('CardLoader', () => {
             },
             equipEffect: {
               power: 2,
-              health: 0,
+              toughness: 0,
             },
           },
         ],

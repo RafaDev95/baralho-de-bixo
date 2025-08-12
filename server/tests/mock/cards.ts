@@ -6,7 +6,7 @@ export const mockCreatureCardDefinition = {
   manaCost: { fire: 1, generic: 0 },
   type: 'creature',
   power: 2,
-  health: 1,
+  toughness: 1,
   abilities: [
     {
       name: 'Quick Strike',

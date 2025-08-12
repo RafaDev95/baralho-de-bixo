@@ -33,7 +33,7 @@ export interface CardBase {
 export interface CreatureCard extends CardBase {
   type: 'creature';
   power: number;
-  health: number;
+  toughness: number;
   abilities?: CardAbility[];
   canAttack: boolean;
   canBlock: boolean;
@@ -78,7 +78,7 @@ export interface CardAbility {
 
 export interface CardDefinition extends CardBase {
   power?: number;
-  health?: number;
+  toughness?: number;
   abilities?: CardAbility[];
   effect?: CardEffect;
 }

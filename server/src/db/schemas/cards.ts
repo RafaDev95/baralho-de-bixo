@@ -24,7 +24,7 @@ export const cardsTable = pgTable('cards', {
   description: text('description').notNull(),
   colors: jsonb('colors').notNull(), // Store as array of color strings
   power: integer('power'),
-  health: integer('health'),
+  toughness: integer('toughness'),
   manaCost: jsonb('mana_cost').notNull(), // Store as {red: 1, blue: 0, green: 0, generic: 2}
   abilities: jsonb('abilities'), // Store card abilities
   effect: jsonb('effect'), // Store card effect

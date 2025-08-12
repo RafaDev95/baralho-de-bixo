@@ -1,8 +1,5 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
   "formatter": {
     "enabled": true,
     "formatWithErrors": true,
@@ -43,21 +40,6 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignore": [
-      ".vscode",
-      ".idea",
-      "scripts/**",
-      "node_modules/**",
-      ".turbo/**",
-      "build/**",
-      "dist/**",
-      "sway/**",
-      "pnpm-lock.yaml",
-      ".next",
-      ".serverless",
-      "artifacts/**",
-      "routeTree.gen.ts",
-      "generated/**"
-    ]
+    "maxSize": 1048576
   }
 }

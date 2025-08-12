@@ -8,7 +8,7 @@
       "description": "A small but aggressive imp that deals 2 damage when played",
       "manaCost": { "red": 1, "generic": 0 },
       "power": 2,
-      "health": 1,
+      "toughness": 1,
       "abilities": [
         {
           "name": "Quick Strike",
@@ -30,7 +30,7 @@
       "description": "A powerful elemental that deals 1 damage to all enemies when played",
       "manaCost": { "fire": 2, "generic": 1 },
       "power": 3,
-      "health": 3,
+      "toughness": 3,
       "abilities": [
         {
           "name": "Burning Presence",
@@ -52,7 +52,7 @@
       "description": "Grows stronger each turn, gaining +1/+1",
       "manaCost": { "fire": 1, "generic": 1 },
       "power": 1,
-      "health": 1,
+      "toughness": 1,
       "abilities": [
         {
           "name": "Growth",
@@ -61,7 +61,7 @@
           "effect": {
             "type": "modify_stats",
             "power": 1,
-            "health": 1
+            "toughness": 1
           }
         }
       ]
@@ -102,7 +102,7 @@
       "effect": {
         "type": "modify_creature",
         "power": 2,
-        "health": 0,
+        "toughness": 0,
         "abilities": [
           {
             "name": "Counter Strike",
@@ -125,7 +125,7 @@
       "description": "Can return to hand when targeted",
       "manaCost": { "water": 1, "generic": 0 },
       "power": 1,
-      "health": 2,
+      "toughness": 2,
       "abilities": [
         {
           "name": "Evasive",
@@ -145,7 +145,7 @@
       "description": "Can block an additional creature each turn",
       "manaCost": { "water": 2, "generic": 1 },
       "power": 2,
-      "health": 4,
+      "toughness": 4,
       "abilities": [
         {
           "name": "Multiple Block",
@@ -165,7 +165,7 @@
       "description": "Can't be blocked by creatures with power 2 or less",
       "manaCost": { "water": 3, "generic": 2 },
       "power": 5,
-      "health": 5,
+      "toughness": 5,
       "abilities": [
         {
           "name": "Intimidating Presence",
@@ -223,7 +223,7 @@
       "description": "Can't be blocked by creatures with power 3 or greater",
       "manaCost": { "wind": 1, "generic": 0 },
       "power": 1,
-      "health": 1,
+      "toughness": 1,
       "abilities": [
         {
           "name": "Elusive",
@@ -244,7 +244,7 @@
       "description": "When played, draw a card",
       "manaCost": { "wind": 1, "generic": 1 },
       "power": 2,
-      "health": 2,
+      "toughness": 2,
       "abilities": [
         {
           "name": "Wind's Favor",
@@ -265,7 +265,7 @@
       "description": "Can attack twice each turn",
       "manaCost": { "wind": 2, "generic": 1 },
       "power": 3,
-      "health": 2,
+      "toughness": 2,
       "abilities": [
         {
           "name": "Double Strike",
@@ -350,7 +350,7 @@
           "effect": {
             "type": "modify_stats",
             "target": "your_creatures",
-            "health": 1
+            "toughness": 1
           }
         }
       ]
@@ -395,7 +395,7 @@
       ],
       "equipEffect": {
         "power": 2,
-        "health": 0
+        "toughness": 0
       }
     },
     {
@@ -417,7 +417,7 @@
       ],
       "equipEffect": {
         "power": 0,
-        "health": 2
+        "toughness": 2
       }
     },
     {
@@ -446,7 +446,7 @@
       "description": "When this creature dies, return it to your hand",
       "manaCost": { "fire": 2, "generic": 2 },
       "power": 4,
-      "health": 3,
+      "toughness": 3,
       "abilities": [
         {
           "name": "Rebirth",
@@ -466,7 +466,7 @@
       "description": "Can't be blocked by creatures with power less than 3",
       "manaCost": { "water": 3, "generic": 1 },
       "power": 4,
-      "health": 4,
+      "toughness": 4,
       "abilities": [
         {
           "name": "Tidal Force",
@@ -487,7 +487,7 @@
       "description": "Can attack the turn it comes into play",
       "manaCost": { "wind": 2, "generic": 2 },
       "power": 3,
-      "health": 3,
+      "toughness": 3,
       "abilities": [
         {
           "name": "Haste",
@@ -503,7 +503,7 @@
       "name": "Elemental Fusion",
       "rarity": "mythic",
       "colors": ["red"],
-      "description": "Combine two creatures into one with combined power and health",
+      "description": "Combine two creatures into one with combined power and toughness",
       "manaCost": { "fire": 2, "generic": 2 },
       "type": "spell",
       "effect": {
@@ -519,7 +519,7 @@
       "description": "Can use abilities from any color",
       "manaCost": { "water": 3, "generic": 2 },
       "power": 5,
-      "health": 5,
+      "toughness": 5,
       "abilities": [
         {
           "name": "Elemental Mastery",
