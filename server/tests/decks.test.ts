@@ -6,6 +6,8 @@ import { CardLoader } from '@/modules/cards/factory/card-loader';
 import { CardService } from '@/modules/cards/service';
 import app from '@/server/app';
 
+// pnpm test tests/decks.test.ts
+
 describe('Deck Creation', () => {
   beforeAll(async () => {
     await setupTestDatabase();

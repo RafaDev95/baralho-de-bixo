@@ -15,6 +15,7 @@ import {
   gameStateSnapshotsTable,
 } from '@/db/schemas';
 import { and, eq } from 'drizzle-orm';
+import { ManaSystem } from './mana-system-simple';
 
 // Type for database transaction
 type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
@@ -321,6 +322,10 @@ export class GameEngine {
     gameState.phase = 'untap';
     gameState.step = 'beginning';
 
+    // Untap mana sources for the new player
+    const newPlayer = gameState.players[gameState.currentPlayerIndex];
+    await ManaSystem.untapManaSources(gameId, newPlayer.playerId);
+
     // Update game session
     await tx
       .update(gameSessionsTable)
@@ -347,6 +352,16 @@ export class GameEngine {
       throw new Error('Card ID is required to play a card');
     }
 
+    // Validate mana cost using ManaSystem
+    const canPlay = await ManaSystem.canPlayCard(
+      gameId,
+      action.playerId,
+      cardData.cardId
+    );
+    if (!canPlay.canPlay) {
+      throw new Error(`Cannot play card: ${canPlay.reason}`);
+    }
+
     // Get the card from hand
     const cardResult = await tx
       .select()
@@ -365,6 +380,16 @@ export class GameEngine {
     }
 
     const gameCard = cardResult[0];
+
+    // Pay the mana cost and tap sources
+    const playResult = await ManaSystem.playCard(
+      gameId,
+      action.playerId,
+      cardData.cardId
+    );
+    if (!playResult.success) {
+      throw new Error(`Failed to play card: ${playResult.reason}`);
+    }
 
     // Move card to battlefield
     await tx
