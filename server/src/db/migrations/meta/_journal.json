@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1753317732196,
-      "tag": "0000_thin_celestials",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1753317784862,
-      "tag": "0001_narrow_ma_gnuci",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1753541522351,
-      "tag": "0002_salty_chimera",
+      "when": 1756350308919,
+      "tag": "0000_ambiguous_dark_beast",
       "breakpoints": true
     }
   ]
