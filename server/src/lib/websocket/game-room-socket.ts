@@ -9,7 +9,13 @@ export interface GameRoomSocket {
 }
 
 export interface GameRoomEvent {
-  type: 'player_joined' | 'player_left' | 'ready_status_changed' | 'game_started' | 'chat_message' | 'connected';
+  type:
+    | 'player_joined'
+    | 'player_left'
+    | 'ready_status_changed'
+    | 'game_started'
+    | 'chat_message'
+    | 'connected';
   data: Record<string, unknown>;
   timestamp: Date;
 }
@@ -21,7 +27,7 @@ class GameRoomSocketManager {
   // Join a room
   joinRoom(roomId: number, playerId: number, ws: WebSocket): string {
     const socketId = `${roomId}-${playerId}-${Date.now()}`;
-    
+
     const socket: GameRoomSocket = {
       id: socketId,
       roomId,
@@ -51,11 +57,15 @@ class GameRoomSocketManager {
     });
 
     // Notify other players in the room
-    this.broadcastToRoom(roomId, {
-      type: 'player_joined',
-      data: { playerId, roomId },
-      timestamp: new Date(),
-    }, socketId);
+    this.broadcastToRoom(
+      roomId,
+      {
+        type: 'player_joined',
+        data: { playerId, roomId },
+        timestamp: new Date(),
+      },
+      socketId
+    );
 
     return socketId;
   }
@@ -118,23 +128,26 @@ class GameRoomSocketManager {
 
     this.broadcastToRoom(socket.roomId, {
       type: 'chat_message',
-      data: { 
-        playerId: socket.playerId, 
-        message, 
-        roomId: socket.roomId 
+      data: {
+        playerId: socket.playerId,
+        message,
+        roomId: socket.roomId,
       },
       timestamp: new Date(),
     });
   }
 
   // Get room info
-  getRoomInfo(roomId: number): { playerCount: number; players: Array<{ playerId: number; isReady: boolean }> } {
+  getRoomInfo(roomId: number): {
+    playerCount: number;
+    players: Array<{ playerId: number; isReady: boolean }>;
+  } {
     const room = this.rooms.get(roomId);
     if (!room) {
       return { playerCount: 0, players: [] };
     }
 
-    const players = Array.from(room).map(socket => ({
+    const players = Array.from(room).map((socket) => ({
       playerId: socket.playerId,
       isReady: socket.isReady,
     }));
@@ -146,9 +159,15 @@ class GameRoomSocketManager {
   }
 
   // Get all rooms info
-  getAllRoomsInfo(): Map<number, { playerCount: number; players: Array<{ playerId: number; isReady: boolean }> }> {
+  getAllRoomsInfo(): Map<
+    number,
+    {
+      playerCount: number;
+      players: Array<{ playerId: number; isReady: boolean }>;
+    }
+  > {
     const roomsInfo = new Map();
-    
+
     for (const [roomId] of this.rooms) {
       roomsInfo.set(roomId, this.getRoomInfo(roomId));
     }
@@ -173,7 +192,11 @@ class GameRoomSocketManager {
     }
   }
 
-  private broadcastToRoom(roomId: number, event: GameRoomEvent, excludeSocketId?: string): void {
+  private broadcastToRoom(
+    roomId: number,
+    event: GameRoomEvent,
+    excludeSocketId?: string
+  ): void {
     const room = this.rooms.get(roomId);
     if (!room) return;
 
@@ -185,4 +208,4 @@ class GameRoomSocketManager {
 }
 
 // Export singleton instance
-export const gameRoomSocketManager = new GameRoomSocketManager(); 
+export const gameRoomSocketManager = new GameRoomSocketManager();

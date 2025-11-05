@@ -1,7 +1,7 @@
 # Game Rooms and WebSocket System - Technical Guide
 
 ## Overview
-The Game Rooms and WebSocket system provides the real-time multiplayer infrastructure for TCG Fuel. It handles player lobbies, real-time communication, and the transition from lobby to active game sessions. This system is crucial for creating an engaging multiplayer experience.
+The Game Rooms and WebSocket system provides the real-time multiplayer infrastructure for Baralho de bixo. It handles player lobbies, real-time communication, and the transition from lobby to active game sessions. This system is crucial for creating an engaging multiplayer experience.
 
 ## Architecture
 

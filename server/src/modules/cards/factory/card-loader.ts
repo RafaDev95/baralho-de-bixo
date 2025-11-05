@@ -1,33 +1,23 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { CardFactory } from './cards-factory';
 import { CARD_TYPE_DEFINITIONS } from './constants';
 import type { CardBase, CardDefinition } from './types';
+import type { TypedCardDefinition } from './card-definition-builder';
+import * as cardDefinitions from '../definitions';
 
-interface CardDefinitions {
-  cards: CardDefinition[];
-}
-
-// Interface for file system operations to make testing easier
-interface FileSystem {
-  readFileSync: typeof readFileSync;
-  join: typeof join;
-}
-
+/**
+ * Type-safe card loader that uses TypeScript definitions
+ */
 export class CardLoader {
   private static instance: CardLoader;
-  private cardDefinitions: CardDefinition[] = [];
+  private cardDefinitions: TypedCardDefinition[] = [];
   private nextId = 1;
   private loaded = false;
-  private fileSystem: FileSystem;
 
-  private constructor(fileSystem?: FileSystem) {
-    this.fileSystem = fileSystem || { readFileSync, join };
-  }
+  private constructor() {}
 
-  public static getInstance(fileSystem?: FileSystem): CardLoader {
+  public static getInstance(): CardLoader {
     if (!CardLoader.instance) {
-      CardLoader.instance = new CardLoader(fileSystem);
+      CardLoader.instance = new CardLoader();
     }
     return CardLoader.instance;
   }
@@ -42,13 +32,13 @@ export class CardLoader {
     if (this.loaded) return;
 
     try {
-      const filePath = this.fileSystem.join(
-        __dirname,
-        '../data/card-definitions.json'
+      // Import all card definitions from TypeScript modules
+      const allCards = Object.values(cardDefinitions).filter(
+        (card): card is TypedCardDefinition => 
+          typeof card === 'object' && card !== null && 'name' in card
       );
-      const fileContent = this.fileSystem.readFileSync(filePath, 'utf-8');
-      const data = JSON.parse(fileContent) as CardDefinitions;
-      this.cardDefinitions = data.cards;
+
+      this.cardDefinitions = allCards;
       this.loaded = true;
     } catch (error) {
       console.error('Error loading card definitions:', error);
@@ -56,10 +46,35 @@ export class CardLoader {
     }
   }
 
-  private createCard(definition: CardDefinition): CardBase {
+  private createCard(definition: TypedCardDefinition): CardBase {
+    // Convert typed definition to CardDefinition format for factory
+    const cardDef: CardDefinition = {
+      name: definition.name,
+      type: definition.type,
+      rarity: definition.rarity,
+      colors: definition.colors,
+      description: definition.description,
+      manaCost: definition.manaCost, // Already uses red/blue/green naming
+    };
+
+    // Add type-specific properties
+    if (definition.type === 'creature') {
+      cardDef.power = definition.power;
+      cardDef.toughness = definition.toughness;
+      cardDef.abilities = definition.abilities || [];
+    }
+    
+    if (definition.type === 'spell') {
+      cardDef.effect = definition.effect;
+    }
+    
+    if (definition.type === 'enchantment' || definition.type === 'artifact') {
+      cardDef.abilities = definition.abilities;
+    }
+
     const baseCardData = {
       id: this.nextId++,
-      ...definition,
+      ...cardDef,
     };
 
     const cardFactory = new CardFactory(CARD_TYPE_DEFINITIONS[definition.type]);

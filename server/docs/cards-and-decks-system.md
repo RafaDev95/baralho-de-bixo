@@ -1,7 +1,7 @@
 # Cards and Decks System - Technical Guide
 
 ## Overview
-The Cards and Decks system is the foundation of the TCG Fuel backend, providing the infrastructure for card management, deck building, and card gameplay mechanics. This system handles everything from individual card properties to complex deck collections and card interactions.
+The Cards and Decks system is the foundation of the Baralho de bixo backend, providing the infrastructure for card management, deck building, and card gameplay mechanics. This system handles everything from individual card properties to complex deck collections and card interactions.
 
 ## Architecture
 

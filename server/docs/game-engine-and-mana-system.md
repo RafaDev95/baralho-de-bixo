@@ -1,7 +1,7 @@
 # Game Engine and Mana System - Technical Guide
 
 ## Overview
-The Game Engine and Mana System form the core gameplay mechanics of TCG Fuel. The Game Engine manages game sessions, turn structure, and action processing, while the Mana System handles resource management for casting spells and playing cards. Together, they provide the foundation for all card game interactions.
+The Game Engine and Mana System form the core gameplay mechanics of Baralho de bixo. The Game Engine manages game sessions, turn structure, and action processing, while the Mana System handles resource management for casting spells and playing cards. Together, they provide the foundation for all card game interactions.
 
 ## Game Engine Architecture
 

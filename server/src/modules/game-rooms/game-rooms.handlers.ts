@@ -3,6 +3,7 @@ import { gameRoomPlayersTable, gameRoomsTable } from '@/db/schemas';
 import type { AppRouteHandler } from '@/lib/types';
 import { and, eq } from 'drizzle-orm';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
+import * as HttpStatusPhrases from 'stoker/http-status-phrases';
 import type {
   Create,
   GetById,
@@ -59,12 +60,12 @@ export const getById: AppRouteHandler<GetById> = async (c) => {
 
   if (!room) {
     return c.json(
-      { message: 'Game room not found' },
+      { message: HttpStatusPhrases.NOT_FOUND },
       HttpStatusCodes.NOT_FOUND
-    );
+    ) as any;
   }
 
-  return c.json(room);
+  return c.json(room)
 };
 
 export const join: AppRouteHandler<Join> = async (c) => {
@@ -78,16 +79,16 @@ export const join: AppRouteHandler<Join> = async (c) => {
 
   if (!room) {
     return c.json(
-      { message: 'Game room not found' },
+      { message: HttpStatusPhrases.NOT_FOUND },
       HttpStatusCodes.NOT_FOUND
-    );
+    ) as any;
   }
 
   if (room.status !== 'waiting') {
     return c.json(
       { message: 'Cannot join room that is not in waiting status' },
       HttpStatusCodes.BAD_REQUEST
-    );
+    ) as any;
   }
 
   // Check if player is already in the room
@@ -102,12 +103,15 @@ export const join: AppRouteHandler<Join> = async (c) => {
     return c.json(
       { message: 'Player is already in this room' },
       HttpStatusCodes.BAD_REQUEST
-    );
+    ) as any;
   }
 
   // Check if room is full
   if (room.currentPlayers >= room.maxPlayers) {
-    return c.json({ message: 'Room is full' }, HttpStatusCodes.BAD_REQUEST);
+    return c.json(
+      { message: 'Room is full' },
+      HttpStatusCodes.BAD_REQUEST
+    ) as any;
   }
 
   // Use transaction to ensure atomicity
@@ -131,7 +135,7 @@ export const join: AppRouteHandler<Join> = async (c) => {
     return playerInRoom;
   });
 
-  return c.json(result);
+  return c.json(result) as any;
 };
 
 export const leave: AppRouteHandler<Leave> = async (c) => {
@@ -145,9 +149,9 @@ export const leave: AppRouteHandler<Leave> = async (c) => {
 
   if (!room) {
     return c.json(
-      { message: 'Game room not found' },
+      { message: HttpStatusPhrases.NOT_FOUND },
       HttpStatusCodes.NOT_FOUND
-    );
+    ) as any;
   }
 
   // Check if player is in the room
@@ -162,7 +166,7 @@ export const leave: AppRouteHandler<Leave> = async (c) => {
     return c.json(
       { message: 'Player is not in this room' },
       HttpStatusCodes.BAD_REQUEST
-    );
+    ) as any;
   }
 
   // Use transaction to ensure atomicity
@@ -207,9 +211,9 @@ export const updateReadyStatus: AppRouteHandler<UpdateReadyStatus> = async (
 
   if (!playerInRoom) {
     return c.json(
-      { message: 'Player is not in this room' },
+      { message: HttpStatusPhrases.NOT_FOUND },
       HttpStatusCodes.NOT_FOUND
-    );
+    ) as any;
   }
 
   // Update ready status
@@ -224,7 +228,7 @@ export const updateReadyStatus: AppRouteHandler<UpdateReadyStatus> = async (
     )
     .returning();
 
-  return c.json(updatedPlayer);
+  return c.json(updatedPlayer) as any;
 };
 
 export const startGame: AppRouteHandler<StartGame> = async (c) => {
@@ -240,16 +244,16 @@ export const startGame: AppRouteHandler<StartGame> = async (c) => {
 
   if (!room) {
     return c.json(
-      { message: 'Game room not found' },
+      { message: HttpStatusPhrases.NOT_FOUND },
       HttpStatusCodes.NOT_FOUND
-    );
+    ) as any;
   }
 
   if (room.status !== 'waiting') {
     return c.json(
       { message: 'Game can only be started from waiting status' },
       HttpStatusCodes.BAD_REQUEST
-    );
+    ) as any;
   }
 
   // Check if all players are ready
@@ -260,7 +264,7 @@ export const startGame: AppRouteHandler<StartGame> = async (c) => {
     return c.json(
       { message: 'All players must be ready to start the game' },
       HttpStatusCodes.BAD_REQUEST
-    );
+    ) as any;
   }
 
   // Check if we have enough players (at least 2)
@@ -268,7 +272,7 @@ export const startGame: AppRouteHandler<StartGame> = async (c) => {
     return c.json(
       { message: 'Need at least 2 players to start the game' },
       HttpStatusCodes.BAD_REQUEST
-    );
+    ) as any;
   }
 
   // Update room status to in_progress
@@ -278,5 +282,5 @@ export const startGame: AppRouteHandler<StartGame> = async (c) => {
     .where(eq(gameRoomsTable.id, id))
     .returning();
 
-  return c.json(updatedRoom);
+  return c.json(updatedRoom) as any;
 };

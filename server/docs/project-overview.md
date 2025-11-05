@@ -1,7 +1,7 @@
-# TCG Fuel - Backend Project Overview
+# Baralho de bixo - Backend Project Overview
 
 ## Project Description
-TCG Fuel is a Trading Card Game backend built with modern TypeScript technologies. The system provides a complete foundation for card game mechanics, player management, deck building, game rooms, and real-time gameplay.
+Baralho de bixo is a Trading Card Game backend built with modern TypeScript technologies. The system provides a complete foundation for card game mechanics, player management, deck building, game rooms, and real-time gameplay.
 
 ## Technology Stack
 - **Runtime**: Node.js with TypeScript
@@ -310,4 +310,4 @@ pnpm dev
 
 ---
 
-*This document is maintained as part of the TCG Fuel project. For questions or contributions, please refer to the project repository.*
+*This document is maintained as part of the Baralho de bixo project. For questions or contributions, please refer to the project repository.*

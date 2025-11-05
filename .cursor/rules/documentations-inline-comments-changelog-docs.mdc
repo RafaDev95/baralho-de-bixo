@@ -1,0 +1,91 @@
+---
+description: `ALWAYS ACTIVATE THIS RULES!!!` Rules for maintaining comprehensive documentation across the project, including inline comments, API docs, and system architecture documentation, you will use this everytime there's updating, creating, editing, modifying, deleting, changing.
+globs: 
+alwaysApply: true
+---
+`ALWAYS ACTIVATE THIS RULES!!!`
+# Minimalist Documentation Standards
+
+This guide outlines our documentation standards for maintaining high-quality, minimalist documentation across the project. These standards apply to all code creation, updates, and modifications.
+
+## Core Documentation Principles
+
+1. **Self-Documenting Code First**
+   - Code should be primarily self-documenting through descriptive naming and clear structure
+   - Inline comments should only be used for complex or non-obvious code
+   - Documentation should focus on "why" rather than "what"
+   - Documentation maintenance should be simplified and focused on exported APIs
+
+2. **Documentation Categories**
+
+   A. **Inline Code Documentation**
+   Follow these principles:
+   - One high-level comment per file for the main component/class/function
+   - JSDoc for all exported functions, classes, and types
+   - Comments only for non-human-readable elements (hex codes, assembly, regex)
+   - Explanations for workarounds, browser quirks, or performance considerations
+
+   B. **Feature Documentation**
+   Each feature should have:
+   - Concise feature overview in dedicated documentation files
+   - API documentation focused on usage, not implementation
+   - Examples that demonstrate typical use cases
+
+   C. **API Documentation**
+   Focus on:
+   - JSDoc comments that feed into intellisense
+   - Parameter and return type documentation
+   - Important edge cases or limitations
+
+3. **Project Documentation Structure**
+
+   Root Level Documentation:
+   - README.md: Main project overview
+   - ARCHITECTURE.md: System design documentation
+   - CHANGELOG.md: Major changes with versioning
+
+4. **Format Guidelines**
+
+   JSDoc Format for Exported Entities:
+   ```typescript
+   /**
+    * Brief description of purpose/context
+    * 
+    * @param paramName - Description of parameter
+    * @returns Description of return value
+    */
+   export function exportedFunction() {}
+   ```
+
+   Inline Comments for Non-Human Readable Code:
+   ```typescript
+   // #6366F1 - Indigo-500 from Tailwind palette
+   const accentColor = "#6366F1";
+   ```
+
+   Explaining Complex Logic:
+   ```typescript
+   // Using bitwise operation for performance (vs Math.floor)
+   const fastFloor = value | 0;
+   ```
+
+5. **What NOT to Comment**
+
+   - Self-evident code that is already clear from variable/function names
+   - Function/variable definitions with descriptive names
+   - Comments that repeat what is already in the type definition
+   - Implementation details that are subject to change
+
+6. **When to Update Documentation**
+
+   Documentation updates are triggered by:
+   - Adding new exported functions/components
+   - Changing the purpose or API of an existing function
+   - Adding complex logic that isn't immediately obvious
+   - Implementing workarounds for bugs or edge cases
+
+## Important Notes:
+- Existing useful comments should be preserved
+- Focus on quality over quantity
+- Documentation should be maintained as code changes
+- Each API should have appropriate JSDoc comments 
