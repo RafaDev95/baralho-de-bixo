@@ -1,6 +1,6 @@
 import { gameRoomSocketManager } from '@/lib/websocket/game-room-socket';
 import { gameRoomWebSocketServer } from '@/lib/websocket/websocket-server';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'bun:test';
 import { WebSocket } from 'ws';
 
 describe('WebSocket Game Rooms', () => {

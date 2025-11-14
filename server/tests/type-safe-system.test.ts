@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'bun:test';
 import { CardLoader } from '../src/modules/cards/factory/card-loader';
 import { defineCard } from '../src/modules/cards/factory/card-definition-builder';
 import { defineDeck } from '../src/modules/decks/deck-builder';

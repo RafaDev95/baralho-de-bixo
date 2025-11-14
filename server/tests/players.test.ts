@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'bun:test';
 import { setupTestDatabase } from './utils/testSetup';
 
 import { cleanupTestDatabase } from '@/db/config/drizzle.config';

@@ -15,7 +15,7 @@ import {
   type ManaPool,
   ManaSystem,
 } from '@/lib/game/mana-system-simple';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
 import { setupTestDatabase } from './utils/testSetup';
 
 describe('ManaSystem', () => {

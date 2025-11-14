@@ -294,7 +294,7 @@ The system includes comprehensive tests covering:
 
 Run tests with:
 ```bash
-pnpm test type-safe-system.test.ts
+bun test tests/type-safe-system.test.ts
 ```
 
 ## Best Practices

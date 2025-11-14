@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'bun:test';
 import { setupTestDatabase } from './utils/testSetup';
 
 import { cleanupTestDatabase } from '@/db/config/drizzle.config';
@@ -6,7 +6,7 @@ import { CardLoader } from '@/modules/cards/factory/card-loader';
 import { CardService } from '@/modules/cards/service';
 import app from '@/server/app';
 
-// pnpm test tests/decks.test.ts
+// bun test tests/decks.test.ts
 
 describe('Deck Creation', () => {
   beforeAll(async () => {

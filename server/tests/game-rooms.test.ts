@@ -6,7 +6,7 @@ import {
   playersTable,
 } from '@/db/schemas';
 import { eq } from 'drizzle-orm';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'bun:test';
 import { setupTestDatabase } from './utils/testSetup';
 
 describe('Game Rooms', () => {

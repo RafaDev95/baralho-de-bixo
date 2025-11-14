@@ -23,7 +23,7 @@ services:
     volumes:
       - ./src:/usr/src/app/src # Mount only source code for live reloading
       - ./package.json:/usr/src/app/package.json # Mount package.json
-      - ./pnpm-lock.yaml:/usr/src/app/pnpm-lock.yaml # Mount lock file
+      - ./bun.lockb:/usr/src/app/bun.lockb # Mount lock file
     environment:
       - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_NAME=${DATABASE_NAME}
@@ -37,7 +37,7 @@ services:
       - TEST_MODE=${TEST_MODE}
       - FUEL_NETWORK_URL=${FUEL_NETWORK_URL}
       - FUEL_CHAIN_ID=${FUEL_CHAIN_ID}
-    command: pnpm dev
+    command: bun run dev
 
 volumes:
   postgres_data:

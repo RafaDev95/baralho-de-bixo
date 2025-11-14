@@ -4,12 +4,12 @@
 Baralho de bixo is a Trading Card Game backend built with modern TypeScript technologies. The system provides a complete foundation for card game mechanics, player management, deck building, game rooms, and real-time gameplay.
 
 ## Technology Stack
-- **Runtime**: Node.js with TypeScript
+- **Runtime**: Bun with TypeScript
 - **Framework**: Hono (HTTP server)
 - **Database**: PostgreSQL with Drizzle ORM
 - **WebSocket**: Standalone WebSocket server using `ws` library
 - **Validation**: Zod schemas
-- **Testing**: Vitest with Testcontainers
+- **Testing**: Bun test runner with Testcontainers
 - **Linting/Formatting**: Biome
 - **API Documentation**: OpenAPI (Hono)
 
@@ -92,22 +92,22 @@ WebSocket → Real-time Events → Game State Updates
 ### Installation
 ```bash
 cd server
-pnpm install
+bun install
 ```
 
 ### Database Setup
 ```bash
-pnpm db:migrate
+bun run migrate
 ```
 
 ### Running Tests
 ```bash
-pnpm test
+bun test
 ```
 
 ### Development Server
 ```bash
-pnpm dev
+bun run dev
 ```
 
 ## API Endpoints

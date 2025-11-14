@@ -1,17 +1,14 @@
 # Base development image
-FROM node:20-alpine AS development
+FROM oven/bun:1-alpine AS development
 
 # Set working directory
 WORKDIR /usr/src/app
 
-# Install pnpm globally
-RUN npm install -g pnpm
-
 # Copy only package management files first for better caching
-COPY package.json pnpm-lock.yaml ./
+COPY package.json bun.lockb* ./
 
 # Install dependencies
-RUN pnpm install
+RUN bun install --frozen-lockfile
 
 # Copy the rest of the application
 COPY . .
@@ -20,4 +17,4 @@ COPY . .
 EXPOSE 4000
 
 # Use development command
-CMD ["pnpm", "dev"]
+CMD ["bun", "run", "dev"]
