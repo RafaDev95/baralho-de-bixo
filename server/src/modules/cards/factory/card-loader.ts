@@ -2,11 +2,8 @@ import { CardFactory } from './cards-factory';
 import { CARD_TYPE_DEFINITIONS } from './constants';
 import type { CardBase, CardDefinition } from './types';
 import type { TypedCardDefinition } from './card-definition-builder';
-import * as cardDefinitions from '../definitions';
+import * as localCardDefinitions from '../definitions';
 
-/**
- * Type-safe card loader that uses TypeScript definitions
- */
 export class CardLoader {
   private static instance: CardLoader;
   private cardDefinitions: TypedCardDefinition[] = [];
@@ -33,7 +30,7 @@ export class CardLoader {
 
     try {
       // Import all card definitions from TypeScript modules
-      const allCards = Object.values(cardDefinitions).filter(
+      const allCards = Object.values(localCardDefinitions).filter(
         (card): card is TypedCardDefinition => 
           typeof card === 'object' && card !== null && 'name' in card
       );

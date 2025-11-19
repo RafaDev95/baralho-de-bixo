@@ -9,7 +9,7 @@ import type { CardDefinition, CardEffect, CardFactoryStrategy } from './types';
 
 export const DEFAULT_EFFECT: CardEffect = {
   type: 'damage',
-  target: 'enemy',
+  target: 'creature',
   value: 1,
 };
 

@@ -110,6 +110,7 @@ export interface CardEffect {
 }
 
 export interface CardAbility {
+  id: string;
   name: string;
   description: string;
   trigger: AbilityTrigger;

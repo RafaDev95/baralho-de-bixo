@@ -1,9 +1,5 @@
 import { defineCard } from '../../factory/card-definition-builder';
-import { quickStrike, burningPresence, growth, rebirth, burningCycle, flameStrike, elementalMastery } from '../../abilities';
-
-/**
- * Red creature cards
- */
+import { quickStrike, burningPresence, growth, rebirth, elementalMastery } from '../../abilities';
 
 export const flameImp = defineCard({
   name: "Flame Imp",

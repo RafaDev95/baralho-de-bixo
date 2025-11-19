@@ -1,10 +1,6 @@
 import { defineCard } from '@/modules/cards/factory/card-definition-builder';
 import { evasive, multipleBlock, intimidatingPresence, tidalForce, windsFavor, doubleStrike, haste } from '@/modules/cards/abilities';
 
-/**
- * Blue creature cards
- */
-
 export const waterSprite = defineCard({
   name: "Water Sprite",
   rarity: "common",
@@ -50,7 +46,7 @@ export const windSprite = defineCard({
   manaCost: { blue: 1, generic: 0 },
   power: 1,
   toughness: 1,
-  abilities: [intimidatingPresence] // Using intimidating presence for power restriction
+  abilities: [intimidatingPresence]
 });
 
 export const stormCaller = defineCard({

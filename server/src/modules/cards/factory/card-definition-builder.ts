@@ -1,9 +1,6 @@
 import type { CardType, CardRarity, CardColor } from '@/db/schemas';
-import type { CardDefinition, CardAbility, ManaCost } from './types';
+import type { CardAbility } from './types';
 
-/**
- * Type-safe mana cost definition
- */
 export interface ManaCostDefinition {
   red?: number;
   blue?: number;
@@ -13,9 +10,6 @@ export interface ManaCostDefinition {
   generic: number;
 }
 
-/**
- * Base card definition interface with strict typing
- */
 export interface BaseCardDefinition {
   name: string;
   type: CardType;
@@ -25,9 +19,7 @@ export interface BaseCardDefinition {
   manaCost: ManaCostDefinition;
 }
 
-/**
- * Creature-specific card definition
- */
+
 export interface CreatureCardDefinition extends BaseCardDefinition {
   type: 'creature';
   power: number;
@@ -35,9 +27,7 @@ export interface CreatureCardDefinition extends BaseCardDefinition {
   abilities?: CardAbility[];
 }
 
-/**
- * Spell-specific card definition
- */
+
 export interface SpellCardDefinition extends BaseCardDefinition {
   type: 'spell';
   effect: {
@@ -48,17 +38,12 @@ export interface SpellCardDefinition extends BaseCardDefinition {
   };
 }
 
-/**
- * Enchantment-specific card definition
- */
+
 export interface EnchantmentCardDefinition extends BaseCardDefinition {
   type: 'enchantment';
   abilities: CardAbility[];
 }
 
-/**
- * Artifact-specific card definition
- */
 export interface ArtifactCardDefinition extends BaseCardDefinition {
   type: 'artifact';
   abilities: CardAbility[];
@@ -68,19 +53,12 @@ export interface ArtifactCardDefinition extends BaseCardDefinition {
   };
 }
 
-/**
- * Union type for all card definitions
- */
 export type TypedCardDefinition =
   | CreatureCardDefinition
   | SpellCardDefinition
   | EnchantmentCardDefinition
   | ArtifactCardDefinition;
 
-/**
- * Type-safe card definition builder
- * Provides compile-time validation and type inference
- */
 export const defineCard = <T extends TypedCardDefinition>(card: T) => {
   // Validate mana cost consistency
   validateManaCost(card.manaCost);
@@ -98,9 +76,6 @@ export const defineCard = <T extends TypedCardDefinition>(card: T) => {
   return card;
 };
 
-/**
- * Validate mana cost structure
- */
 function validateManaCost(manaCost: ManaCostDefinition): void {
   const manaTypes = ['red', 'blue', 'green', 'white', 'black', 'generic'] as const;
   
@@ -117,9 +92,6 @@ function validateManaCost(manaCost: ManaCostDefinition): void {
   }
 }
 
-/**
- * Validate creature stats
- */
 function validateCreatureStats(power: number, toughness: number): void {
   if (power < 0 || !Number.isInteger(power)) {
     throw new Error(`Invalid power: ${power}. Must be a non-negative integer.`);
@@ -130,9 +102,6 @@ function validateCreatureStats(power: number, toughness: number): void {
   }
 }
 
-/**
- * Validate spell effect structure
- */
 function validateSpellEffect(effect: SpellCardDefinition['effect']): void {
   if (!effect.type) {
     throw new Error('Spell effect must have a type');
@@ -143,30 +112,18 @@ function validateSpellEffect(effect: SpellCardDefinition['effect']): void {
   }
 }
 
-/**
- * Type guard to check if a card definition is a creature
- */
 export function isCreatureCard(card: TypedCardDefinition): card is CreatureCardDefinition {
   return card.type === 'creature';
 }
 
-/**
- * Type guard to check if a card definition is a spell
- */
 export function isSpellCard(card: TypedCardDefinition): card is SpellCardDefinition {
   return card.type === 'spell';
 }
 
-/**
- * Type guard to check if a card definition is an enchantment
- */
 export function isEnchantmentCard(card: TypedCardDefinition): card is EnchantmentCardDefinition {
   return card.type === 'enchantment';
 }
 
-/**
- * Type guard to check if a card definition is an artifact
- */
 export function isArtifactCard(card: TypedCardDefinition): card is ArtifactCardDefinition {
   return card.type === 'artifact';
 }

@@ -1,10 +1,6 @@
 import { defineCard } from '../../factory/card-definition-builder';
 import { burningCycle, tidalProtection, windsFavorStatic, costReduction } from '../../abilities';
 
-/**
- * Enchantment cards
- */
-
 export const eternalFlame = defineCard({
   name: "Eternal Flame",
   rarity: "rare",

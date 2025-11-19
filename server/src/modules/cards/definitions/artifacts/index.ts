@@ -1,10 +1,6 @@
 import { defineCard } from '../../factory/card-definition-builder';
 import { flameStrike, spellWard, windWalk } from '@/modules/cards/abilities';
 
-/**
- * Artifact cards
- */
-
 export const flameSword = defineCard({
   name: "Flame Sword",
   rarity: "uncommon",

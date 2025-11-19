@@ -1,10 +1,6 @@
 import { defineAbility } from '../ability-registry';
 import type { AbilityDefinition } from '../ability-registry';
 
-/**
- * Combat-related abilities
- */
-
 export const quickStrike: AbilityDefinition = defineAbility({
   id: 'quick_strike',
   name: 'Quick Strike',

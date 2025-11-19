@@ -1,15 +1,11 @@
 import { defineAbility } from '../ability-registry';
 import type { AbilityDefinition } from '../ability-registry';
 
-/**
- * Spell effects as abilities
- */
-
 export const fireballEffect: AbilityDefinition = defineAbility({
   id: 'fireball_effect',
   name: 'Fireball',
   description: 'Deal 3 damage to target creature or player',
-  trigger: 'static', // Spells don't have triggers, they're cast
+  trigger: 'static',
   effect: {
     type: 'damage',
     target: 'any',
@@ -32,10 +28,10 @@ export const infernoEffect: AbilityDefinition = defineAbility({
 export const flameShieldEffect: AbilityDefinition = defineAbility({
   id: 'flame_shield_effect',
   name: 'Flame Shield',
-  description: 'Give a creature +2/+0 and \'Deal 1 damage to attacker when blocked\'',
+  description: "Give a creature +2/+0 and 'Deal 1 damage to attacker when blocked'",
   trigger: 'static',
   effect: {
-    type: 'modify_creature',
+    type: 'modify_stats',
     target: 'creature',
     power: 2,
     toughness: 0,
@@ -55,7 +51,7 @@ export const flameShieldEffect: AbilityDefinition = defineAbility({
 export const tidalWaveEffect: AbilityDefinition = defineAbility({
   id: 'tidal_wave_effect',
   name: 'Tidal Wave',
-  description: 'Return target creature to its owner\'s hand',
+  description: "Return target creature to its owner's hand",
   trigger: 'static',
   effect: {
     type: 'return_to_hand',
@@ -66,7 +62,7 @@ export const tidalWaveEffect: AbilityDefinition = defineAbility({
 export const tsunamiEffect: AbilityDefinition = defineAbility({
   id: 'tsunami_effect',
   name: 'Tsunami',
-  description: 'Return all creatures to their owners\' hands',
+  description: "Return all creatures to their owners' hands",
   trigger: 'static',
   effect: {
     type: 'return_to_hand',
@@ -89,7 +85,7 @@ export const waterShieldEffect: AbilityDefinition = defineAbility({
 export const gustEffect: AbilityDefinition = defineAbility({
   id: 'gust_effect',
   name: 'Gust',
-  description: 'Return target creature to the top of its owner\'s library',
+  description: "Return target creature to the top of its owner's library",
   trigger: 'static',
   effect: {
     type: 'return_to_library',
@@ -101,7 +97,7 @@ export const gustEffect: AbilityDefinition = defineAbility({
 export const cycloneEffect: AbilityDefinition = defineAbility({
   id: 'cyclone_effect',
   name: 'Cyclone',
-  description: 'Shuffle all creatures into their owners\' libraries',
+  description: "Shuffle all creatures into their owners' libraries",
   trigger: 'static',
   effect: {
     type: 'shuffle_into_library',
@@ -112,7 +108,7 @@ export const cycloneEffect: AbilityDefinition = defineAbility({
 export const windWalkSpellEffect: AbilityDefinition = defineAbility({
   id: 'wind_walk_spell_effect',
   name: 'Wind Walk',
-  description: 'Target creature can\'t be blocked this turn',
+  description: "Target creature can't be blocked this turn",
   trigger: 'static',
   effect: {
     type: 'unblockable',
@@ -124,7 +120,7 @@ export const windWalkSpellEffect: AbilityDefinition = defineAbility({
 export const elementalFusionEffect: AbilityDefinition = defineAbility({
   id: 'elemental_fusion_effect',
   name: 'Elemental Fusion',
-  description: 'Combine two creatures into one with combined power and toughness',
+  description: "Combine two creatures into one with combined power and toughness",
   trigger: 'static',
   effect: {
     type: 'fuse_creatures',
@@ -132,9 +128,6 @@ export const elementalFusionEffect: AbilityDefinition = defineAbility({
   }
 });
 
-/**
- * Export all spell effects
- */
 export const spellEffects = {
   fireballEffect,
   infernoEffect,

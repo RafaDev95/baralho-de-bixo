@@ -1,87 +1,62 @@
 import { defineCard } from '../../factory/card-definition-builder';
 import { tidalWaveEffect, tsunamiEffect, waterShieldEffect, gustEffect, cycloneEffect, windWalkSpellEffect } from '../../abilities';
 
-/**
- * Blue spell cards
- */
-
 export const tidalWave = defineCard({
   name: "Tidal Wave",
   rarity: "common",
   colors: ["blue"],
-  description: "Return target creature to its owner's hand",
+  description: tidalWaveEffect.description,
   manaCost: { blue: 1, generic: 1 },
   type: "spell",
-  effect: {
-    type: "return_to_hand",
-    target: "creature"
-  }
+  effect: tidalWaveEffect.effect
 });
 
 export const tsunami = defineCard({
   name: "Tsunami",
   rarity: "rare",
   colors: ["blue"],
-  description: "Return all creatures to their owners' hands",
+  description: tsunamiEffect.description,
   manaCost: { blue: 2, generic: 2 },
   type: "spell",
-  effect: {
-    type: "return_to_hand",
-    target: "all_creatures"
-  }
+  effect: tsunamiEffect.effect
 });
 
 export const waterShield = defineCard({
   name: "Water Shield",
   rarity: "uncommon",
   colors: ["blue"],
-  description: "Prevent all damage to target creature this turn",
+  description: waterShieldEffect.description,
   manaCost: { blue: 1, generic: 1 },
   type: "spell",
-  effect: {
-    type: "prevent_damage",
-    target: "creature",
-    duration: "until_end_of_turn"
-  }
+  effect: waterShieldEffect.effect
 });
 
 export const gust = defineCard({
   name: "Gust",
   rarity: "common",
   colors: ["blue"],
-  description: "Return target creature to the top of its owner's library",
+  description: gustEffect.description,
   manaCost: { blue: 1, generic: 1 },
   type: "spell",
-  effect: {
-    type: "return_to_library",
-    target: "creature",
-    position: "top"
-  }
+  effect: gustEffect.effect
 });
 
 export const cyclone = defineCard({
   name: "Cyclone",
   rarity: "rare",
   colors: ["blue"],
-  description: "Shuffle all creatures into their owners' libraries",
+  description: cycloneEffect.description,
   manaCost: { blue: 2, generic: 2 },
   type: "spell",
-  effect: {
-    type: "shuffle_into_library",
-    target: "all_creatures"
-  }
+  effect: cycloneEffect.effect
 });
 
 export const windWalk = defineCard({
   name: "Wind Walk",
   rarity: "uncommon",
   colors: ["blue"],
-  description: "Target creature can't be blocked this turn",
+  description: windWalkSpellEffect.description,
   manaCost: { blue: 1, generic: 1 },
   type: "spell",
-  effect: {
-    type: "unblockable",
-    target: "creature",
-    duration: "until_end_of_turn"
-  }
+  effect: windWalkSpellEffect.effect
 });

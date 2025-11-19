@@ -1,5 +1,5 @@
 import { db } from '@/db/config';
-import { gameCardsTable } from '@/db/schemas';
+import { cardsTable, gameCardsTable } from '@/db/schemas';
 import { and, eq } from 'drizzle-orm';
 
 // Mana types in the game
@@ -121,10 +121,17 @@ export class ManaSystem {
     }
 
     // Then pay generic costs using remaining mana
+    // First try to use generic mana from the pool if available
     const genericCost = cost.generic || 0;
     let genericPaid = 0;
 
-    // Try to pay with colored mana first (in order of preference)
+    if (newPool.generic > 0 && genericCost > 0) {
+      const used = Math.min(newPool.generic, genericCost);
+      newPool.generic -= used;
+      genericPaid += used;
+    }
+
+    // If still need to pay generic costs, use colored mana in order
     const colorOrder: ManaType[] = ['red', 'blue', 'green', 'white', 'black'];
 
     for (const color of colorOrder) {
@@ -229,7 +236,7 @@ export class ManaSystem {
     for (const land of lands) {
       // Check if it's a land card and get its mana type
       const card = await db.query.cardsTable.findFirst({
-        where: eq(db.query.cardsTable.id, land.cardId),
+        where: eq(cardsTable.id, land.cardId),
       });
 
       if (card && card.type === 'artifact') {
@@ -259,7 +266,7 @@ export class ManaSystem {
   ): Promise<{ canPlay: boolean; reason?: string }> {
     // Get the card details
     const card = await db.query.cardsTable.findFirst({
-      where: eq(db.query.cardsTable.id, cardId),
+      where: eq(cardsTable.id, cardId),
     });
 
     if (!card) {
@@ -270,7 +277,7 @@ export class ManaSystem {
     const availableMana = await ManaSystem.getAvailableMana(gameId, playerId);
 
     // Parse the card's mana cost
-    const manaCost = ManaSystem.parseManaCost(card.manaCost);
+    const manaCost = ManaSystem.parseManaCost(card.manaCost as Record<string, unknown>);
 
     // Check if player can pay the cost
     if (!ManaSystem.canPayManaCost(availableMana, manaCost)) {
@@ -330,14 +337,14 @@ export class ManaSystem {
 
     // Get the card and its mana cost
     const card = await db.query.cardsTable.findFirst({
-      where: eq(db.query.cardsTable.id, cardId),
+      where: eq(cardsTable.id, cardId),
     });
 
     if (!card) {
       return { success: false, reason: 'Card not found' };
     }
 
-    const manaCost = ManaSystem.parseManaCost(card.manaCost);
+    const manaCost = ManaSystem.parseManaCost(card.manaCost as Record<string, unknown>);
 
     // Get available mana sources and pay the cost
     const sources = await ManaSystem.getPlayerManaSources(gameId, playerId);
@@ -395,7 +402,7 @@ export class ManaSystem {
 
     // Tap all the sources
     for (const cardId of sourcesToTap) {
-      await ManaSystem.tapManaSource(gameId, cardId);
+      await ManaSystem.tapManaSource(_gameId, cardId);
     }
   }
 }
