@@ -9,10 +9,8 @@ import type {
 
 /**
  * CardFactory - Factory Pattern Implementation
- * 
  * Centralizes card creation logic using static factory methods.
  * Each card type has its own factory method that ensures proper initialization.
- * 
  * Benefits:
  * - Single responsibility: All card creation in one place
  * - Easy to extend: Add new card types by adding new factory methods
@@ -144,7 +142,11 @@ export class CardFactory {
     }
 
     // Validate energy cost
-    if (typeof card.energyCost !== 'number' || card.energyCost < 0 || card.energyCost > 10) {
+    if (
+      typeof card.energyCost !== 'number' ||
+      card.energyCost < 0 ||
+      card.energyCost > 10
+    ) {
       throw new Error('Card energy cost must be a number between 0 and 10');
     }
   }

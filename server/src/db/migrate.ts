@@ -5,7 +5,7 @@ import drizzleConfig from '$/drizzle.config';
 import { db, pool } from './config';
 
 const main = async () => {
-  // biome-ignore lint/style/noNonNullAssertion: <explanation>
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   await migrate(db, { migrationsFolder: drizzleConfig.out! });
   console.info('migration done');
 };

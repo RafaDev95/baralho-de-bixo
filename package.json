@@ -10,7 +10,5 @@
   "author": "",
   "license": "ISC",
   "packageManager": "bun@1.1.0",
-  "devDependencies": {
-    "@biomejs/biome": "^1.6.4"
-  }
+  "devDependencies": {}
 }
