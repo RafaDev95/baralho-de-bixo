@@ -10,7 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import type { z } from "zod";
+
 import { deckCards } from "./deck-cards";
 import { rarityEnum, typeEnum } from "./enums";
 import { cardPositionsTable, stackTable } from "./games";
@@ -49,7 +49,6 @@ export const cardCountersTable = pgTable("card_counters", {
 });
 
 export const cardsSchema = createSelectSchema(cardsTable);
-export type Card = z.infer<typeof cardsSchema>;
 export const insertCardSchema = createInsertSchema(cardsTable).omit({
   createdAt: true,
   updatedAt: true,
@@ -66,6 +65,7 @@ export const cardsRelations = relations(cardsTable, ({ many }) => ({
 
 export const updateCardSchema = insertCardSchema.partial();
 
-export type CardSchema = z.infer<typeof cardsSchema>;
+
+export type Card = typeof cardsSchema._output
 export type CardType = (typeof typeEnum.enumValues)[number];
 export type CardRarity = (typeof rarityEnum.enumValues)[number];

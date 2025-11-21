@@ -7,7 +7,6 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import type { z } from 'zod';
 import { cardsTable } from './cards';
 import { playersTable } from './players';
 
@@ -48,4 +47,4 @@ export const tradesRelations = relations(tradesTable, ({ one }) => ({
   }),
 }));
 
-export type TradeSchema = z.infer<typeof tradesSchema>;
+export type Trade = typeof tradesSchema._output

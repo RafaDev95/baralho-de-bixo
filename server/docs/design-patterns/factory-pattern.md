@@ -50,7 +50,6 @@ const card = CardFactory.createCreature(
   5, // toughness
   {
     rarity: "rare",
-    colors: ["red"],
     description: "A powerful dragon"
   }
 );

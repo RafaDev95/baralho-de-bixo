@@ -59,14 +59,14 @@ export class CardFactory {
     effect: SpellCard['effect'],
     options?: {
       rarity?: CardDefinition['rarity'];
-      colors?: CardDefinition['colors'];
+      energyCost?: number;
       description?: string;
     }
   ): SpellCard {
     const card: SpellCard = {
       name,
       type: 'spell',
-      energyCost,
+      energyCost: options?.energyCost ?? energyCost,
       effect,
       rarity: options?.rarity ?? 'common',
       description: options?.description ?? '',
@@ -85,14 +85,14 @@ export class CardFactory {
     abilities: EnchantmentCard['abilities'],
     options?: {
       rarity?: CardDefinition['rarity'];
-      colors?: CardDefinition['colors'];
+      energyCost?: number;
       description?: string;
     }
   ): EnchantmentCard {
     const card: EnchantmentCard = {
       name,
       type: 'enchantment',
-      energyCost,
+      energyCost: options?.energyCost ?? energyCost,
       abilities,
       rarity: options?.rarity ?? 'common',
       description: options?.description ?? '',
@@ -111,14 +111,14 @@ export class CardFactory {
     abilities: ArtifactCard['abilities'],
     options?: {
       rarity?: CardDefinition['rarity'];
-      colors?: CardDefinition['colors'];
+      energyCost?: number;
       description?: string;
     }
   ): ArtifactCard {
     const card: ArtifactCard = {
       name,
       type: 'artifact',
-      energyCost,
+      energyCost: options?.energyCost ?? energyCost,
       abilities,
       rarity: options?.rarity ?? 'common',
       description: options?.description ?? '',

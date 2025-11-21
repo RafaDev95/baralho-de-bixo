@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Strategy Pattern encapsulates different attack behaviors and card abilities. This allows cards to have different behaviors without modifying core game logic.
+The Strategy Pattern encapsulates different attack behaviors and card abilities. This allows cards to have different behaviors without modifying core game logic or the cards itself.
 
 ## Implementation
 

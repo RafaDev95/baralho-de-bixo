@@ -9,7 +9,6 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import type { z } from 'zod';
 import { deckCards } from './deck-cards';
 import { gameRoomPlayersTable } from './game-rooms';
 import { playersTable } from './players';
@@ -45,4 +44,4 @@ export const decksRelations = relations(decksTable, ({ one, many }) => ({
   gameRooms: many(gameRoomPlayersTable),
 }));
 
-export type DeckSchema = z.infer<typeof decksSchema>;
+export type Deck = typeof decksSchema._output

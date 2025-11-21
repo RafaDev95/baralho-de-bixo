@@ -10,7 +10,6 @@ import {
 } from 'drizzle-orm/pg-core';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import type { z } from 'zod';
 import { decksTable } from './decks';
 import { gameRoomsTable } from './game-rooms';
 import { playersTable } from './players';
@@ -149,7 +148,7 @@ export const gameStateSnapshotsTable = pgTable('game_state_snapshots', {
 
 // Schemas for validation
 export const gameSessionsSchema = createSelectSchema(gameSessionsTable);
-export type GameSession = z.infer<typeof gameSessionsSchema>;
+export type GameSession = typeof gameSessionsSchema._output
 
 export const insertGameSessionSchema = createInsertSchema(
   gameSessionsTable
@@ -163,7 +162,7 @@ export const insertGameSessionSchema = createInsertSchema(
 });
 
 export const gamePlayersSchema = createSelectSchema(gamePlayersTable);
-export type GamePlayer = z.infer<typeof gamePlayersSchema>;
+export type GamePlayer = typeof gamePlayersSchema._output
 
 export const insertGamePlayerSchema = createInsertSchema(gamePlayersTable).omit(
   {
@@ -174,7 +173,7 @@ export const insertGamePlayerSchema = createInsertSchema(gamePlayersTable).omit(
 );
 
 export const gameCardsSchema = createSelectSchema(gameCardsTable);
-export type GameCard = z.infer<typeof gameCardsSchema>;
+export type GameCard = typeof gameCardsSchema._output
 
 export const insertGameCardSchema = createInsertSchema(gameCardsTable).omit({
   createdAt: true,
@@ -183,7 +182,7 @@ export const insertGameCardSchema = createInsertSchema(gameCardsTable).omit({
 });
 
 export const gameActionsSchema = createSelectSchema(gameActionsTable);
-export type GameAction = z.infer<typeof gameActionsSchema>;
+export type GameAction = typeof gameActionsSchema._output
 
 export const insertGameActionSchema = createInsertSchema(gameActionsTable).omit(
   {
@@ -195,7 +194,7 @@ export const insertGameActionSchema = createInsertSchema(gameActionsTable).omit(
 export const gameStateSnapshotsSchema = createSelectSchema(
   gameStateSnapshotsTable
 );
-export type GameStateSnapshot = z.infer<typeof gameStateSnapshotsSchema>;
+export type GameStateSnapshot = typeof gameStateSnapshotsSchema._output
 
 // Relations
 export const gameSessionsRelations = relations(

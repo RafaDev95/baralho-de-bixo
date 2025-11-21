@@ -2,7 +2,6 @@ import { relations } from 'drizzle-orm';
 import { integer, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import type { z } from 'zod';
 import { decksTable } from './decks';
 import { playersTable } from './players';
 
@@ -47,7 +46,7 @@ export const gameRoomPlayersTable = pgTable('game_room_players', {
 });
 
 export const gameRoomsSchema = createSelectSchema(gameRoomsTable);
-export type GameRoom = z.infer<typeof gameRoomsSchema>;
+export type GameRoom = typeof gameRoomsSchema._output
 
 export const insertGameRoomSchema = createInsertSchema(gameRoomsTable).omit({
   createdAt: true,
@@ -57,7 +56,7 @@ export const insertGameRoomSchema = createInsertSchema(gameRoomsTable).omit({
 });
 
 export const gameRoomPlayersSchema = createSelectSchema(gameRoomPlayersTable);
-export type GameRoomPlayer = z.infer<typeof gameRoomPlayersSchema>;
+export type GameRoomPlayer = typeof gameRoomPlayersSchema._output
 
 export const insertGameRoomPlayerSchema = createInsertSchema(
   gameRoomPlayersTable

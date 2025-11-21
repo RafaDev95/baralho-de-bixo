@@ -7,7 +7,6 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import type { z } from 'zod';
 import { decksTable } from './decks';
 import { gameRoomPlayersTable } from './game-rooms';
 import { tradesTable } from './trades';
@@ -37,4 +36,4 @@ export const playersRelations = relations(playersTable, ({ many }) => ({
   gameRooms: many(gameRoomPlayersTable),
 }));
 
-export type PlayerSchema = z.infer<typeof playersSchema>;
+export type Player = typeof playersSchema._output

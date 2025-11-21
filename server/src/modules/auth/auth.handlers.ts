@@ -1,34 +1,14 @@
 import { db } from '@/db/config';
-import { playersTable } from '@/db/schemas';
+import { insertPlayerSchema, playersTable } from '@/db/schemas';
 import { eq } from 'drizzle-orm';
 import type { Context } from 'hono';
-import { z } from 'zod';
 
-// Validation schemas
-const playerSignUpSchema = z.object({
-  username: z
-    .string()
-    .min(3, 'Username must be at least 3 characters')
-    .max(50, 'Username too long'),
-  email: z.string().email('Invalid email format'),
-});
 
-const playerSignInSchema = z.object({
-  email: z.string().email('Invalid email format'),
-});
-
-export type PlayerSignUpRequest = z.infer<typeof playerSignUpSchema>;
-export type PlayerSignInRequest = z.infer<typeof playerSignInSchema>;
-
-/**
- * Player sign up - create new player account
- */
 export const playerSignUp = async (c: Context) => {
   try {
     const body = await c.req.json();
-    const { username, email } = playerSignUpSchema.parse(body);
+    const { username, email } = insertPlayerSchema.parse(body);
 
-    // Check if username already exists
     const existingUsername = await db
       .select()
       .from(playersTable)
@@ -97,13 +77,11 @@ export const playerSignUp = async (c: Context) => {
   }
 };
 
-/**
- * Player sign in - get player by email
- */
+
 export const playerSignIn = async (c: Context) => {
   try {
     const body = await c.req.json();
-    const { email } = playerSignInSchema.parse(body);
+    const { email } = insertPlayerSchema.parse(body);
 
     // Find player by email
     const player = await db
@@ -148,9 +126,6 @@ export const playerSignIn = async (c: Context) => {
   }
 };
 
-/**
- * Get player profile by email
- */
 export const getPlayerProfile = async (c: Context) => {
   try {
     const email = c.req.param('email');

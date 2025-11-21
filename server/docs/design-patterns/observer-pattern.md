@@ -38,7 +38,7 @@ The Observer Pattern provides:
 ### Observer + WebSocket
 - Server pushes immediately
 - < 100ms latency
-- Efficient bandwidth
+- Efficient bandwidth (It doesn't affect bandwidth directly but, if we have LESS latency the communication should be faster and smoother and consuming less bandwidth)
 - Lower server load
 
 ## Example

@@ -4,7 +4,6 @@ import { createRoute } from '@hono/zod-openapi';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
 import { jsonContent } from 'stoker/openapi/helpers';
 import { IdParamsSchema, createErrorSchema } from 'stoker/openapi/schemas';
-import { createGenericPatchRoute, createGenericPostRoute } from './handlers';
 
 const tags = ['Trades'];
 
@@ -17,12 +16,26 @@ export const list = createRoute({
   },
 });
 
-export const create = createGenericPostRoute({
+export const create = createRoute({
+  tags,
   path: '/trades',
-  insertSchema: insertTradeSchema,
-  responseSchema: tradesSchema,
-  description: 'Create a trade',
-  tag: tags[0],
+  method: 'post',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: insertTradeSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    [HttpStatusCodes.CREATED]: jsonContent(tradesSchema, 'Trade created'),
+    [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
+      createErrorSchema(insertTradeSchema),
+      'Invalid trade data'
+    ),
+  },
 });
 
 export const getById = createRoute({
@@ -40,11 +53,28 @@ export const getById = createRoute({
   },
 });
 
-export const update = createGenericPatchRoute({
+export const update = createRoute({
   tag: tags[0],
   path: '/trades/{id}',
-  responseSchema: tradesSchema,
-  updateSchema: insertTradeSchema.partial(),
+  method: 'patch',
+  request: {
+    params: IdParamsSchema,
+    body: {
+      content: {
+        'application/json': {
+          schema: insertTradeSchema.partial(),
+        },
+      },
+    },
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(tradesSchema, 'Trade updated'),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(notFoundSchema, 'Not found'),
+    [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
+      createErrorSchema(IdParamsSchema),
+      'Invalid Id Error'
+    ),
+  },
 });
 
 export const remove = createRoute({
