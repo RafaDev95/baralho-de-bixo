@@ -14,6 +14,7 @@ export interface GameRoomEvent {
     | 'player_left'
     | 'ready_status_changed'
     | 'game_started'
+    | 'game_event'
     | 'chat_message'
     | 'connected';
   data: Record<string, unknown>;
@@ -192,7 +193,7 @@ class GameRoomSocketManager {
     }
   }
 
-  private broadcastToRoom(
+  broadcastToRoom(
     roomId: number,
     event: GameRoomEvent,
     excludeSocketId?: string

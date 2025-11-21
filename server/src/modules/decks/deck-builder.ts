@@ -1,4 +1,3 @@
-import type { CardColor } from '@/db/schemas';
 import type { TypedCardDefinition } from '@/modules/cards/factory/card-definition-builder';
 
 /**
@@ -15,7 +14,6 @@ export interface DeckCardEntry {
 export interface DeckTemplate {
   name: string;
   type: 'starter' | 'custom';
-  colors: CardColor[];
   description: string;
   cards: DeckCardEntry[];
 }
@@ -40,10 +38,6 @@ function validateDeck(deck: DeckTemplate): void {
   
   if (!deck.type) {
     throw new Error('Deck must have a type');
-  }
-  
-  if (!Array.isArray(deck.colors) || deck.colors.length === 0) {
-    throw new Error('Deck must have at least one color');
   }
   
   if (!deck.description) {
@@ -71,16 +65,6 @@ function validateDeck(deck: DeckTemplate): void {
   // Validate minimum deck size
   if (totalCards < 15) {
     throw new Error(`Deck must have at least 15 cards, found ${totalCards}`);
-  }
-  
-  // Validate color identity
-  for (const cardEntry of deck.cards) {
-    const cardColors = cardEntry.card.colors;
-    const hasValidColor = cardColors.some(color => deck.colors.includes(color));
-    
-    if (!hasValidColor) {
-      throw new Error(`Card ${cardEntry.card.name} has colors ${cardColors.join(', ')} which don't match deck colors ${deck.colors.join(', ')}`);
-    }
   }
 }
 

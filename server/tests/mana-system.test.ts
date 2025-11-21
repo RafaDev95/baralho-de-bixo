@@ -224,14 +224,12 @@ describe('ManaSystem', () => {
     it.skip('should validate card play with mana system', async () => {
       // Create test data with unique values to avoid conflicts
       const uniqueId = Date.now();
-      // Wallet address must be exactly 42 characters (0x + 40 hex chars)
-      const walletAddress = `0x${uniqueId.toString(16).padStart(40, '0').slice(0, 40)}`;
       const username = `testplayer${uniqueId}`;
       const email = `test${uniqueId}@example.com`;
       
       // Use raw SQL to avoid PGlite prepared statement issues with updatedAt
       const playerResult = await db.execute(
-        sql`INSERT INTO players (wallet_address, username, email) VALUES (${walletAddress}, ${username}, ${email}) RETURNING *`
+        sql`INSERT INTO players (username, email) VALUES (${username}, ${email}) RETURNING *`
       );
       const player = playerResult.rows[0] as any;
 

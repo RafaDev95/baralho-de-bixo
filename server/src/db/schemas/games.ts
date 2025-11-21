@@ -93,17 +93,6 @@ export const cardPositionsTable = pgTable('card_positions', {
   updatedAt: timestamp('updated_at'),
 });
 
-export const manaPoolsTable = pgTable('mana_pools', {
-  id: serial('id').primaryKey(),
-  gameId: integer('game_id').notNull(),
-  playerId: integer('player_id').notNull(),
-  redMana: integer('red_mana').default(0),
-  blueMana: integer('blue_mana').default(0),
-  greenMana: integer('green_mana').default(0),
-  genericMana: integer('generic_mana').default(0),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at'),
-});
 
 // Relations
 export const gamesRelations = relations(gamesTable, ({ one, many }) => ({
@@ -121,7 +110,6 @@ export const gamesRelations = relations(gamesTable, ({ one, many }) => ({
   }),
   turns: many(turnsTable),
   gameStates: many(gameStatesTable),
-  manaPools: many(manaPoolsTable),
   cardPositions: many(cardPositionsTable),
   stack: many(stackTable),
   triggeredAbilities: many(triggeredAbilitiesTable),

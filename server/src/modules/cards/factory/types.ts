@@ -1,4 +1,4 @@
-import type { CardRarity, CardType, CardColor } from '@/db/schemas';
+import type { CardRarity, CardType } from '@/db/schemas';
 
 // Enhanced ability trigger types based on JSON definitions
 export type AbilityTrigger =
@@ -57,9 +57,8 @@ export interface CardBase {
   name: string;
   type: CardType;
   rarity: CardRarity;
-  colors: CardColor[];
   description: string;
-  manaCost: ManaCost;
+  energyCost: number; // Simplified: single energy cost (0-10)
 }
 
 export interface CreatureCard extends CardBase {
@@ -68,8 +67,6 @@ export interface CreatureCard extends CardBase {
   toughness: number;
   abilities?: CardAbility[];
   canAttack: boolean;
-  canBlock: boolean;
-  hasSummoningSickness: boolean;
 }
 
 export interface SpellCard extends CardBase {
@@ -87,14 +84,7 @@ export interface ArtifactCard extends CardBase {
   abilities: CardAbility[];
 }
 
-export interface ManaCost {
-  red?: number;
-  blue?: number;
-  green?: number;
-  white?: number;
-  black?: number;
-  generic: number;
-}
+// Removed ManaCost - using simple energyCost number instead
 
 export interface CardEffect {
   type: EffectType;

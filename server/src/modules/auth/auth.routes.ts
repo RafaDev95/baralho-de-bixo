@@ -5,7 +5,6 @@ import { z } from 'zod';
 
 // Schema definitions
 const PlayerSignUpRequestSchema = z.object({
-  wallet_address: z.string().min(1, 'Wallet address is required'),
   username: z
     .string()
     .min(3, 'Username must be at least 3 characters')
@@ -14,10 +13,7 @@ const PlayerSignUpRequestSchema = z.object({
 });
 
 const PlayerSignInRequestSchema = z.object({
-  wallet_address: z.string().min(1, 'Wallet address is required'),
-  signature: z.string().min(1, 'Signature is required'),
-  digest: z.string().min(1, 'Digest is required'),
-  encodedMessage: z.string().min(1, 'Encoded message is required'),
+  email: z.string().email('Invalid email format'),
 });
 
 const PlayerResponseSchema = z.object({
@@ -25,12 +21,11 @@ const PlayerResponseSchema = z.object({
   message: z.string().optional(),
   player: z
     .object({
-      wallet_address: z.string(),
+      id: z.number(),
       username: z.string(),
       email: z.string(),
       balance: z.number(),
       rank: z.number(),
-      lastLoginAt: z.string().nullable(),
       created_at: z.string(),
     })
     .optional(),
@@ -66,7 +61,7 @@ export const playerSignUp = createRoute({
   },
   tags: ['Authentication'],
   summary: 'Player sign up',
-  description: 'Register a new player with wallet address, username, and email',
+  description: 'Register a new player with username and email',
 });
 
 export const playerSignIn = createRoute({
@@ -90,10 +85,6 @@ export const playerSignIn = createRoute({
       PlayerResponseSchema,
       'Invalid request'
     ),
-    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
-      PlayerResponseSchema,
-      'Invalid signature'
-    ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
       PlayerResponseSchema,
       'Player not found'
@@ -101,15 +92,15 @@ export const playerSignIn = createRoute({
   },
   tags: ['Authentication'],
   summary: 'Player sign in',
-  description: 'Sign in existing player by verifying wallet signature',
+  description: 'Sign in existing player by email',
 });
 
 export const getPlayerProfile = createRoute({
   method: 'get',
-  path: '/profile/{address}',
+  path: '/profile/{email}',
   request: {
     params: z.object({
-      address: z.string().min(1, 'Wallet address is required'),
+      email: z.string().email('Invalid email format'),
     }),
   },
   responses: {
@@ -119,7 +110,7 @@ export const getPlayerProfile = createRoute({
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       PlayerResponseSchema,
-      'Invalid address'
+      'Invalid email'
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
       PlayerResponseSchema,
@@ -128,5 +119,5 @@ export const getPlayerProfile = createRoute({
   },
   tags: ['Authentication'],
   summary: 'Get player profile',
-  description: 'Retrieve player profile by wallet address',
+  description: 'Retrieve player profile by email',
 });

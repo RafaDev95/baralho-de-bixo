@@ -17,8 +17,7 @@ export const BASE_CARD_REQUIRED_FIELDS: (keyof CardDefinition)[] = [
   'name',
   'type',
   'rarity',
-  'colors',
-  'manaCost',
+  'energyCost',
 ];
 
 export const CARD_TYPE_DEFINITIONS: Record<CardType, CardFactoryStrategy> = {

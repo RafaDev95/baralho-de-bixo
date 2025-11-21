@@ -94,9 +94,6 @@ export const gameSessionsHandlers = {
         type: type as
           | 'play_card'
           | 'attack'
-          | 'block'
-          | 'activate_ability'
-          | 'cast_spell'
           | 'draw_card'
           | 'discard_card'
           | 'end_turn'

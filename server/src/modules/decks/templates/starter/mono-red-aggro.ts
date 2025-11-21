@@ -7,7 +7,6 @@ import { defineDeck } from "../../deck-builder";
  */
 export const monoRedAggro = defineDeck({
   name: 'Mono Red Aggro',
-  colors: ['red'],
   description: 'An aggressive deck focused on dealing quick damage with fire creatures and spells',
   type: 'starter',
   cards: [

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The TCG Fuel project now features a fully type-safe card and deck system that replaces the previous JSON-based approach. This system provides compile-time validation, better developer experience, and easier maintenance.
+The TCG project now features a fully type-safe card and deck system that replaces the previous JSON-based approach. This system provides compile-time validation, better developer experience, and easier maintenance.
 
 ## Key Benefits
 
@@ -77,10 +77,9 @@ import { quickStrike } from '../abilities';
 export const flameImp = defineCard({
   name: "Flame Imp",
   rarity: "common",
-  colors: ["red"],
   type: "creature",
   description: "A small but aggressive imp",
-  manaCost: { red: 1, generic: 0 },
+  energyCost: 1,
   power: 2,
   toughness: 1,
   abilities: [quickStrike]
@@ -92,10 +91,9 @@ export const flameImp = defineCard({
 export const fireball = defineCard({
   name: "Fireball",
   rarity: "common",
-  colors: ["red"],
   type: "spell",
   description: "Deal 3 damage to target creature or player",
-  manaCost: { red: 1, generic: 2 },
+  energyCost: 3,
   effect: {
     type: "damage",
     target: "any",
@@ -111,10 +109,9 @@ import { burningCycle } from '../abilities';
 export const eternalFlame = defineCard({
   name: "Eternal Flame",
   rarity: "rare",
-  colors: ["red"],
   type: "enchantment",
   description: "At the start of your turn, deal 1 damage to each player",
-  manaCost: { red: 2, generic: 1 },
+  energyCost: 3,
   abilities: [burningCycle]
 });
 ```
@@ -145,7 +142,6 @@ import { flameImp, fireball, fireElemental } from '../../cards/definitions';
 
 export const monoRedAggro = defineDeck({
   name: 'Mono Red Aggro',
-  colors: ['red'],
   description: 'An aggressive fire deck',
   type: 'starter',
   cards: [
@@ -166,9 +162,8 @@ interface BaseCardDefinition {
   name: string;
   type: CardType;
   rarity: CardRarity;
-  colors: CardColor[];
   description: string;
-  manaCost: ManaCostDefinition;
+  energyCost: number; // Simple energy cost (0-10)
 }
 
 // Creature-specific properties
@@ -314,8 +309,7 @@ bun test tests/type-safe-system.test.ts
 ### Building Decks
 1. **Use type-safe references** - Reference cards directly, not by name
 2. **Validate deck size** - Ensure minimum 15 cards
-3. **Check color identity** - All cards must match deck colors
-4. **Test deck validation** - Use `validateDeckForPlay()` function
+3. **Test deck validation** - Use `validateDeckForPlay()` function
 
 ## Troubleshooting
 
@@ -328,10 +322,6 @@ bun test tests/type-safe-system.test.ts
 #### "Deck must have at least 15 cards"
 - **Cause**: Deck doesn't meet minimum size requirement
 - **Solution**: Add more cards or increase counts
-
-#### "Card colors don't match deck colors"
-- **Cause**: Card has colors not in deck's color identity
-- **Solution**: Either change deck colors or use different cards
 
 #### Import errors
 - **Cause**: Missing exports in index.ts files

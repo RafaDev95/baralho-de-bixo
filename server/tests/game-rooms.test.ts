@@ -23,7 +23,6 @@ describe('Game Rooms', () => {
     const [player] = await db
       .insert(playersTable)
       .values({
-        walletAddress: '0x1234567890123456789012345678901234567890',
         username: 'testplayer',
         email: 'test@example.com',
       })
@@ -46,7 +45,6 @@ describe('Game Rooms', () => {
     const [secondPlayer] = await db
       .insert(playersTable)
       .values({
-        walletAddress: '0x0987654321098765432109876543210987654321',
         username: 'testplayer2',
         email: 'test2@example.com',
       })

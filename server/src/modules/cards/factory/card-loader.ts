@@ -49,9 +49,8 @@ export class CardLoader {
       name: definition.name,
       type: definition.type,
       rarity: definition.rarity,
-      colors: definition.colors,
       description: definition.description,
-      manaCost: definition.manaCost, // Already uses red/blue/green naming
+      energyCost: definition.energyCost,
     };
 
     // Add type-specific properties

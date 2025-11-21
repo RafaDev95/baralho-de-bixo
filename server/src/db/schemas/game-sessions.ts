@@ -36,18 +36,12 @@ export const gameSessionsTable = pgTable('game_sessions', {
   currentTurn: integer('current_turn').notNull().default(1),
   currentPlayerIndex: integer('current_player_index').notNull().default(0),
   phase: text('phase', {
-    enum: ['untap', 'upkeep', 'draw', 'main1', 'combat', 'main2', 'end'],
+    enum: ['draw', 'play', 'end'],
   })
     .notNull()
-    .default('untap'),
+    .default('draw'),
   step: text('step', {
-    enum: [
-      'beginning',
-      'declare_attackers',
-      'declare_blockers',
-      'damage',
-      'end',
-    ],
+    enum: ['beginning'],
   })
     .notNull()
     .default('beginning'),
@@ -72,6 +66,8 @@ export const gamePlayersTable = pgTable('game_players', {
   deckId: integer('deck_id').references(() => decksTable.id),
   playerIndex: integer('player_index').notNull(), // 0 or 1 for 2-player games
   lifeTotal: integer('life_total').notNull().default(20),
+  energy: integer('energy').notNull().default(1), // Current energy (1-10)
+  maxEnergy: integer('max_energy').notNull().default(1), // Maximum energy this turn
   handSize: integer('hand_size').notNull().default(0),
   deckSize: integer('deck_size').notNull().default(0),
   graveyardSize: integer('graveyard_size').notNull().default(0),
@@ -97,11 +93,9 @@ export const gameCardsTable = pgTable('game_cards', {
     .notNull()
     .references(() => playersTable.id),
   location: text('location', {
-    enum: ['hand', 'deck', 'graveyard', 'exile', 'battlefield', 'stack'],
+    enum: ['hand', 'deck', 'graveyard', 'battlefield'],
   }).notNull(),
   zoneIndex: integer('zone_index'), // Position within the zone
-  isTapped: boolean('is_tapped').default(false),
-  isSummoningSick: boolean('is_summoning_sick').default(true),
   power: integer('power'),
   toughness: integer('toughness'),
   damage: integer('damage').default(0),
@@ -126,9 +120,6 @@ export const gameActionsTable = pgTable('game_actions', {
     enum: [
       'play_card',
       'attack',
-      'block',
-      'activate_ability',
-      'cast_spell',
       'draw_card',
       'discard_card',
       'end_turn',
@@ -277,33 +268,12 @@ export const updateGameCardSchema = insertGameCardSchema.partial();
 
 // Type exports
 export type GameSessionStatus = 'active' | 'finished' | 'cancelled' | 'paused';
-export type GamePhase =
-  | 'untap'
-  | 'upkeep'
-  | 'draw'
-  | 'main1'
-  | 'combat'
-  | 'main2'
-  | 'end';
-export type GameStep =
-  | 'beginning'
-  | 'declare_attackers'
-  | 'declare_blockers'
-  | 'damage'
-  | 'end';
-export type CardLocation =
-  | 'hand'
-  | 'deck'
-  | 'graveyard'
-  | 'exile'
-  | 'battlefield'
-  | 'stack';
+export type GamePhase = 'draw' | 'play' | 'end';
+export type GameStep = 'beginning';
+export type CardLocation = 'hand' | 'deck' | 'graveyard' | 'battlefield';
 export type ActionType =
   | 'play_card'
   | 'attack'
-  | 'block'
-  | 'activate_ability'
-  | 'cast_spell'
   | 'draw_card'
   | 'discard_card'
   | 'end_turn'

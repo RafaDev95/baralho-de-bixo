@@ -35,8 +35,6 @@ services:
       - LOG_LEVEL=${LOG_LEVEL}
       - NODE_ENV=${NODE_ENV}
       - TEST_MODE=${TEST_MODE}
-      - FUEL_NETWORK_URL=${FUEL_NETWORK_URL}
-      - FUEL_CHAIN_ID=${FUEL_CHAIN_ID}
     command: bun run dev
 
 volumes:

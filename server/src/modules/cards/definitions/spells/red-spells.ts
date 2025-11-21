@@ -4,9 +4,8 @@ import { fireballEffect, infernoEffect, flameShieldEffect, elementalFusionEffect
 export const fireball = defineCard({
   name: "Fireball",
   rarity: "common",
-  colors: ["red"],
   description: fireballEffect.description,
-  manaCost: { red: 1, generic: 2 },
+  energyCost: 3,
   type: "spell",
   effect: fireballEffect.effect
 });
@@ -14,9 +13,8 @@ export const fireball = defineCard({
 export const inferno = defineCard({
   name: "Inferno",
   rarity: "mythic",
-  colors: ["red"],
   description: infernoEffect.description,
-  manaCost: { red: 3, generic: 2 },
+  energyCost: 5,
   type: "spell",
   effect: infernoEffect.effect
 });
@@ -24,9 +22,8 @@ export const inferno = defineCard({
 export const flameShield = defineCard({
   name: "Flame Shield",
   rarity: "uncommon",
-  colors: ["red"],
   description: flameShieldEffect.description,
-  manaCost: { red: 1, generic: 1 },
+  energyCost: 2,
   type: "spell",
   effect: flameShieldEffect.effect
 });
@@ -34,9 +31,8 @@ export const flameShield = defineCard({
 export const elementalFusion = defineCard({
   name: "Elemental Fusion",
   rarity: "mythic",
-  colors: ["red"],
   description: elementalFusionEffect.description,
-  manaCost: { red: 2, generic: 2 },
+  energyCost: 4,
   type: "spell",
   effect: elementalFusionEffect.effect
 });

@@ -1,9 +1,8 @@
 export const mockCreatureCardDefinition = {
   name: 'Flame Imp',
   rarity: 'common',
-  colors: ['red'],
   description: 'A small but aggressive imp',
-  manaCost: { red: 1, generic: 0 },
+  energyCost: 1,
   type: 'creature',
   power: 2,
   toughness: 1,
@@ -24,9 +23,8 @@ export const mockCreatureCardDefinition = {
 export const mockSpellCardDefinition = {
   name: 'Fireball',
   rarity: 'common',
-  colors: ['red'],
   description: 'Deal 3 damage',
-  manaCost: { red: 1, generic: 2 },
+  energyCost: 3,
   type: 'spell',
   effect: {
     type: 'damage',
@@ -38,9 +36,8 @@ export const mockSpellCardDefinition = {
 export const mockEnchantmentCardDefinition = {
   name: 'Fire Shield',
   rarity: 'common',
-  colors: ['red'],
   description: 'Gain 2 armor',
-  manaCost: { red: 1, generic: 2 },
+  energyCost: 3,
   type: 'enchantment',
   abilities: [
     {
@@ -59,9 +56,8 @@ export const mockEnchantmentCardDefinition = {
 export const mockArtifactCardDefinition = {
   name: 'Fire Sword',
   rarity: 'common',
-  colors: ['red'],
   description: 'Deal 2 damage',
-  manaCost: { red: 1, generic: 2 },
+  energyCost: 3,
   type: 'artifact',
   abilities: [
     {

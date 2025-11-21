@@ -1,5 +1,5 @@
 {
-  "id": "41e50ca7-c450-4804-8feb-358ebf804f23",
+  "id": "3b38278b-8ecb-4fac-b457-0fc1f3bafad8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -61,7 +61,9 @@
         "auth_challenges_nonce_unique": {
           "name": "auth_challenges_nonce_unique",
           "nullsNotDistinct": false,
-          "columns": ["nonce"]
+          "columns": [
+            "nonce"
+          ]
         }
       },
       "policies": {},
@@ -178,11 +180,12 @@
           "primaryKey": false,
           "notNull": false
         },
-        "mana_cost": {
-          "name": "mana_cost",
-          "type": "jsonb",
+        "energy_cost": {
+          "name": "energy_cost",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": 0
         },
         "abilities": {
           "name": "abilities",
@@ -198,20 +201,6 @@
         },
         "can_attack": {
           "name": "can_attack",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "can_block": {
-          "name": "can_block",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "has_summoning_sickness": {
-          "name": "has_summoning_sickness",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false,
@@ -390,8 +379,12 @@
           "name": "game_room_players_room_id_game_rooms_id_fk",
           "tableFrom": "game_room_players",
           "tableTo": "game_rooms",
-          "columnsFrom": ["room_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "room_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -399,8 +392,12 @@
           "name": "game_room_players_player_id_players_id_fk",
           "tableFrom": "game_room_players",
           "tableTo": "players",
-          "columnsFrom": ["player_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "player_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -408,8 +405,12 @@
           "name": "game_room_players_deck_id_decks_id_fk",
           "tableFrom": "game_room_players",
           "tableTo": "decks",
-          "columnsFrom": ["deck_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "deck_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -570,8 +571,12 @@
           "name": "game_actions_game_id_game_sessions_id_fk",
           "tableFrom": "game_actions",
           "tableTo": "game_sessions",
-          "columnsFrom": ["game_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -579,8 +584,12 @@
           "name": "game_actions_player_id_players_id_fk",
           "tableFrom": "game_actions",
           "tableTo": "players",
-          "columnsFrom": ["player_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "player_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -637,20 +646,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "is_tapped": {
-          "name": "is_tapped",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "is_summoning_sick": {
-          "name": "is_summoning_sick",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
         "power": {
           "name": "power",
           "type": "integer",
@@ -702,8 +697,12 @@
           "name": "game_cards_game_id_game_sessions_id_fk",
           "tableFrom": "game_cards",
           "tableTo": "game_sessions",
-          "columnsFrom": ["game_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -711,8 +710,12 @@
           "name": "game_cards_owner_id_players_id_fk",
           "tableFrom": "game_cards",
           "tableTo": "players",
-          "columnsFrom": ["owner_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -720,8 +723,12 @@
           "name": "game_cards_controller_id_players_id_fk",
           "tableFrom": "game_cards",
           "tableTo": "players",
-          "columnsFrom": ["controller_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "controller_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -772,6 +779,20 @@
           "primaryKey": false,
           "notNull": true,
           "default": 20
+        },
+        "energy": {
+          "name": "energy",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "max_energy": {
+          "name": "max_energy",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
         },
         "hand_size": {
           "name": "hand_size",
@@ -828,8 +849,12 @@
           "name": "game_players_game_id_game_sessions_id_fk",
           "tableFrom": "game_players",
           "tableTo": "game_sessions",
-          "columnsFrom": ["game_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -837,8 +862,12 @@
           "name": "game_players_player_id_players_id_fk",
           "tableFrom": "game_players",
           "tableTo": "players",
-          "columnsFrom": ["player_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "player_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -846,8 +875,12 @@
           "name": "game_players_deck_id_decks_id_fk",
           "tableFrom": "game_players",
           "tableTo": "decks",
-          "columnsFrom": ["deck_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "deck_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -919,7 +952,7 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "default": "'untap'"
+          "default": "'draw'"
         },
         "step": {
           "name": "step",
@@ -966,8 +999,12 @@
           "name": "game_sessions_room_id_game_rooms_id_fk",
           "tableFrom": "game_sessions",
           "tableTo": "game_rooms",
-          "columnsFrom": ["room_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "room_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -975,8 +1012,12 @@
           "name": "game_sessions_winner_id_players_id_fk",
           "tableFrom": "game_sessions",
           "tableTo": "players",
-          "columnsFrom": ["winner_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "winner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1041,8 +1082,12 @@
           "name": "game_state_snapshots_game_id_game_sessions_id_fk",
           "tableFrom": "game_state_snapshots",
           "tableTo": "game_sessions",
-          "columnsFrom": ["game_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "game_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1594,12 +1639,6 @@
           "primaryKey": true,
           "notNull": true
         },
-        "wallet_address": {
-          "name": "wallet_address",
-          "type": "varchar(42)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "username": {
           "name": "username",
           "type": "varchar(255)",
@@ -1644,15 +1683,12 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "players_wallet_address_unique": {
-          "name": "players_wallet_address_unique",
-          "nullsNotDistinct": false,
-          "columns": ["wallet_address"]
-        },
         "players_email_unique": {
           "name": "players_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       },
       "policies": {},
@@ -1733,7 +1769,10 @@
     "public.deck_type": {
       "name": "deck_type",
       "schema": "public",
-      "values": ["starter", "custom"]
+      "values": [
+        "starter",
+        "custom"
+      ]
     },
     "public.card_zone": {
       "name": "card_zone",
@@ -1750,17 +1789,34 @@
     "public.color": {
       "name": "color",
       "schema": "public",
-      "values": ["white", "blue", "black", "red", "green", "colorless"]
+      "values": [
+        "white",
+        "blue",
+        "black",
+        "red",
+        "green",
+        "colorless"
+      ]
     },
     "public.rarity": {
       "name": "rarity",
       "schema": "public",
-      "values": ["common", "uncommon", "rare", "mythic"]
+      "values": [
+        "common",
+        "uncommon",
+        "rare",
+        "mythic"
+      ]
     },
     "public.type": {
       "name": "type",
       "schema": "public",
-      "values": ["creature", "spell", "enchantment", "artifact"]
+      "values": [
+        "creature",
+        "spell",
+        "enchantment",
+        "artifact"
+      ]
     }
   },
   "schemas": {},

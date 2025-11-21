@@ -1,22 +1,12 @@
-import type { CardType, CardRarity, CardColor } from '@/db/schemas';
+import type { CardType, CardRarity } from '@/db/schemas';
 import type { CardAbility } from './types';
-
-export interface ManaCostDefinition {
-  red?: number;
-  blue?: number;
-  green?: number;
-  white?: number;
-  black?: number;
-  generic: number;
-}
 
 export interface BaseCardDefinition {
   name: string;
   type: CardType;
   rarity: CardRarity;
-  colors: CardColor[];
   description: string;
-  manaCost: ManaCostDefinition;
+  energyCost: number; // Simple energy cost (0-10)
 }
 
 
@@ -60,8 +50,8 @@ export type TypedCardDefinition =
   | ArtifactCardDefinition;
 
 export const defineCard = <T extends TypedCardDefinition>(card: T) => {
-  // Validate mana cost consistency
-  validateManaCost(card.manaCost);
+  // Validate energy cost
+  validateEnergyCost(card.energyCost);
   
   // Validate creature-specific properties
   if (card.type === 'creature') {
@@ -76,19 +66,9 @@ export const defineCard = <T extends TypedCardDefinition>(card: T) => {
   return card;
 };
 
-function validateManaCost(manaCost: ManaCostDefinition): void {
-  const manaTypes = ['red', 'blue', 'green', 'white', 'black', 'generic'] as const;
-  
-  for (const manaType of manaTypes) {
-    const value = manaCost[manaType];
-    if (value !== undefined && (value < 0 || !Number.isInteger(value))) {
-      throw new Error(`Invalid mana cost for ${manaType}: ${value}. Must be a non-negative integer.`);
-    }
-  }
-  
-  // Ensure generic mana is defined
-  if (manaCost.generic === undefined) {
-    throw new Error('Generic mana cost must be defined');
+function validateEnergyCost(energyCost: number): void {
+  if (energyCost < 0 || energyCost > 10 || !Number.isInteger(energyCost)) {
+    throw new Error(`Invalid energy cost: ${energyCost}. Must be an integer between 0 and 10.`);
   }
 }
 

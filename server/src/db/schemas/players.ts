@@ -14,7 +14,6 @@ import { tradesTable } from './trades';
 
 export const playersTable = pgTable('players', {
   id: serial('id').primaryKey(),
-  walletAddress: varchar('wallet_address', { length: 42 }).notNull().unique(),
   username: varchar('username', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   balance: integer('balance').default(0),

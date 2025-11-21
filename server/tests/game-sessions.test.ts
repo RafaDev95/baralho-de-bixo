@@ -24,7 +24,6 @@ describe('Game Sessions', () => {
     const [testPlayer] = await db
       .insert(playersTable)
       .values({
-        walletAddress: '0x1234567890123456789012345678901234567890',
         username: 'testplayer',
         email: 'test@example.com',
       })
@@ -38,10 +37,9 @@ describe('Game Sessions', () => {
         type: 'creature',
         rarity: 'common',
         description: 'A test card',
-        colors: ['red'],
         power: 2,
         toughness: 2,
-        manaCost: { red: 1, blue: 0, green: 0, generic: 1 },
+        energyCost: 2,
       })
       .returning();
     testCardId = testCard.id;
@@ -66,7 +64,6 @@ describe('Game Sessions', () => {
     const [secondPlayer] = await db
       .insert(playersTable)
       .values({
-        walletAddress: '0x0987654321098765432109876543210987654321',
         username: 'secondplayer',
         email: 'second@example.com',
       })

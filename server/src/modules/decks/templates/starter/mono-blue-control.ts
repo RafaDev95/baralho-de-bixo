@@ -17,7 +17,6 @@ import {
  */
 export const monoBlueControl = defineDeck({
   name: 'Mono Blue Control',
-  colors: ['blue'],
   description: 'A control deck that focuses on managing the board with water creatures and spells',
   type: 'starter',
   cards: [

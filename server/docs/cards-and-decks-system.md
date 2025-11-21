@@ -29,10 +29,9 @@ CREATE TABLE cards (
   type TEXT NOT NULL CHECK (type IN ('creature', 'spell', 'enchantment', 'artifact')),
   rarity TEXT NOT NULL CHECK (rarity IN ('common', 'uncommon', 'rare', 'mythic')),
   description TEXT NOT NULL,
-  colors JSONB NOT NULL, -- Array of color strings
   power INTEGER, -- For creatures
   toughness INTEGER, -- For creatures
-  mana_cost JSONB NOT NULL, -- Object: {red: 1, blue: 0, generic: 2}
+  energy_cost INTEGER NOT NULL DEFAULT 0, -- Simple energy cost (0-10)
   abilities JSONB, -- Card abilities
   effect JSONB, -- Card effects
   can_attack BOOLEAN DEFAULT true,

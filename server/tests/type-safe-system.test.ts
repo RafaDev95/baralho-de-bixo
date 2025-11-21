@@ -16,10 +16,9 @@ describe('Type-Safe Card System', () => {
       const testCard = defineCard({
         name: "Test Creature",
         rarity: "common",
-        colors: ["red"],
         type: "creature",
         description: "A test creature",
-        manaCost: { red: 1, generic: 0 },
+        energyCost: 1,
         power: 2,
         toughness: 1,
         abilities: [quickStrike]
@@ -37,10 +36,9 @@ describe('Type-Safe Card System', () => {
       const testSpell = defineCard({
         name: "Test Spell",
         rarity: "common",
-        colors: ["red"],
         type: "spell",
         description: "A test spell",
-        manaCost: { red: 1, generic: 1 },
+        energyCost: 2,
         effect: {
           type: "damage",
           target: "any",
@@ -54,19 +52,18 @@ describe('Type-Safe Card System', () => {
       expect(testSpell.effect?.value).toBe(3);
     });
 
-    it('should validate mana cost structure', () => {
+    it('should validate energy cost structure', () => {
       expect(() => {
         defineCard({
           name: "Invalid Card",
           rarity: "common",
-          colors: ["red"],
           type: "creature",
-          description: "Invalid mana cost",
-          manaCost: { red: -1, generic: 0 }, // Invalid negative mana
+          description: "Invalid energy cost",
+          energyCost: -1, // Invalid negative energy
           power: 1,
           toughness: 1
         });
-      }).toThrow('Invalid mana cost for red: -1');
+      }).toThrow('Invalid energy cost: -1');
     });
 
     it('should validate creature stats', () => {
@@ -74,10 +71,9 @@ describe('Type-Safe Card System', () => {
         defineCard({
           name: "Invalid Card",
           rarity: "common",
-          colors: ["red"],
           type: "creature",
           description: "Invalid stats",
-          manaCost: { red: 1, generic: 0 },
+          energyCost: 1,
           power: -1, // Invalid negative power
           toughness: 1
         });
@@ -90,7 +86,6 @@ describe('Type-Safe Card System', () => {
       const testDeck = defineDeck({
         name: "Test Deck",
         type: "starter",
-        colors: ["red"],
         description: "A test deck",
         cards: [
           { card: flameImp, count: 4 },
@@ -111,7 +106,6 @@ describe('Type-Safe Card System', () => {
         defineDeck({
           name: "Invalid Deck",
           type: "starter",
-          colors: ["red"],
           description: "Too few cards",
           cards: [
             { card: flameImp, count: 1 } // Only 1 card, minimum is 15
@@ -120,37 +114,20 @@ describe('Type-Safe Card System', () => {
       }).toThrow('Deck must have at least 15 cards, found 1');
     });
 
-    it('should validate color identity', () => {
+    it('should validate deck structure', () => {
       expect(() => {
         defineDeck({
-          name: "Invalid Deck",
+          name: "Valid Deck",
           type: "starter",
-          colors: ["red"],
-          description: "Wrong color",
+          description: "Valid deck",
           cards: [
-            { card: flameImp, count: 4 }, // Red card
-            { card: fireball, count: 4 },  // Red card
-            { card: flameImp, count: 4 }, // Add more cards to reach minimum
+            { card: flameImp, count: 4 },
+            { card: fireball, count: 4 },
+            { card: flameImp, count: 4 },
             { card: fireball, count: 3 }
           ]
         });
-      }).not.toThrow(); // Should not throw for valid colors
-
-      // This should throw for invalid colors
-      expect(() => {
-        defineDeck({
-          name: "Invalid Deck",
-          type: "starter",
-          colors: ["red"],
-          description: "Wrong color",
-          cards: [
-            { card: flameImp, count: 4 },
-            { card: flameImp, count: 4 },
-            { card: flameImp, count: 4 },
-            { card: flameImp, count: 3 }
-          ]
-        });
-      }).not.toThrow(); // flameImp is red, so this should be valid
+      }).not.toThrow();
     });
   });
 

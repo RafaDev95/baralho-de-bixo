@@ -1,5 +1,5 @@
 {
-  "name": "tcg-fuel",
+  "name": "simple-tcg-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

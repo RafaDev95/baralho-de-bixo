@@ -6,6 +6,7 @@ import {
   type GamePlayer,
   type GameSession,
   type GameStep,
+  cardsTable,
   deckCards,
   gameActionsTable,
   gameCardsTable,
@@ -15,7 +16,11 @@ import {
   gameStateSnapshotsTable,
 } from '@/db/schemas';
 import { and, eq } from 'drizzle-orm';
-import { ManaSystem } from './mana-system-simple';
+import { EnergySystem } from './energy-system';
+import { gameEventEmitter } from './game-event-emitter';
+import type { GameEvent } from './game-event-types';
+import { AttackStrategyFactory } from './strategies/attack-strategy';
+import { gameSocketManager } from '@/lib/websocket/game-socket-manager';
 
 // Type for database transaction
 type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
@@ -109,12 +114,23 @@ export class GameEngine {
         .set({ status: 'in_progress' })
         .where(eq(gameRoomsTable.id, roomId));
 
+      // Initialize energy for all players
+      for (const gamePlayer of gamePlayers) {
+        await tx
+          .update(gamePlayersTable)
+          .set({
+            energy: 1,
+            maxEnergy: 1,
+          })
+          .where(eq(gamePlayersTable.id, gamePlayer.id));
+      }
+
       // Create initial game state
       const gameState: GameState = {
         gameId: gameSession.id,
         currentTurn: 1,
         currentPlayerIndex: 0,
-        phase: 'untap',
+        phase: 'draw',
         step: 'beginning',
         players: gamePlayers,
         cards: [],
@@ -122,8 +138,30 @@ export class GameEngine {
 
       this.gameState.set(gameSession.id, gameState);
 
+      // Start first player's turn (draw card, set energy)
+      const firstPlayer = gamePlayers[0];
+      await EnergySystem.startTurn(gameSession.id, firstPlayer.playerId);
+      await this.drawCards(tx, gameSession.id, firstPlayer.playerId, 1);
+
       // Create initial snapshot
       await this.createGameSnapshot(tx, gameSession.id, gameState);
+
+      // Register game with socket manager
+      await gameSocketManager.registerGame(gameSession.id, roomId);
+
+      // Emit game started event
+      await gameEventEmitter.emit({
+        type: 'game_started',
+        gameId: gameSession.id,
+        data: {
+          gameId: gameSession.id,
+          players: gamePlayers.map((p) => ({
+            playerId: p.playerId,
+            playerIndex: p.playerIndex,
+          })),
+        },
+        timestamp: new Date(),
+      });
 
       return gameSession;
     });
@@ -170,8 +208,8 @@ export class GameEngine {
       // Insert deck cards
       await tx.insert(gameCardsTable).values(gameCardsData);
 
-      // Draw starting hand (7 cards)
-      await this.drawCards(tx, gameId, gamePlayer.playerId, 7);
+      // Draw starting hand (5 cards)
+      await this.drawCards(tx, gameId, gamePlayer.playerId, 5);
     }
   }
 
@@ -261,6 +299,20 @@ export class GameEngine {
 
       // Create snapshot
       await this.createGameSnapshot(tx, gameId, gameState);
+
+      // Emit game state updated event
+      await gameEventEmitter.emit({
+        type: 'game_state_updated',
+        gameId,
+        playerId: action.playerId,
+        data: {
+          gameId,
+          currentTurn: gameState.currentTurn,
+          currentPlayerIndex: gameState.currentPlayerIndex,
+          phase: gameState.phase,
+        },
+        timestamp: new Date(),
+      });
     });
   }
 
@@ -293,11 +345,145 @@ export class GameEngine {
       case 'play_card':
         await this.playCard(tx, gameId, action);
         break;
+      case 'attack':
+        await this.attack(tx, gameId, action, gameState);
+        break;
       case 'draw_card':
         await this.drawCards(tx, gameId, action.playerId, 1);
         break;
       default:
         throw new Error(`Unsupported action type: ${action.type}`);
+    }
+  }
+
+  /**
+   * Attack with a creature (direct attack to opponent)
+   */
+  private async attack(
+    tx: Transaction,
+    gameId: number,
+    action: GameAction,
+    gameState: GameState
+  ): Promise<void> {
+    const attackData = action.data as { cardId: number };
+    if (!attackData?.cardId) {
+      throw new Error('Card ID is required to attack');
+    }
+
+    // Get the attacking creature
+    const attacker = await tx
+      .select()
+      .from(gameCardsTable)
+      .where(
+        and(
+          eq(gameCardsTable.gameId, gameId),
+          eq(gameCardsTable.id, attackData.cardId),
+          eq(gameCardsTable.location, 'battlefield'),
+          eq(gameCardsTable.ownerId, action.playerId)
+        )
+      )
+      .limit(1);
+
+    if (attacker.length === 0) {
+      throw new Error('Attacking creature not found');
+    }
+
+    const attackingCreature = attacker[0];
+
+    if (!attackingCreature.power || attackingCreature.power <= 0) {
+      throw new Error('Creature has no attack power');
+    }
+
+    // Find opponent
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+    const opponent = gameState.players.find(
+      (p) => p.playerId !== currentPlayer.playerId
+    );
+
+    if (!opponent) {
+      throw new Error('Opponent not found');
+    }
+
+    // Get card definition to check for abilities
+    const cardDef = await tx.query.cardsTable.findFirst({
+      where: eq(cardsTable.id, attackingCreature.cardId),
+    });
+
+    // Get attack strategy based on card abilities
+    const abilities = cardDef?.abilities
+      ? (cardDef.abilities as Array<{ name: string }>).map((a) => a.name)
+      : [];
+    const attackStrategy = AttackStrategyFactory.getStrategy(abilities);
+    const attackResult = attackStrategy.attack(
+      attackingCreature.power ?? 0
+    );
+
+    // Deal damage to opponent
+    const damage = attackResult.damage;
+    const oldLifeTotal = opponent.lifeTotal;
+    const newLifeTotal = Math.max(0, oldLifeTotal - damage);
+
+    await tx
+      .update(gamePlayersTable)
+      .set({ lifeTotal: newLifeTotal })
+      .where(eq(gamePlayersTable.id, opponent.id));
+
+    // Update opponent in game state
+    opponent.lifeTotal = newLifeTotal;
+
+    // Emit attack declared event
+    await gameEventEmitter.emit({
+      type: 'attack_declared',
+      gameId,
+      playerId: action.playerId,
+      data: {
+        attackerId: attackingCreature.id,
+        attackerPower: attackingCreature.power ?? 0,
+        targetPlayerId: opponent.playerId,
+      },
+      timestamp: new Date(),
+    });
+
+    // Emit damage dealt event
+    await gameEventEmitter.emit({
+      type: 'damage_dealt',
+      gameId,
+      playerId: action.playerId,
+      data: {
+        amount: damage,
+        targetPlayerId: opponent.playerId,
+        newHealth: newLifeTotal,
+      },
+      timestamp: new Date(),
+    });
+
+    // Emit player health changed event
+    await gameEventEmitter.emit({
+      type: 'player_health_changed',
+      gameId,
+      playerId: opponent.playerId,
+      data: {
+        playerId: opponent.playerId,
+        oldHealth: oldLifeTotal,
+        newHealth: newLifeTotal,
+      },
+      timestamp: new Date(),
+    });
+
+    // Check for game over
+    if (newLifeTotal <= 0) {
+      gameState.phase = 'end';
+      // Emit game ended event
+      await gameEventEmitter.emit({
+        type: 'game_ended',
+        gameId,
+        playerId: action.playerId,
+        data: {
+          winnerId: action.playerId,
+          loserId: opponent.playerId,
+        },
+        timestamp: new Date(),
+      });
     }
   }
 
@@ -319,12 +505,19 @@ export class GameEngine {
     }
 
     // Reset phase and step for new player
-    gameState.phase = 'untap';
+    gameState.phase = 'draw';
     gameState.step = 'beginning';
 
-    // Untap mana sources for the new player
+    // Start new turn for the new player (draw card, gain energy)
     const newPlayer = gameState.players[gameState.currentPlayerIndex];
-    await ManaSystem.untapManaSources(gameId, newPlayer.playerId);
+    await EnergySystem.startTurn(gameId, newPlayer.playerId);
+    await this.drawCards(tx, gameId, newPlayer.playerId, 1);
+
+    // Get updated player energy
+    const playerEnergy = await EnergySystem.getPlayerEnergy(
+      gameId,
+      newPlayer.playerId
+    );
 
     // Update game session
     await tx
@@ -337,6 +530,20 @@ export class GameEngine {
         updatedAt: new Date(),
       })
       .where(eq(gameSessionsTable.id, gameId));
+
+    // Emit turn started event
+    await gameEventEmitter.emit({
+      type: 'turn_started',
+      gameId,
+      playerId: newPlayer.playerId,
+      data: {
+        playerId: newPlayer.playerId,
+        turnNumber: gameState.currentTurn,
+        energy: playerEnergy.energy,
+        maxEnergy: playerEnergy.maxEnergy,
+      },
+      timestamp: new Date(),
+    });
   }
 
   /**
@@ -352,18 +559,8 @@ export class GameEngine {
       throw new Error('Card ID is required to play a card');
     }
 
-    // Validate mana cost using ManaSystem
-    const canPlay = await ManaSystem.canPlayCard(
-      gameId,
-      action.playerId,
-      cardData.cardId
-    );
-    if (!canPlay.canPlay) {
-      throw new Error(`Cannot play card: ${canPlay.reason}`);
-    }
-
-    // Get the card from hand
-    const cardResult = await tx
+    // Get the card definition to check energy cost
+    const gameCard = await tx
       .select()
       .from(gameCardsTable)
       .where(
@@ -375,21 +572,42 @@ export class GameEngine {
       )
       .limit(1);
 
-    if (cardResult.length === 0) {
+    if (gameCard.length === 0) {
       throw new Error('Card not found in hand');
     }
 
-    const gameCard = cardResult[0];
+    const cardInHand = gameCard[0];
 
-    // Pay the mana cost and tap sources
-    const playResult = await ManaSystem.playCard(
+    // Get card definition
+    const cardDef = await tx.query.cardsTable.findFirst({
+      where: eq(cardsTable.id, cardInHand.cardId),
+    });
+
+    if (!cardDef) {
+      throw new Error('Card definition not found');
+    }
+
+    // Validate energy cost using EnergySystem
+    const canPlay = await EnergySystem.canPlayCard(
       gameId,
       action.playerId,
-      cardData.cardId
+      cardDef.id
     );
-    if (!playResult.success) {
-      throw new Error(`Failed to play card: ${playResult.reason}`);
+    if (!canPlay.canPlay) {
+      throw new Error(`Cannot play card: ${canPlay.reason}`);
     }
+
+    // Pay the energy cost
+    const energyCost = EnergySystem.getCardEnergyCost(cardDef);
+    const playerEnergyBefore = await EnergySystem.getPlayerEnergy(
+      gameId,
+      action.playerId
+    );
+    await EnergySystem.payEnergyCost(gameId, action.playerId, energyCost);
+    const playerEnergyAfter = await EnergySystem.getPlayerEnergy(
+      gameId,
+      action.playerId
+    );
 
     // Move card to battlefield
     await tx
@@ -398,7 +616,7 @@ export class GameEngine {
         location: 'battlefield',
         zoneIndex: 0,
       })
-      .where(eq(gameCardsTable.id, gameCard.id));
+      .where(eq(gameCardsTable.id, cardInHand.id));
 
     // Update player stats
     await tx
@@ -412,6 +630,34 @@ export class GameEngine {
           eq(gamePlayersTable.playerId, action.playerId)
         )
       );
+
+    // Emit card played event
+    await gameEventEmitter.emit({
+      type: 'card_played',
+      gameId,
+      playerId: action.playerId,
+      data: {
+        cardId: cardDef.id,
+        cardName: cardDef.name,
+        playerId: action.playerId,
+        energyCost,
+      },
+      timestamp: new Date(),
+    });
+
+    // Emit energy changed event
+    await gameEventEmitter.emit({
+      type: 'energy_changed',
+      gameId,
+      playerId: action.playerId,
+      data: {
+        playerId: action.playerId,
+        oldEnergy: playerEnergyBefore.energy,
+        newEnergy: playerEnergyAfter.energy,
+        maxEnergy: playerEnergyAfter.maxEnergy,
+      },
+      timestamp: new Date(),
+    });
   }
 
   /**

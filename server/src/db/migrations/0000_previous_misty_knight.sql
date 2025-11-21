@@ -33,12 +33,10 @@ CREATE TABLE IF NOT EXISTS "cards" (
 	"colors" jsonb NOT NULL,
 	"power" integer,
 	"toughness" integer,
-	"mana_cost" jsonb NOT NULL,
+	"energy_cost" integer DEFAULT 0 NOT NULL,
 	"abilities" jsonb,
 	"effect" jsonb,
 	"can_attack" boolean DEFAULT true,
-	"can_block" boolean DEFAULT true,
-	"has_summoning_sickness" boolean DEFAULT true,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updatedAt" timestamp (3)
 );
@@ -105,8 +103,6 @@ CREATE TABLE IF NOT EXISTS "game_cards" (
 	"controller_id" integer NOT NULL,
 	"location" text NOT NULL,
 	"zone_index" integer,
-	"is_tapped" boolean DEFAULT false,
-	"is_summoning_sick" boolean DEFAULT true,
 	"power" integer,
 	"toughness" integer,
 	"damage" integer DEFAULT 0,
@@ -123,6 +119,8 @@ CREATE TABLE IF NOT EXISTS "game_players" (
 	"deck_id" integer,
 	"player_index" integer NOT NULL,
 	"life_total" integer DEFAULT 20 NOT NULL,
+	"energy" integer DEFAULT 1 NOT NULL,
+	"max_energy" integer DEFAULT 1 NOT NULL,
 	"hand_size" integer DEFAULT 0 NOT NULL,
 	"deck_size" integer DEFAULT 0 NOT NULL,
 	"graveyard_size" integer DEFAULT 0 NOT NULL,
@@ -142,7 +140,7 @@ CREATE TABLE IF NOT EXISTS "game_sessions" (
 	"status" text DEFAULT 'active' NOT NULL,
 	"current_turn" integer DEFAULT 1 NOT NULL,
 	"current_player_index" integer DEFAULT 0 NOT NULL,
-	"phase" text DEFAULT 'untap' NOT NULL,
+	"phase" text DEFAULT 'draw' NOT NULL,
 	"step" text DEFAULT 'beginning' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updatedAt" timestamp (3),
@@ -255,14 +253,12 @@ CREATE TABLE IF NOT EXISTS "turns" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "players" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"wallet_address" varchar(42) NOT NULL,
 	"username" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"balance" integer DEFAULT 0,
 	"rank" integer DEFAULT 0,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updatedAt" timestamp (3),
-	CONSTRAINT "players_wallet_address_unique" UNIQUE("wallet_address"),
 	CONSTRAINT "players_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
