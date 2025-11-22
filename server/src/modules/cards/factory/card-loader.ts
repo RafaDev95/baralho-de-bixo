@@ -6,7 +6,7 @@ import * as localCardDefinitions from '../definitions';
 
 export class CardLoader {
   private static instance: CardLoader;
-  private cardDefinitions: TypedCardDefinition[] = [];
+  private cardDefinitions: CardDefinition[] = [];
   private nextId = 1;
   private loaded = false;
 
@@ -19,9 +19,8 @@ export class CardLoader {
     return CardLoader.instance;
   }
 
-  // Method to reset instance for testing
   public static resetInstance(): void {
-    // @ts-ignore - Reset instance for testing
+    // @ts-expect-error - Reset instance for testing
     CardLoader.instance = undefined;
   }
 
@@ -31,11 +30,17 @@ export class CardLoader {
     try {
       // Import all card definitions from TypeScript modules
       const allCards = Object.values(localCardDefinitions).filter(
-        (card): card is TypedCardDefinition => 
-          typeof card === 'object' && card !== null && 'name' in card
+        (card) => typeof card === 'object' && card !== null && 'name' in card
       );
 
-      this.cardDefinitions = allCards;
+      this.cardDefinitions = allCards.map((card) => ({
+        name: card.name,
+        type: card.type,
+        rarity: card.rarity,
+        description: card.description,
+        energyCost: card.energyCost,
+      }));
+
       this.loaded = true;
     } catch (error) {
       console.error('Error loading card definitions:', error);
@@ -43,7 +48,7 @@ export class CardLoader {
     }
   }
 
-  private createCard(definition: TypedCardDefinition): CardBase {
+  private createCard(definition: CardDefinition): CardBase {
     // Convert typed definition to CardDefinition format for factory
     const cardDef: CardDefinition = {
       name: definition.name,
@@ -59,11 +64,11 @@ export class CardLoader {
       cardDef.toughness = definition.toughness;
       cardDef.abilities = definition.abilities || [];
     }
-    
+
     if (definition.type === 'spell') {
       cardDef.effect = definition.effect;
     }
-    
+
     if (definition.type === 'enchantment' || definition.type === 'artifact') {
       cardDef.abilities = definition.abilities;
     }

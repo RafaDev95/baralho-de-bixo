@@ -35,7 +35,7 @@ export type EffectType =
   | 'reduce_cost'
   | 'fuse_creatures';
 
-export type EffectTarget = 
+export type EffectTarget =
   | 'self'
   | 'player'
   | 'creature'
@@ -50,8 +50,18 @@ export type EffectTarget =
   | 'your_spells'
   | 'random';
 
-export type EffectCondition = 'if' | 'unless';
-export type EffectDuration = 'instant' | 'permanent' | 'turn' | 'round' | 'until_end_of_turn';
+export type EffectCondition =
+  | 'if'
+  | 'unless'
+  | 'power_greater_than_2'
+  | 'power_less_than_3'
+  | 'power_greater_than_3';
+export type EffectDuration =
+  | 'instant'
+  | 'permanent'
+  | 'turn'
+  | 'round'
+  | 'until_end_of_turn';
 
 export interface CardBase {
   name: string;
@@ -112,6 +122,7 @@ export interface CardDefinition extends CardBase {
   toughness?: number;
   abilities?: CardAbility[];
   effect?: CardEffect;
+  type: CardType;
 }
 
 export type CardFactoryData =

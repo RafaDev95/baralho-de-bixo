@@ -24,8 +24,6 @@ export class CreatureCardFactory implements CardFactoryStrategy {
       toughness,
       abilities: cardDefinition.abilities || [],
       canAttack: true,
-      canBlock: true,
-      hasSummoningSickness: true,
     };
 
     return card;
