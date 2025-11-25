@@ -1,5 +1,4 @@
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
-import { PGlite } from '@electric-sql/pglite';
 import { type NodePgDatabase, drizzle } from 'drizzle-orm/node-postgres';
 import pg, { type Pool } from 'pg';
 
@@ -17,56 +16,21 @@ export const prodDb = drizzle(pool, {
   logger: true,
 });
 
-// Test database integration - using PGlite (in-memory PostgreSQL) by default
-// Falls back to testcontainers if USE_TESTCONTAINERS env var is set
+// Test database integration - using testcontainers for fully compatible PostgreSQL
 export let testContainer: StartedPostgreSqlContainer | null = null;
 export let testPool: pg.Pool | null = null;
-export let testPGlite: PGlite | null = null;
 export let testDb: ReturnType<typeof drizzle> | null = null;
 
 export async function initializeTestDatabase(): Promise<void> {
   // If already initialized, reuse existing database
-  if (testDb && (testPool || testPGlite)) {
+  if (testDb && testPool) {
     console.log('[DATABASE]: Reusing existing test database');
     return;
   }
 
-  // Use testcontainers if explicitly requested (for CI/CD or specific test scenarios)
-  const useTestcontainers = process.env.USE_TESTCONTAINERS === 'true';
-
-  if (useTestcontainers) {
-    console.log('[DATABASE]: Using testcontainers (slower but more isolated)');
-    return initializeTestcontainersDatabase();
-  }
-
-  // Default: Use PGlite (fast, in-memory PostgreSQL)
-  console.log('[DATABASE]: Using PGlite (fast in-memory PostgreSQL)');
-  return initializePGliteDatabase();
-}
-
-async function initializePGliteDatabase(): Promise<void> {
-  console.log('[DATABASE]: Initializing PGlite...');
-  const startTime = Date.now();
-
-  try {
-    // Create in-memory PGlite instance
-    testPGlite = new PGlite();
-    await testPGlite.waitReady;
-
-    // PGlite exposes a Postgres-compatible interface
-    // We can use it directly with drizzle
-    testDb = drizzle(testPGlite as any, {
-      schema,
-      logger: false,
-    });
-
-    const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
-    console.log(`[DATABASE]: PGlite initialized successfully in ${elapsed}s`);
-  } catch (error) {
-    const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
-    console.error(`[DATABASE]: PGlite initialization failed after ${elapsed}s:`, error);
-    throw error;
-  }
+  // Use testcontainers for fully compatible PostgreSQL
+  console.log('[DATABASE]: Using testcontainers (fully compatible PostgreSQL)');
+  return initializeTestcontainersDatabase();
 }
 
 async function initializeTestcontainersDatabase(): Promise<void> {
@@ -74,24 +38,33 @@ async function initializeTestcontainersDatabase(): Promise<void> {
 
   const { PostgreSqlContainer } = await import('@testcontainers/postgresql');
   console.log('[DATABASE]: Creating PostgreSQL container...');
-  
+
   // Create container with extended timeout and explicit health check
+  const { Wait } = await import('testcontainers');
   const container = new PostgreSqlContainer('postgres:14-alpine')
     .withDatabase('postgres')
     .withUsername('postgres')
     .withPassword('postgres')
-    .withStartupTimeout(120000); // 120 second startup timeout
-  
-  console.log('[DATABASE]: Starting container (this may take a while on first run)...');
+    .withStartupTimeout(120000) // 120 second startup timeout
+    .withWaitStrategy(
+      Wait.forLogMessage('database system is ready to accept connections', 2)
+    );
+
+  console.log(
+    '[DATABASE]: Starting container (this may take a while on first run)...'
+  );
   const startTime = Date.now();
-  
+
   try {
     testContainer = await container.start();
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
     console.log(`[DATABASE]: Container started successfully in ${elapsed}s`);
   } catch (error) {
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
-    console.error(`[DATABASE]: Container startup failed after ${elapsed}s:`, error);
+    console.error(
+      `[DATABASE]: Container startup failed after ${elapsed}s:`,
+      error
+    );
     throw error;
   }
 
@@ -127,11 +100,6 @@ export async function cleanupTestDatabase(): Promise<void> {
   if (testContainer) {
     await testContainer.stop();
     testContainer = null;
-  }
-
-  if (testPGlite) {
-    await testPGlite.close();
-    testPGlite = null;
   }
 
   testDb = null;

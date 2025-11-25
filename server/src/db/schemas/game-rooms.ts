@@ -46,7 +46,7 @@ export const gameRoomPlayersTable = pgTable('game_room_players', {
 });
 
 export const gameRoomsSchema = createSelectSchema(gameRoomsTable);
-export type GameRoom = typeof gameRoomsSchema._output
+export type GameRoom = typeof gameRoomsSchema._output;
 
 export const insertGameRoomSchema = createInsertSchema(gameRoomsTable).omit({
   createdAt: true,
@@ -56,7 +56,7 @@ export const insertGameRoomSchema = createInsertSchema(gameRoomsTable).omit({
 });
 
 export const gameRoomPlayersSchema = createSelectSchema(gameRoomPlayersTable);
-export type GameRoomPlayer = typeof gameRoomPlayersSchema._output
+export type GameRoomPlayer = typeof gameRoomPlayersSchema._output;
 
 export const insertGameRoomPlayerSchema = createInsertSchema(
   gameRoomPlayersTable

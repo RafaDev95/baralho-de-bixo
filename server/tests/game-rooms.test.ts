@@ -16,57 +16,63 @@ describe('Game Rooms', () => {
   let secondPlayerId: number;
   let secondDeckId: number;
 
-  beforeAll(async () => {
-    await setupTestDatabase();
+  beforeAll(
+    async () => {
+      await setupTestDatabase();
 
-    // Create test player
-    const [player] = await db
-      .insert(playersTable)
-      .values({
-        username: 'testplayer',
-        email: 'test@example.com',
-      })
-      .returning();
-    testPlayerId = player.id;
+      // Create test player
+      const [player] = await db
+        .insert(playersTable)
+        .values({
+          username: 'testplayer',
+          email: 'test@example.com',
+        })
+        .returning();
+      testPlayerId = player.id;
 
-    // Create test deck
-    const [deck] = await db
-      .insert(decksTable)
-      .values({
-        playerId: testPlayerId,
-        name: 'Test Deck',
-        type: 1,
-        cardCount: 15,
-      })
-      .returning();
-    testDeckId = deck.id;
+      // Create test deck
+      const [deck] = await db
+        .insert(decksTable)
+        .values({
+          playerId: testPlayerId,
+          name: 'Test Deck',
+          type: 1,
+          cardCount: 15,
+        })
+        .returning();
+      testDeckId = deck.id;
 
-    // Create second test player
-    const [secondPlayer] = await db
-      .insert(playersTable)
-      .values({
-        username: 'testplayer2',
-        email: 'test2@example.com',
-      })
-      .returning();
-    secondPlayerId = secondPlayer.id;
+      // Create second test player
+      const [secondPlayer] = await db
+        .insert(playersTable)
+        .values({
+          username: 'testplayer2',
+          email: 'test2@example.com',
+        })
+        .returning();
+      secondPlayerId = secondPlayer.id;
 
-    // Create second test deck
-    const [secondDeck] = await db
-      .insert(decksTable)
-      .values({
-        playerId: secondPlayerId,
-        name: 'Test Deck 2',
-        type: 1,
-        cardCount: 15,
-      })
-      .returning();
-    secondDeckId = secondDeck.id;
-  });
+      // Create second test deck
+      const [secondDeck] = await db
+        .insert(decksTable)
+        .values({
+          playerId: secondPlayerId,
+          name: 'Test Deck 2',
+          type: 1,
+          cardCount: 15,
+        })
+        .returning();
+      secondDeckId = secondDeck.id;
+    },
+    120000 // 2 minute timeout for testcontainers to start
+  );
 
-  afterAll(async () => {
-    await cleanupTestDatabase();
-  });
+  afterAll(
+    async () => {
+      await cleanupTestDatabase();
+    },
+    30000 // 30 second timeout for cleanup
+  );
 
   describe('Room Creation', () => {
     it('should create a new game room', async () => {

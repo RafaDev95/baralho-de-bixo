@@ -42,9 +42,9 @@ export const cardCountersTable = pgTable('card_counters', {
   counter_type: text('counter_type').notNull(),
   amount: integer('amount').notNull(),
   created_at: timestamp('created_at').notNull().defaultNow(),
-  updated_at: timestamp({ mode: 'date', precision: 3 }).$onUpdate(
-    () => new Date()
-  ),
+  updated_at: timestamp({ mode: 'date', precision: 3 })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export const cardsSchema = createSelectSchema(cardsTable);

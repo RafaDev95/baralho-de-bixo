@@ -31,15 +31,34 @@ export class CardLoader {
       // Import all card definitions from TypeScript modules
       const allCards = Object.values(localCardDefinitions).filter(
         (card) => typeof card === 'object' && card !== null && 'name' in card
-      );
+      ) as TypedCardDefinition[];
 
-      this.cardDefinitions = allCards.map((card) => ({
-        name: card.name,
-        type: card.type,
-        rarity: card.rarity,
-        description: card.description,
-        energyCost: card.energyCost,
-      }));
+      this.cardDefinitions = allCards.map((card) => {
+        const baseCard: CardDefinition = {
+          name: card.name,
+          type: card.type,
+          rarity: card.rarity,
+          description: card.description,
+          energyCost: card.energyCost,
+        };
+
+        // Add type-specific properties
+        if (card.type === 'creature') {
+          baseCard.power = card.power;
+          baseCard.toughness = card.toughness;
+          baseCard.abilities = card.abilities || [];
+        }
+
+        if (card.type === 'spell') {
+          baseCard.effect = card.effect;
+        }
+
+        if (card.type === 'enchantment' || card.type === 'artifact') {
+          baseCard.abilities = card.abilities;
+        }
+
+        return baseCard;
+      });
 
       this.loaded = true;
     } catch (error) {
@@ -49,33 +68,9 @@ export class CardLoader {
   }
 
   private createCard(definition: CardDefinition): CardBase {
-    // Convert typed definition to CardDefinition format for factory
-    const cardDef: CardDefinition = {
-      name: definition.name,
-      type: definition.type,
-      rarity: definition.rarity,
-      description: definition.description,
-      energyCost: definition.energyCost,
-    };
-
-    // Add type-specific properties
-    if (definition.type === 'creature') {
-      cardDef.power = definition.power;
-      cardDef.toughness = definition.toughness;
-      cardDef.abilities = definition.abilities || [];
-    }
-
-    if (definition.type === 'spell') {
-      cardDef.effect = definition.effect;
-    }
-
-    if (definition.type === 'enchantment' || definition.type === 'artifact') {
-      cardDef.abilities = definition.abilities;
-    }
-
     const baseCardData = {
       id: this.nextId++,
-      ...cardDef,
+      ...definition,
     };
 
     const cardFactory = new CardFactory(CARD_TYPE_DEFINITIONS[definition.type]);

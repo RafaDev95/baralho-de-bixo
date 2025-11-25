@@ -11,11 +11,11 @@ import app from '@/server/app';
 describe('Deck Creation', () => {
   beforeAll(async () => {
     await setupTestDatabase();
-  });
+  }, 120000); // 2 minute timeout for testcontainers to start
 
   afterAll(async () => {
     await cleanupTestDatabase();
-  });
+  }, 30000); // 30 second timeout for cleanup
 
   describe('Load all cards before tests', () => {
     it('should load all cards and save them to the database', async () => {

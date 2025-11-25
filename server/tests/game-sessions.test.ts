@@ -17,105 +17,111 @@ describe('Game Sessions', () => {
   let testDeckId: number;
   let testCardId: number;
 
-  beforeAll(async () => {
-    await setupTestDatabase();
+  beforeAll(
+    async () => {
+      await setupTestDatabase();
 
-    // Create test data
-    const [testPlayer] = await db
-      .insert(playersTable)
-      .values({
-        username: 'testplayer',
-        email: 'test@example.com',
-      })
-      .returning();
-    testPlayerId = testPlayer.id;
+      // Create test data
+      const [testPlayer] = await db
+        .insert(playersTable)
+        .values({
+          username: 'testplayer',
+          email: 'test@example.com',
+        })
+        .returning();
+      testPlayerId = testPlayer.id;
 
-    const [testCard] = await db
-      .insert(cardsTable)
-      .values({
-        name: 'Test Card',
-        type: 'creature',
-        rarity: 'common',
-        description: 'A test card',
-        power: 2,
-        toughness: 2,
-        energyCost: 2,
-      })
-      .returning();
-    testCardId = testCard.id;
+      const [testCard] = await db
+        .insert(cardsTable)
+        .values({
+          name: 'Test Card',
+          type: 'creature',
+          rarity: 'common',
+          description: 'A test card',
+          power: 2,
+          toughness: 2,
+          energyCost: 2,
+        })
+        .returning();
+      testCardId = testCard.id;
 
-    const [testDeck] = await db
-      .insert(decksTable)
-      .values({
-        name: 'Test Deck',
-        playerId: testPlayerId,
-        type: 1,
-      })
-      .returning();
-    testDeckId = testDeck.id;
+      const [testDeck] = await db
+        .insert(decksTable)
+        .values({
+          name: 'Test Deck',
+          playerId: testPlayerId,
+          type: 1,
+        })
+        .returning();
+      testDeckId = testDeck.id;
 
-    // Add card to deck
-    await db.insert(deckCards).values({
-      deckId: testDeckId,
-      cardId: testCardId,
-    });
-
-    // Create a second player and deck for the room
-    const [secondPlayer] = await db
-      .insert(playersTable)
-      .values({
-        username: 'secondplayer',
-        email: 'second@example.com',
-      })
-      .returning();
-
-    const [secondDeck] = await db
-      .insert(decksTable)
-      .values({
-        name: 'Second Deck',
-        playerId: secondPlayer.id,
-        type: 1,
-      })
-      .returning();
-
-    await db.insert(deckCards).values({
-      deckId: secondDeck.id,
-      cardId: testCardId,
-    });
-
-    // Create test room
-    const [testRoom] = await db
-      .insert(gameRoomsTable)
-      .values({
-        name: 'Test Game Room',
-        status: 'waiting',
-        maxPlayers: 2,
-        currentPlayers: 2,
-        createdBy: testPlayerId,
-      })
-      .returning();
-    testRoomId = testRoom.id;
-
-    // Add players to room
-    await db.insert(gameRoomPlayersTable).values([
-      {
-        roomId: testRoomId,
-        playerId: testPlayerId,
+      // Add card to deck
+      await db.insert(deckCards).values({
         deckId: testDeckId,
-        isReady: 'ready',
-      },
-      {
-        roomId: testRoomId,
-        playerId: secondPlayer.id,
-        deckId: secondDeck.id,
-        isReady: 'ready',
-      },
-    ]);
-  });
+        cardId: testCardId,
+      });
 
-  afterAll(async () => {
-    await cleanupTestDatabase();
-  });
+      // Create a second player and deck for the room
+      const [secondPlayer] = await db
+        .insert(playersTable)
+        .values({
+          username: 'secondplayer',
+          email: 'second@example.com',
+        })
+        .returning();
+
+      const [secondDeck] = await db
+        .insert(decksTable)
+        .values({
+          name: 'Second Deck',
+          playerId: secondPlayer.id,
+          type: 1,
+        })
+        .returning();
+
+      await db.insert(deckCards).values({
+        deckId: secondDeck.id,
+        cardId: testCardId,
+      });
+
+      // Create test room
+      const [testRoom] = await db
+        .insert(gameRoomsTable)
+        .values({
+          name: 'Test Game Room',
+          status: 'waiting',
+          maxPlayers: 2,
+          currentPlayers: 2,
+          createdBy: testPlayerId,
+        })
+        .returning();
+      testRoomId = testRoom.id;
+
+      // Add players to room
+      await db.insert(gameRoomPlayersTable).values([
+        {
+          roomId: testRoomId,
+          playerId: testPlayerId,
+          deckId: testDeckId,
+          isReady: 'ready',
+        },
+        {
+          roomId: testRoomId,
+          playerId: secondPlayer.id,
+          deckId: secondDeck.id,
+          isReady: 'ready',
+        },
+      ]);
+    },
+    120000 // 2 minute timeout for testcontainers to start
+  );
+
+  afterAll(
+    async () => {
+      await cleanupTestDatabase();
+    },
+    30000 // 30 second timeout for cleanup
+  );
 
   describe('Game Engine', () => {
     it('should create a game session from a ready room', async () => {

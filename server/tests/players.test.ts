@@ -7,11 +7,11 @@ import app from '../src/server/app';
 describe('Player Registration', () => {
   beforeAll(async () => {
     await setupTestDatabase();
-  });
+  }, 120000); // 2 minute timeout for testcontainers to start
 
   afterAll(async () => {
     await cleanupTestDatabase();
-  });
+  }, 30000); // 30 second timeout for cleanup
 
   describe('POST /players', () => {
     it('should successfully register a new player', async () => {
@@ -22,6 +22,9 @@ describe('Player Registration', () => {
 
       const res = await app.request('/players', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(playerData),
       });
 

@@ -39,7 +39,6 @@ export const list: AppRouteHandler<List> = async (c) => {
 
 export const create: AppRouteHandler<Create> = async (c) => {
   const body = c.req.valid('json');
-
   const [room] = await db.insert(gameRoomsTable).values(body).returning();
 
   return c.json(room, HttpStatusCodes.CREATED);
@@ -65,7 +64,7 @@ export const getById: AppRouteHandler<GetById> = async (c) => {
     ) as any;
   }
 
-  return c.json(room)
+  return c.json(room);
 };
 
 export const join: AppRouteHandler<Join> = async (c) => {

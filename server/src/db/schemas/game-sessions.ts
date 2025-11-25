@@ -148,7 +148,7 @@ export const gameStateSnapshotsTable = pgTable('game_state_snapshots', {
 
 // Schemas for validation
 export const gameSessionsSchema = createSelectSchema(gameSessionsTable);
-export type GameSession = typeof gameSessionsSchema._output
+export type GameSession = typeof gameSessionsSchema._output;
 
 export const insertGameSessionSchema = createInsertSchema(
   gameSessionsTable
@@ -162,7 +162,7 @@ export const insertGameSessionSchema = createInsertSchema(
 });
 
 export const gamePlayersSchema = createSelectSchema(gamePlayersTable);
-export type GamePlayer = typeof gamePlayersSchema._output
+export type GamePlayer = typeof gamePlayersSchema._output;
 
 export const insertGamePlayerSchema = createInsertSchema(gamePlayersTable).omit(
   {
@@ -173,7 +173,7 @@ export const insertGamePlayerSchema = createInsertSchema(gamePlayersTable).omit(
 );
 
 export const gameCardsSchema = createSelectSchema(gameCardsTable);
-export type GameCard = typeof gameCardsSchema._output
+export type GameCard = typeof gameCardsSchema._output;
 
 export const insertGameCardSchema = createInsertSchema(gameCardsTable).omit({
   createdAt: true,
@@ -182,7 +182,7 @@ export const insertGameCardSchema = createInsertSchema(gameCardsTable).omit({
 });
 
 export const gameActionsSchema = createSelectSchema(gameActionsTable);
-export type GameAction = typeof gameActionsSchema._output
+export type GameAction = typeof gameActionsSchema._output;
 
 export const insertGameActionSchema = createInsertSchema(gameActionsTable).omit(
   {
@@ -194,7 +194,7 @@ export const insertGameActionSchema = createInsertSchema(gameActionsTable).omit(
 export const gameStateSnapshotsSchema = createSelectSchema(
   gameStateSnapshotsTable
 );
-export type GameStateSnapshot = typeof gameStateSnapshotsSchema._output
+export type GameStateSnapshot = typeof gameStateSnapshotsSchema._output;
 
 // Relations
 export const gameSessionsRelations = relations(

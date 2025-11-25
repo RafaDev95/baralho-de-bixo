@@ -12,9 +12,21 @@ export const list: AppRouteHandler<List> = async (c) => {
 };
 
 export const create: AppRouteHandler<Create> = async (c) => {
-  const body = await c.req.json();
-  const [result] = await db.insert(playersTable).values(body).returning();
-  return c.json(result, HttpStatusCodes.CREATED);
+  try {
+    const body = c.req.valid('json');
+    const [result] = await db.insert(playersTable).values(body).returning();
+    return c.json(result, HttpStatusCodes.CREATED);
+  } catch (error: any) {
+    console.error('Player creation error:', error);
+    if (error.code === '23505') {
+      // Unique constraint violation
+      return c.json(
+        { message: 'Email or username already exists' },
+        HttpStatusCodes.CONFLICT
+      );
+    }
+    throw error;
+  }
 };
 
 export const getById: AppRouteHandler<GetById> = async (c) => {
@@ -39,7 +51,7 @@ export const update: AppRouteHandler<Update> = async (c) => {
 
   const [result] = await db
     .update(playersTable)
-    .set(body)
+    .set({ ...body, updatedAt: new Date() })
     .where(eq(playersTable.id, params.id))
     .returning();
 

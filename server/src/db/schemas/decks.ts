@@ -44,4 +44,4 @@ export const decksRelations = relations(decksTable, ({ one, many }) => ({
   gameRooms: many(gameRoomPlayersTable),
 }));
 
-export type Deck = typeof decksSchema._output
+export type Deck = typeof decksSchema._output;
