@@ -4,7 +4,7 @@ import { and, eq } from 'drizzle-orm';
 
 /**
  * Energy System - Simplified resource management
- * 
+ *
  * Players start with 1 energy and gain +1 per turn (max 10).
  * Cards cost energy to play (simple integer cost).
  * Energy resets to max at the start of each turn.
@@ -105,10 +105,11 @@ export class EnergySystem {
    * Start a new turn - reset energy to max and increase max energy
    */
   static async startTurn(
+    tx: Parameters<Parameters<typeof db.transaction>[0]>[0],
     gameId: number,
     playerId: number
   ): Promise<void> {
-    const player = await db.query.gamePlayersTable.findFirst({
+    const player = await tx.query.gamePlayersTable.findFirst({
       where: and(
         eq(gamePlayersTable.gameId, gameId),
         eq(gamePlayersTable.playerId, playerId)
@@ -122,7 +123,7 @@ export class EnergySystem {
     const currentMaxEnergy = player.maxEnergy ?? 1;
     const newMaxEnergy = Math.min(10, currentMaxEnergy + 1);
 
-    await db
+    await tx
       .update(gamePlayersTable)
       .set({
         energy: newMaxEnergy,
@@ -146,4 +147,3 @@ export class EnergySystem {
     return 0;
   }
 }
-

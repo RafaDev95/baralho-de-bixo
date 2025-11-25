@@ -7,7 +7,7 @@ import {
   gameRoomsTable,
   playersTable,
 } from '@/db/schemas';
-import { gameEngine } from '@/lib/game/game-engine-simple';
+import { gameEngine } from '@/lib/game';
 import { afterAll, beforeAll, describe, expect, it } from 'bun:test';
 import { setupTestDatabase } from './utils/testSetup';
 
@@ -16,6 +16,7 @@ describe('Game Sessions', () => {
   let testPlayerId: number;
   let testDeckId: number;
   let testCardId: number;
+  let gameSessionId: number;
 
   beforeAll(
     async () => {
@@ -131,16 +132,20 @@ describe('Game Sessions', () => {
       expect(gameSession.roomId).toBe(testRoomId);
       expect(gameSession.status).toBe('active');
       expect(gameSession.startedAt).toBeDefined();
+
+      // Store game session ID for other tests
+      gameSessionId = gameSession.id;
     });
 
     it('should initialize player decks and hands', async () => {
-      const gameState = gameEngine.getGameState(1); // Assuming first game created
+      const gameState = gameEngine.getGameState(gameSessionId);
 
       expect(gameState).toBeDefined();
       expect(gameState?.players).toHaveLength(2);
       expect(gameState?.currentTurn).toBe(1);
       expect(gameState?.currentPlayerIndex).toBe(0);
-      expect(gameState?.phase).toBe('untap');
+      // After game creation, phase moves to 'draw' after untap (startTurn is called)
+      expect(gameState?.phase).toBe('draw');
       expect(gameState?.step).toBe('beginning');
     });
 
@@ -199,18 +204,18 @@ describe('Game Sessions', () => {
 
   describe('Game Actions', () => {
     it('should process end turn action', async () => {
-      const gameState = gameEngine.getGameState(1);
+      const gameState = gameEngine.getGameState(gameSessionId);
       if (!gameState) throw new Error('Game state not found');
 
       const initialPlayerIndex = gameState.currentPlayerIndex;
       const initialTurn = gameState.currentTurn;
 
-      await gameEngine.processGameAction(1, {
+      await gameEngine.processGameAction(gameSessionId, {
         type: 'end_turn',
         playerId: gameState.players[initialPlayerIndex].playerId,
       });
 
-      const updatedGameState = gameEngine.getGameState(1);
+      const updatedGameState = gameEngine.getGameState(gameSessionId);
       expect(updatedGameState).toBeDefined();
 
       if (updatedGameState) {
@@ -226,14 +231,14 @@ describe('Game Sessions', () => {
           expect(updatedGameState.currentTurn).toBe(initialTurn);
         }
 
-        // Phase and step should reset
-        expect(updatedGameState.phase).toBe('untap');
+        // Phase and step should reset (moves to draw after untap)
+        expect(updatedGameState.phase).toBe('draw');
         expect(updatedGameState.step).toBe('beginning');
       }
     });
 
     it('should reject actions from non-current player', async () => {
-      const gameState = gameEngine.getGameState(1);
+      const gameState = gameEngine.getGameState(gameSessionId);
       if (!gameState) throw new Error('Game state not found');
 
       const nonCurrentPlayer = gameState.players.find(
@@ -244,7 +249,7 @@ describe('Game Sessions', () => {
       if (!nonCurrentPlayer) throw new Error('No non-current player found');
 
       await expect(
-        gameEngine.processGameAction(1, {
+        gameEngine.processGameAction(gameSessionId, {
           type: 'end_turn',
           playerId: nonCurrentPlayer.playerId,
         })
@@ -254,15 +259,15 @@ describe('Game Sessions', () => {
 
   describe('Game State Management', () => {
     it('should maintain game state in memory', () => {
-      const gameState = gameEngine.getGameState(1);
+      const gameState = gameEngine.getGameState(gameSessionId);
       expect(gameState).toBeDefined();
-      expect(gameState?.gameId).toBe(1);
+      expect(gameState?.gameId).toBe(gameSessionId);
     });
 
     it('should return all active games', () => {
       const activeGames = gameEngine.getActiveGames();
       expect(activeGames).toHaveLength(1);
-      expect(activeGames[0].gameId).toBe(1);
+      expect(activeGames[0].gameId).toBe(gameSessionId);
     });
   });
 });

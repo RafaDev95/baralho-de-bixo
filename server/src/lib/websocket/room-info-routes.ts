@@ -1,8 +1,8 @@
-import { gameRoomSocketManager } from '@/lib/websocket/game-room-socket';
+import { gameRoomSocketManager } from './game-room-socket';
 import { Hono } from 'hono';
 import { z } from 'zod';
 
-const gameRoomsWebSocket = new Hono();
+const roomInfoRoutes = new Hono();
 
 const joinRoomSchema = z.object({
   type: z.literal('join_room'),
@@ -31,7 +31,7 @@ export const messageSchema = z.discriminatedUnion('type', [
   leaveRoomSchema,
 ]);
 
-gameRoomsWebSocket.get('/:roomId/info', (c) => {
+roomInfoRoutes.get('/:roomId/info', (c) => {
   const roomId = Number.parseInt(c.req.param('roomId'), 10);
   const roomInfo = gameRoomSocketManager.getRoomInfo(roomId);
 
@@ -41,7 +41,7 @@ gameRoomsWebSocket.get('/:roomId/info', (c) => {
   });
 });
 
-gameRoomsWebSocket.get('/info', (c) => {
+roomInfoRoutes.get('/info', (c) => {
   const roomsInfo = gameRoomSocketManager.getAllRoomsInfo();
   const roomsArray = Array.from(roomsInfo.entries()).map(([roomId, info]) => ({
     roomId,
@@ -52,11 +52,11 @@ gameRoomsWebSocket.get('/info', (c) => {
 });
 
 // WebSocket endpoint (will be handled by the main server)
-gameRoomsWebSocket.get('/ws/:roomId', (c) => {
+roomInfoRoutes.get('/ws/:roomId', (c) => {
   return c.json({
     message: 'WebSocket endpoint - connect via ws:// protocol',
     roomId: c.req.param('roomId'),
   });
 });
 
-export default gameRoomsWebSocket;
+export default roomInfoRoutes;

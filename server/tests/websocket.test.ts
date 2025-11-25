@@ -1,5 +1,7 @@
-import { gameRoomSocketManager } from '@/lib/websocket/game-room-socket';
-import { gameRoomWebSocketServer } from '@/lib/websocket/websocket-server';
+import {
+  gameRoomSocketManager,
+  gameRoomWebSocketServer,
+} from '@/lib/websocket';
 import { afterAll, beforeAll, describe, expect, it } from 'bun:test';
 import { WebSocket } from 'ws';
 

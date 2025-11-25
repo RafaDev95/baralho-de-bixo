@@ -3,7 +3,7 @@ import createApp from '@/lib/create-app';
 import cards from '@/modules/cards';
 import decks from '@/modules/decks';
 import gameRooms from '@/modules/game-rooms';
-import gameRoomsWebSocket from '@/modules/game-rooms/game-rooms-websocket';
+import roomInfoRoutes from '@/lib/websocket/room-info-routes';
 import index from '@/modules/index.route';
 import players from '@/modules/players';
 
@@ -14,7 +14,7 @@ const routes = [
   cards,
   decks,
   gameRooms,
-  gameRoomsWebSocket,
+  roomInfoRoutes,
   players,
 ] as const;
 

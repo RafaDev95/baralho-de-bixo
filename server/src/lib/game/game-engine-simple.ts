@@ -18,9 +18,8 @@ import {
 import { and, eq } from 'drizzle-orm';
 import { EnergySystem } from './energy-system';
 import { gameEventEmitter } from './game-event-emitter';
-import type { GameEvent } from './game-event-types';
 import { AttackStrategyFactory } from './strategies/attack-strategy';
-import { gameSocketManager } from '@/lib/websocket/game-socket-manager';
+import { gameSocketManager } from '@/lib/websocket';
 
 // Type for database transaction
 type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
@@ -130,7 +129,7 @@ export class GameEngine {
         gameId: gameSession.id,
         currentTurn: 1,
         currentPlayerIndex: 0,
-        phase: 'draw',
+        phase: 'untap',
         step: 'beginning',
         players: gamePlayers,
         cards: [],
@@ -138,9 +137,12 @@ export class GameEngine {
 
       this.gameState.set(gameSession.id, gameState);
 
-      // Start first player's turn (draw card, set energy)
+      // Start first player's turn (set energy, then move to draw phase)
       const firstPlayer = gamePlayers[0];
-      await EnergySystem.startTurn(gameSession.id, firstPlayer.playerId);
+      await EnergySystem.startTurn(tx, gameSession.id, firstPlayer.playerId);
+
+      // Move to draw phase and draw starting hand
+      gameState.phase = 'draw';
       await this.drawCards(tx, gameSession.id, firstPlayer.playerId, 1);
 
       // Create initial snapshot
@@ -414,9 +416,7 @@ export class GameEngine {
       ? (cardDef.abilities as Array<{ name: string }>).map((a) => a.name)
       : [];
     const attackStrategy = AttackStrategyFactory.getStrategy(abilities);
-    const attackResult = attackStrategy.attack(
-      attackingCreature.power ?? 0
-    );
+    const attackResult = attackStrategy.attack(attackingCreature.power ?? 0);
 
     // Deal damage to opponent
     const damage = attackResult.damage;
@@ -504,13 +504,16 @@ export class GameEngine {
       gameState.currentTurn++;
     }
 
-    // Reset phase and step for new player
-    gameState.phase = 'draw';
+    // Reset phase and step for new player (start with untap, then move to draw)
+    gameState.phase = 'untap';
     gameState.step = 'beginning';
 
-    // Start new turn for the new player (draw card, gain energy)
+    // Start new turn for the new player (gain energy)
     const newPlayer = gameState.players[gameState.currentPlayerIndex];
-    await EnergySystem.startTurn(gameId, newPlayer.playerId);
+    await EnergySystem.startTurn(tx, gameId, newPlayer.playerId);
+
+    // Move to draw phase and draw card
+    gameState.phase = 'draw';
     await this.drawCards(tx, gameId, newPlayer.playerId, 1);
 
     // Get updated player energy

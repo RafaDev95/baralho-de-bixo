@@ -1,6 +1,6 @@
 import { db } from '@/db/config';
 import { gameSessionsTable } from '@/db/schemas';
-import { gameEngine } from '@/lib/game/game-engine-simple';
+import { gameEngine } from '@/lib/game';
 import { eq } from 'drizzle-orm';
 import type { Context } from 'hono';
 

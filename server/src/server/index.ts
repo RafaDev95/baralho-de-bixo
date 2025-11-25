@@ -1,7 +1,7 @@
 import { serve } from '@hono/node-server';
 
 import { env } from '@/env';
-import { gameRoomWebSocketServer } from '@/lib/websocket/websocket-server';
+import { gameRoomWebSocketServer } from '@/lib/websocket';
 
 import app from './app';
 

@@ -1,4 +1,4 @@
-import { messageSchema } from '@/modules/game-rooms/game-rooms-websocket';
+import { messageSchema } from './room-info-routes';
 import type { WebSocket } from 'ws';
 import { WebSocketServer } from 'ws';
 import { gameRoomSocketManager } from './game-room-socket';
