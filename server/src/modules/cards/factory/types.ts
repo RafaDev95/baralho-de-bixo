@@ -68,7 +68,7 @@ export interface CardBase {
   type: CardType;
   rarity: CardRarity;
   description: string;
-  energyCost: number; // Simplified: single energy cost (0-10)
+  energyCost: number;
 }
 
 export interface CreatureCard extends CardBase {
@@ -94,8 +94,6 @@ export interface ArtifactCard extends CardBase {
   abilities: CardAbility[];
 }
 
-// Removed ManaCost - using simple energyCost number instead
-
 export interface CardEffect {
   type: EffectType;
   target: EffectTarget;
@@ -106,7 +104,7 @@ export interface CardEffect {
   toughness?: number;
   abilities?: CardAbility[];
   position?: 'top' | 'bottom';
-  [key: string]: unknown; // Allow additional properties for flexibility
+  [key: string]: unknown;
 }
 
 export interface CardAbility {

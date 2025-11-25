@@ -5,7 +5,6 @@ import decks from '@/modules/decks';
 import gameRooms from '@/modules/game-rooms';
 import gameSessions from '@/modules/game-sessions';
 import players from '@/modules/players';
-import trades from '@/modules/trades';
 import { createRoute } from '@hono/zod-openapi';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
 import { jsonContent } from 'stoker/openapi/helpers';
@@ -38,7 +37,6 @@ const router = createRouter()
   .route('/', gameRooms)
   .route('/', gameSessions)
   .route('/', players)
-  .route('/', trades)
   .route('/auth', auth);
 
 export default router;

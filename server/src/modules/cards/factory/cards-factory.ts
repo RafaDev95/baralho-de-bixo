@@ -1,14 +1,5 @@
-import { CardType } from '@/db/schemas';
-import { BASE_CARD_REQUIRED_FIELDS, CARD_TYPE_DEFINITIONS } from './constants';
-import type {
-  CardDefinition,
-  CreatureCard,
-  SpellCard,
-  EnchantmentCard,
-  ArtifactCard,
-  CardFactoryStrategy,
-  CardBase,
-} from './types';
+import { BASE_CARD_REQUIRED_FIELDS } from './constants';
+import type { CardDefinition, CardFactoryStrategy, CardBase } from './types';
 
 /**
  * CardFactory - Factory Pattern Implementation
@@ -39,7 +30,6 @@ export class CardFactory {
       }
     }
 
-    // Validate energy cost
     if (
       typeof card.energyCost !== 'number' ||
       card.energyCost < 0 ||

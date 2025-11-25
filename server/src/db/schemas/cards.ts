@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations } from 'drizzle-orm';
 import {
   boolean,
   integer,
@@ -7,43 +7,42 @@ import {
   serial,
   text,
   timestamp,
-} from "drizzle-orm/pg-core";
+} from 'drizzle-orm/pg-core';
 
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { deckCards } from "./deck-cards";
-import { rarityEnum, typeEnum } from "./enums";
-import { cardPositionsTable, stackTable } from "./games";
-import { tradesTable } from "./trades";
+import { deckCards } from './deck-cards';
+import { rarityEnum, typeEnum } from './enums';
+import { cardPositionsTable, stackTable } from './games';
 
-export const cardsTable = pgTable("cards", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
+export const cardsTable = pgTable('cards', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
   type: typeEnum().notNull(),
   rarity: rarityEnum().notNull(),
-  description: text("description").notNull(),
-  power: integer("power"),
-  toughness: integer("toughness"),
-  energyCost: integer("energy_cost").notNull().default(0), // Simple energy cost (0-10)
-  abilities: jsonb("abilities"), // Store card abilities
-  effect: jsonb("effect"), // Store card effect
+  description: text('description').notNull(),
+  power: integer('power'),
+  toughness: integer('toughness'),
+  energyCost: integer('energy_cost').notNull().default(0), // Simple energy cost (0-10)
+  abilities: jsonb('abilities'), // Store card abilities
+  effect: jsonb('effect'), // Store card effect
   // Add fields for creature-specific properties
-  canAttack: boolean("can_attack").default(true),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp({ mode: "date", precision: 3 }).$onUpdate(
+  canAttack: boolean('can_attack').default(true),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp({ mode: 'date', precision: 3 }).$onUpdate(
     () => new Date()
   ),
 });
 
 // Track counters on cards
-export const cardCountersTable = pgTable("card_counters", {
-  id: serial("id").primaryKey(),
-  gameId: integer("game_id").notNull(),
-  cardId: integer("card_id").notNull(),
-  counter_type: text("counter_type").notNull(),
-  amount: integer("amount").notNull(),
-  created_at: timestamp("created_at").notNull().defaultNow(),
-  updated_at: timestamp({ mode: "date", precision: 3 }).$onUpdate(
+export const cardCountersTable = pgTable('card_counters', {
+  id: serial('id').primaryKey(),
+  gameId: integer('game_id').notNull(),
+  cardId: integer('card_id').notNull(),
+  counter_type: text('counter_type').notNull(),
+  amount: integer('amount').notNull(),
+  created_at: timestamp('created_at').notNull().defaultNow(),
+  updated_at: timestamp({ mode: 'date', precision: 3 }).$onUpdate(
     () => new Date()
   ),
 });
@@ -57,7 +56,6 @@ export const insertCardSchema = createInsertSchema(cardsTable).omit({
 
 export const cardsRelations = relations(cardsTable, ({ many }) => ({
   deckCards: many(deckCards),
-  trades: many(tradesTable),
   positions: many(cardPositionsTable),
   counters: many(cardCountersTable),
   stack: many(stackTable),
@@ -65,7 +63,6 @@ export const cardsRelations = relations(cardsTable, ({ many }) => ({
 
 export const updateCardSchema = insertCardSchema.partial();
 
-
-export type Card = typeof cardsSchema._output
+export type Card = typeof cardsSchema._output;
 export type CardType = (typeof typeEnum.enumValues)[number];
 export type CardRarity = (typeof rarityEnum.enumValues)[number];

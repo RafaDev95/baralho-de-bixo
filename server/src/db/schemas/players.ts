@@ -9,7 +9,6 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { decksTable } from './decks';
 import { gameRoomPlayersTable } from './game-rooms';
-import { tradesTable } from './trades';
 
 export const playersTable = pgTable('players', {
   id: serial('id').primaryKey(),
@@ -32,8 +31,7 @@ export const insertPlayerSchema = createInsertSchema(playersTable).omit({
 
 export const playersRelations = relations(playersTable, ({ many }) => ({
   decks: many(decksTable),
-  trades: many(tradesTable),
   gameRooms: many(gameRoomPlayersTable),
 }));
 
-export type Player = typeof playersSchema._output
+export type Player = typeof playersSchema._output;

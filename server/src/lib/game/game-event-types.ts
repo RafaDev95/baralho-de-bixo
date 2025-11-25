@@ -1,6 +1,6 @@
 /**
  * Game Event Types
- * 
+ *
  * Defines all possible game events that can be emitted.
  * Used with Observer pattern for decoupled event handling.
  */
@@ -101,4 +101,3 @@ export interface GameStateUpdatedEvent extends GameEvent {
     phase: string;
   };
 }
-

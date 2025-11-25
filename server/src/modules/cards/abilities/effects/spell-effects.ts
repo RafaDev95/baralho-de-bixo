@@ -9,8 +9,8 @@ export const fireballEffect: AbilityDefinition = defineAbility({
   effect: {
     type: 'damage',
     target: 'any',
-    value: 3
-  }
+    value: 3,
+  },
 });
 
 export const infernoEffect: AbilityDefinition = defineAbility({
@@ -21,31 +21,22 @@ export const infernoEffect: AbilityDefinition = defineAbility({
   effect: {
     type: 'damage',
     target: 'all',
-    value: 5
-  }
+    value: 5,
+  },
 });
 
 export const flameShieldEffect: AbilityDefinition = defineAbility({
   id: 'flame_shield_effect',
   name: 'Flame Shield',
-  description: "Give a creature +2/+0 and 'Deal 1 damage to attacker when blocked'",
+  description:
+    "Give a creature +2/+0 and 'Deal 1 damage to attacker when blocked'",
   trigger: 'static',
   effect: {
     type: 'modify_stats',
     target: 'creature',
     power: 2,
     toughness: 0,
-    abilities: [{
-      name: 'Counter Strike',
-      description: 'Deal 1 damage to attacker when blocked',
-      trigger: 'on_blocked',
-      effect: {
-        type: 'damage',
-        target: 'attacker',
-        value: 1
-      }
-    }]
-  }
+  },
 });
 
 export const tidalWaveEffect: AbilityDefinition = defineAbility({
@@ -55,8 +46,8 @@ export const tidalWaveEffect: AbilityDefinition = defineAbility({
   trigger: 'static',
   effect: {
     type: 'return_to_hand',
-    target: 'creature'
-  }
+    target: 'creature',
+  },
 });
 
 export const tsunamiEffect: AbilityDefinition = defineAbility({
@@ -66,8 +57,8 @@ export const tsunamiEffect: AbilityDefinition = defineAbility({
   trigger: 'static',
   effect: {
     type: 'return_to_hand',
-    target: 'all_creatures'
-  }
+    target: 'all_creatures',
+  },
 });
 
 export const waterShieldEffect: AbilityDefinition = defineAbility({
@@ -78,8 +69,8 @@ export const waterShieldEffect: AbilityDefinition = defineAbility({
   effect: {
     type: 'prevent_damage',
     target: 'creature',
-    duration: 'until_end_of_turn'
-  }
+    duration: 'until_end_of_turn',
+  },
 });
 
 export const gustEffect: AbilityDefinition = defineAbility({
@@ -90,8 +81,8 @@ export const gustEffect: AbilityDefinition = defineAbility({
   effect: {
     type: 'return_to_library',
     target: 'creature',
-    position: 'top'
-  }
+    position: 'top',
+  },
 });
 
 export const cycloneEffect: AbilityDefinition = defineAbility({
@@ -101,8 +92,8 @@ export const cycloneEffect: AbilityDefinition = defineAbility({
   trigger: 'static',
   effect: {
     type: 'shuffle_into_library',
-    target: 'all_creatures'
-  }
+    target: 'all_creatures',
+  },
 });
 
 export const windWalkSpellEffect: AbilityDefinition = defineAbility({
@@ -113,19 +104,20 @@ export const windWalkSpellEffect: AbilityDefinition = defineAbility({
   effect: {
     type: 'unblockable',
     target: 'creature',
-    duration: 'until_end_of_turn'
-  }
+    duration: 'until_end_of_turn',
+  },
 });
 
 export const elementalFusionEffect: AbilityDefinition = defineAbility({
   id: 'elemental_fusion_effect',
   name: 'Elemental Fusion',
-  description: "Combine two creatures into one with combined power and toughness",
+  description:
+    'Combine two creatures into one with combined power and toughness',
   trigger: 'static',
   effect: {
     type: 'fuse_creatures',
-    target: 'two_creatures'
-  }
+    target: 'two_creatures',
+  },
 });
 
 export const spellEffects = {

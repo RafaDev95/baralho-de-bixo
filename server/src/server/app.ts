@@ -6,7 +6,6 @@ import gameRooms from '@/modules/game-rooms';
 import gameRoomsWebSocket from '@/modules/game-rooms/game-rooms-websocket';
 import index from '@/modules/index.route';
 import players from '@/modules/players';
-import trades from '@/modules/trades';
 
 const app = createApp();
 
@@ -17,7 +16,6 @@ const routes = [
   gameRooms,
   gameRoomsWebSocket,
   players,
-  trades,
 ] as const;
 
 configureOpenApi(app);

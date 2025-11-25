@@ -1,4 +1,3 @@
-export * from './auth-challenges';
 export * from './cards';
 export * from './deck-cards';
 export * from './decks';
@@ -7,4 +6,3 @@ export * from './game-rooms';
 export * from './game-sessions';
 export * from './games';
 export * from './players';
-export * from './trades';
