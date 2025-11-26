@@ -3,7 +3,6 @@ import * as HttpStatusCodes from 'stoker/http-status-codes';
 import { jsonContent } from 'stoker/openapi/helpers';
 import { z } from 'zod';
 
-// Schema definitions
 const PlayerSignUpRequestSchema = z.object({
   username: z
     .string()
@@ -32,7 +31,6 @@ const PlayerResponseSchema = z.object({
   error: z.string().optional(),
 });
 
-// Routes
 export const playerSignUp = createRoute({
   method: 'post',
   path: '/signup',

@@ -19,7 +19,6 @@ export const create: AppRouteHandler<Create> = async (c) => {
   } catch (error: any) {
     console.error('Player creation error:', error);
     if (error.code === '23505') {
-      // Unique constraint violation
       return c.json(
         { message: 'Email or username already exists' },
         HttpStatusCodes.CONFLICT

@@ -16,7 +16,6 @@ export const prodDb = drizzle(pool, {
   logger: true,
 });
 
-// Test database integration - using testcontainers for fully compatible PostgreSQL
 export let testContainer: StartedPostgreSqlContainer | null = null;
 export let testPool: pg.Pool | null = null;
 export let testDb: ReturnType<typeof drizzle> | null = null;
@@ -28,7 +27,6 @@ export async function initializeTestDatabase(): Promise<void> {
     return;
   }
 
-  // Use testcontainers for fully compatible PostgreSQL
   console.log('[DATABASE]: Using testcontainers (fully compatible PostgreSQL)');
   return initializeTestcontainersDatabase();
 }
@@ -39,7 +37,6 @@ async function initializeTestcontainersDatabase(): Promise<void> {
   const { PostgreSqlContainer } = await import('@testcontainers/postgresql');
   console.log('[DATABASE]: Creating PostgreSQL container...');
 
-  // Create container with extended timeout and explicit health check
   const { Wait } = await import('testcontainers');
   const container = new PostgreSqlContainer('postgres:14-alpine')
     .withDatabase('postgres')

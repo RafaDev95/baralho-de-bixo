@@ -3,7 +3,6 @@ import { insertPlayerSchema, playersTable } from '@/db/schemas';
 import { eq } from 'drizzle-orm';
 import type { Context } from 'hono';
 
-
 export const playerSignUp = async (c: Context) => {
   try {
     const body = await c.req.json();
@@ -25,7 +24,6 @@ export const playerSignUp = async (c: Context) => {
       );
     }
 
-    // Check if email already exists
     const existingEmail = await db
       .select()
       .from(playersTable)
@@ -42,7 +40,6 @@ export const playerSignUp = async (c: Context) => {
       );
     }
 
-    // Create new player
     const newPlayer = await db
       .insert(playersTable)
       .values({
@@ -77,13 +74,11 @@ export const playerSignUp = async (c: Context) => {
   }
 };
 
-
 export const playerSignIn = async (c: Context) => {
   try {
     const body = await c.req.json();
     const { email } = insertPlayerSchema.parse(body);
 
-    // Find player by email
     const player = await db
       .select()
       .from(playersTable)
@@ -140,7 +135,6 @@ export const getPlayerProfile = async (c: Context) => {
       );
     }
 
-    // Get player from database
     const player = await db
       .select()
       .from(playersTable)

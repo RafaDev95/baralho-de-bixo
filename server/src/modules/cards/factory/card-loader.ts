@@ -28,7 +28,6 @@ export class CardLoader {
     if (this.loaded) return;
 
     try {
-      // Import all card definitions from TypeScript modules
       const allCards = Object.values(localCardDefinitions).filter(
         (card) => typeof card === 'object' && card !== null && 'name' in card
       ) as TypedCardDefinition[];
@@ -42,7 +41,6 @@ export class CardLoader {
           energyCost: card.energyCost,
         };
 
-        // Add type-specific properties
         if (card.type === 'creature') {
           baseCard.power = card.power;
           baseCard.toughness = card.toughness;
