@@ -14,7 +14,8 @@ services:
   app:
     build:
       context: .
-      target: development # Explicitly specify development target
+      dockerfile: Dockerfile
+      target: development
     container_name: baralho-de-bixo-api
     depends_on:
       - db
@@ -24,6 +25,7 @@ services:
       - ./src:/usr/src/app/src # Mount only source code for live reloading
       - ./package.json:/usr/src/app/package.json # Mount package.json
       - ./bun.lockb:/usr/src/app/bun.lockb # Mount lock file
+      - node_modules:/usr/src/app/node_modules # Use named volume to preserve installed packages
     environment:
       - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_NAME=${DATABASE_NAME}
@@ -35,7 +37,8 @@ services:
       - LOG_LEVEL=${LOG_LEVEL}
       - NODE_ENV=${NODE_ENV}
       - TEST_MODE=${TEST_MODE}
-    command: bun run dev
+    command: ["bun", "run", "dev"]
 
 volumes:
   postgres_data:
+  node_modules:

@@ -1,12 +1,13 @@
 import { db } from '@/db/config';
 import { insertPlayerSchema, playersTable } from '@/db/schemas';
+import { hashPassword } from '@/utils/password';
 import { eq } from 'drizzle-orm';
 import type { Context } from 'hono';
 
 export const playerSignUp = async (c: Context) => {
   try {
     const body = await c.req.json();
-    const { username, email } = insertPlayerSchema.parse(body);
+    const { username, email, password } = insertPlayerSchema.parse(body);
 
     const existingUsername = await db
       .select()
@@ -40,11 +41,14 @@ export const playerSignUp = async (c: Context) => {
       );
     }
 
+    const passwordHash = await hashPassword(password);
+
     const newPlayer = await db
       .insert(playersTable)
       .values({
         username,
         email,
+        passwordHash,
       })
       .returning();
 

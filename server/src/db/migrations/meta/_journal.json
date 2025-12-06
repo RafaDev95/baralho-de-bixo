@@ -15,6 +15,13 @@
       "when": 1764031167929,
       "tag": "0001_light_cassandra_nova",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1764719161951,
+      "tag": "0002_nebulous_power_man",
+      "breakpoints": true
     }
   ]
 }

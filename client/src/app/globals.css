@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-cinzel: 'Cinzel Decorative', serif;
+  --font-inter: 'Inter', sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 210 20% 8%; /* #0d1117 - mystic-dark */
+    --foreground: 210 40% 98%;
+    --card: 210 24% 23%; /* #2d3748 - stone-carving base */
+    --card-foreground: 210 40% 98%;
+    --popover: 210 20% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 43 69% 52%; /* #d4af37 - ancient-gold */
+    --primary-foreground: 210 20% 8%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 210 14% 63%; /* #a0aec0 - mystic-gray */
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 210 14% 63%; /* #a0aec0 - mystic-gray */
+    --input: 210 24% 23%; /* #2d3748 */
+    --ring: 43 69% 52%; /* #d4af37 - ancient-gold */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Aetheria theme utilities */
+  .bg-mystic-dark {
+    background-color: #0d1117;
+  }
+
+  .text-ancient-gold {
+    color: #d4af37;
+  }
+
+  .border-ancient-gold {
+    border-color: #d4af37;
+  }
+
+  .bg-ancient-gold {
+    background-color: #d4af37;
+  }
+
+  .text-mystic-gray {
+    color: #a0aec0;
+  }
+
+  .border-mystic-gray {
+    border-color: #a0aec0;
+  }
+
+  .text-emerald-glow {
+    color: #38a169;
+  }
+
+  .bg-emerald-glow {
+    background-color: #38a169;
+  }
+
+  .shadow-gold-glow {
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5),
+      0 0 20px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .shadow-gold-glow:hover {
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.7),
+      0 0 30px rgba(212, 175, 55, 0.5);
+  }
+
+  .bg-ancient-scroll {
+    border: 4px solid #d4af37;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .bg-stone-carving {
+    background-color: #2d3748;
+    border: 2px solid #a0aec0;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+  }
+
+  .card-rune-border {
+    border: 1px solid #d4af37;
+    box-shadow: 0 0 8px #d4af37;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card-rune-border:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.6);
+  }
+
+  @keyframes shimmer {
+    0%,
+    100% {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+
+  .magical-particle {
+    animation: shimmer 4s infinite ease-in-out;
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  /* Purple glow for title */
+  .text-shadow-purple-glow {
+    text-shadow: 0 0 20px rgba(139, 92, 246, 0.8),
+      0 0 40px rgba(139, 92, 246, 0.6), 0 0 60px rgba(139, 92, 246, 0.4);
+  }
+
+  /* Orange-yellow glow for primary button */
+  .shadow-orange-glow {
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.7),
+      0 0 30px rgba(251, 191, 36, 0.5), 0 0 45px rgba(251, 191, 36, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .shadow-orange-glow:hover {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.9),
+      0 0 40px rgba(251, 191, 36, 0.7), 0 0 60px rgba(251, 191, 36, 0.5);
+  }
+
+  /* Purple glow for secondary button */
+  .shadow-purple-glow {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.7),
+      0 0 30px rgba(139, 92, 246, 0.5), 0 0 45px rgba(139, 92, 246, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .shadow-purple-glow:hover {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.9),
+      0 0 40px rgba(139, 92, 246, 0.7), 0 0 60px rgba(139, 92, 246, 0.5);
+  }
+
+  /* Runic circle background pattern */
+  .runic-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    height: 700px;
+    opacity: 0.2;
+    border-radius: 50%;
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2),
+      inset 0 0 40px rgba(212, 175, 55, 0.1);
+    background: repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0deg,
+        rgba(212, 175, 55, 0.05) 5deg,
+        transparent 10deg
+      ),
+      radial-gradient(
+        circle at 50% 50%,
+        transparent 20%,
+        rgba(212, 175, 55, 0.1) 50%,
+        transparent 80%
+      );
+  }
+
+  .runic-circle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+  }
+
+  .runic-circle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+  }
+
+  /* Metallic button style */
+  .button-metallic {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+    border-left: 3px solid #d4af37;
+    border-right: 3px solid #d4af37;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .button-metallic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(212, 175, 55, 0.2),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  .button-metallic:hover::before {
+    left: 100%;
+  }
+}

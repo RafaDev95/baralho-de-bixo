@@ -9,6 +9,10 @@ const PlayerSignUpRequestSchema = z.object({
     .min(3, 'Username must be at least 3 characters')
     .max(50, 'Username too long'),
   email: z.string().email('Invalid email format'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters long')
+    .max(100, 'Password is too long'),
 });
 
 const PlayerSignInRequestSchema = z.object({
@@ -59,7 +63,7 @@ export const playerSignUp = createRoute({
   },
   tags: ['Authentication'],
   summary: 'Player sign up',
-  description: 'Register a new player with username and email',
+  description: 'Register a new player with username, email, and password',
 });
 
 export const playerSignIn = createRoute({

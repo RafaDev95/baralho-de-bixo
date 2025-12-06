@@ -1,14 +1,21 @@
 {
-  "name": "simple-tcg-server",
+  "name": "simple-tcg-workspace",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "bun run --bun concurrently \"bun run dev:server\" \"bun run dev:client\"",
+    "dev:server": "cd server && bun run dev",
+    "dev:client": "cd client && bun run dev",
+    "build": "bun run build:server && bun run build:client",
+    "build:server": "cd server && bun run build",
+    "build:client": "cd client && bun run build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "bun@1.1.0",
-  "devDependencies": {}
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "packageManager": "bun@1.1.0"
 }

@@ -1,4 +1,31 @@
-node_modules
-.dist
-.build
+# Workspace level ignores
+node_modules/
+.DS_Store
+*.log
+
+# Lock files (keep root bun.lock, ignore workspace-specific ones)
+**/bun.lock
+**/bun.lockb
+!bun.lock
+
+# Client
+client/.next/
+client/out/
+client/build/
+client/node_modules/
+
+# Server
+server/.build/
+server/node_modules/
+server/pg_data/
+
+# Environment files
 .env
+.env.local
+.env*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

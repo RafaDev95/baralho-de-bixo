@@ -1,0 +1,208 @@
+---
+alwaysApply: true
+---
+
+RULE: task_generation_standard
+
+Whenever the user asks to "create a task", "generate a task", "write a task file",
+"create a .md task", or anything similar, you MUST generate a detailed markdown task
+file following the exact structure and tone described below.
+
+====================================================================
+
+### REQUIRED TASK STRUCTURE (FOLLOW EXACTLY)
+
+# Task <number>: <Title>
+
+Author: <use user's name or "User"> | Date: <today's date>
+
+**Phases**: <number> Setup phases + <number> Implementation phases
+
+## Overview
+
+- Explain the purpose of the task.
+- Clarify the scope and motivation.
+- Describe how the task fits into the overall integration.
+
+## Prerequisites
+
+List all preconditions using checkboxes:
+
+- [ ] Environment variables available
+- [ ] API/testnet/mainnet addresses known
+- [ ] Dependencies installed
+- [ ] Any required setup completed
+
+## Implementation Steps
+
+### Phase 0: Environment Setup (optional)
+
+- Add environment variables to `.env.example`
+- Add validation in `src/config/env.ts`
+- Update configuration files as needed
+
+### Phase 1: Core Implementation
+
+Break down into numbered, explicit steps:
+
+1. Create/update directories (e.g. `/src/services/`)
+2. Generate TypeScript types from OpenAPI spec
+3. Implement service modules
+4. Add validation & error handling
+5. Implement business logic
+6. Implement React Query hooks (follow React Query rules below)
+
+### Phase 2: UI Integration
+
+- Add or update components/pages
+- Connect components to hooks/services
+- Handle loading, success, error, and empty states
+- Ensure interactions trigger the correct service calls
+
+### Phase 3: Testing & Validation
+
+- Include recommended unit/integration tests
+- Document manual testing steps
+- Describe expected outputs, responses, and logs
+
+## Code Blocks
+
+Any code mentioned MUST be provided inside fenced code blocks.
+Use TypeScript unless requested otherwise.
+
+## File Paths
+
+All referenced paths must be real project paths:
+
+- `src/services/...`
+- `src/hooks/...`
+- `src/state/...`
+- `app/(routes)/...`
+
+## Final Checklist
+
+- [ ] Types generated
+- [ ] Service implemented
+- [ ] React Query hooks implemented and following rules
+- [ ] UI updated
+- [ ] Tests written
+- [ ] Manual validation complete
+
+## Output Format
+
+Respond with **ONLY the markdown file content**.
+The file MUST be named: `task-<number>-<slug>.md`.
+
+====================================================================
+
+### GLOBAL RULES FOR ALL TASKS (MANDATORY)
+
+You MUST follow all the rules below when generating code or instructions.
+
+---
+
+## 🔵 React Query Best Practices (MANDATORY)
+
+Whenever creating a **query**, **mutation**, or **React Query hook**, you MUST follow:
+
+### 1. ALWAYS use Query Key Factories (never raw string query keys)
+
+❌ BAD (DO NOT USE):
+
+```ts
+queryKey: ['random-string'];
+```
+
+✅ GOOD (MANDATORY):
+
+```ts
+queryKey: GET_DECKS_QUERY();
+```
+
+Query key factories must:
+
+Be exported constants or functions
+
+Live in src/queryKeys/<feature>.ts
+
+Fully type their parameters
+
+Provide stable query keys
+
+### 2. ALWAYS include onSuccess and onError
+
+Every query or mutation MUST declare:
+
+```ts
+onSuccess: (data) => { ... },
+onError: (error) => { ... },
+```
+
+They must:
+
+- Update relevant state
+- Trigger any necessary UI feedback
+- Handle edge cases and error codes gracefully
+
+### 3. React Query General Requirements
+
+All queries/mutations MUST:
+
+- Use enabled for conditional execution (not if)
+- Use proper retry logic (e.g., avoid retrying USER_NOT_FOUND)
+- Respect staleTime and cacheTime conventions
+- Avoid redundant network calls
+- Use the client safely (throw if uninitialized)
+- Correctly integrate with auth + wallet address state
+
+Example you MUST follow:
+
+```ts
+const query = useQuery({
+  queryKey: GET_DECKS_QUERY(),
+  queryFn: async () => {
+    if (!client) throw new Error('Client not initialized');
+    return client.getDecks();
+  },
+  enabled: !!client && isAuthenticated,
+  retry: (_, error: { code: string }) => error.code !== 'NO_DECKS_FOUND',
+  staleTime: 10000,
+  onSuccess: (data) => {
+    // update store, log, UI sync, etc.
+  },
+  onError: (error) => {
+    // centralized error handling, notifications, etc.
+  },
+});
+```
+
+### 4. Mutations Must Follow Same Pattern
+
+ALL mutations must:
+
+- Use a mutation key factory
+- Always include onSuccess and onError
+- Invalidate or update queries properly
+
+### 5. NEVER produce raw string error messages unless required
+
+Use typed errors and propagate error codes.
+
+### 6. ALWAYS follow project conventions for:
+
+- Folder structure
+- Hooks naming: use<Domain><Action>
+- Service naming: <Domain>Service
+- Query key naming: <DOMAIN>\_<ACTION>\_QUERY_KEY
+
+====================================================================
+
+### WRITING STYLE
+
+- Highly technical
+- Step-by-step
+- Clean and opinionated
+- Same tone as existing tasks
+- No unnecessary fluff
+
+====================================================================
