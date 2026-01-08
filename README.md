@@ -88,6 +88,26 @@ NODE_ENV=development
 - **Client**: Next.js 15 with App Router, React Query, WebSocket support
 - **Server**: Hono API with PostgreSQL, WebSocket server, Game engine
 
+## Documentation
+
+Server documentation is available in `server/docs/`:
+
+- **[API Documentation](server/docs/API_DOCUMENTATION.md)** - Full API reference, database schema, WebSocket events
+- **[Type-Safe Card System](server/docs/type-safe-card-system.md)** - Card/deck builder system with TypeScript validation
+
+### Design Patterns
+
+This project demonstrates several design patterns in `server/docs/design-patterns/`:
+
+| Pattern | Purpose |
+|---------|---------|
+| [Factory](server/docs/design-patterns/factory-pattern.md) | Card creation with pluggable type strategies |
+| [Strategy](server/docs/design-patterns/strategy-pattern.md) | Attack behaviors and card factory strategies |
+| [Observer](server/docs/design-patterns/observer-pattern.md) | Game events decoupled from WebSocket/UI |
+| [Builder](server/docs/design-patterns/builder-pattern.md) | Type-safe `defineCard()`, `defineAbility()`, `defineDeck()` |
+| [Registry](server/docs/design-patterns/registry-pattern.md) | O(1) strategy/ability lookup |
+| [Singleton](server/docs/design-patterns/singleton-pattern.md) | Global game engine and event emitter |
+
 ## License
 
 ISC
