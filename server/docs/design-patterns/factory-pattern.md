@@ -2,58 +2,134 @@
 
 ## Overview
 
-The Factory Pattern is used for centralized card creation. All cards are created through the `CardFactory` class, ensuring consistency, validation, and type safety.
+The Factory Pattern centralizes card creation through the `CardFactory` class. Combined with the Strategy pattern, it uses pluggable `CardFactoryStrategy` implementations to handle type-specific validation and creation for each card type (creature, spell, enchantment, artifact).
 
 ## Implementation
 
-**Location**: `server/src/modules/cards/factory/cards-factory.ts`
+**Location**: `src/modules/cards/factory/cards-factory.ts`
+
+### CardFactory Class
 
 ```typescript
 export class CardFactory {
-  static createCreature(name, energyCost, power, toughness, options?)
-  static createSpell(name, energyCost, effect, options?)
-  static createEnchantment(name, energyCost, abilities, options?)
-  static createArtifact(name, energyCost, abilities, options?)
+  private readonly cardFactoryStrategy: CardFactoryStrategy;
+
+  constructor(cardFactoryStrategy: CardFactoryStrategy) {
+    this.cardFactoryStrategy = cardFactoryStrategy;
+  }
+
+  createCard(cardData: CardDefinition): CardBase {
+    this.validateBaseCard(cardData);
+    return this.cardFactoryStrategy.createCard(cardData);
+  }
+
+  private validateBaseCard(card: CardDefinition): void {
+    // Validates required fields and energy cost (0-10)
+  }
 }
 ```
 
-## Why This Pattern?
+### CardFactoryStrategy Interface
 
-The Factory Pattern provides:
-- Centralized card creation
-- Consistent validation
-- Type-safe creation
-- Easy to maintain and extend
-
-## Benefits for Our Game
-
-1. **Consistency**: All cards created the same way
-2. **Validation**: Required fields checked automatically
-3. **Type Safety**: TypeScript ensures correct types
-4. **Extensibility**: Easy to add new card types
-5. **Maintainability**: Changes in one place
-
-## Browser Performance Impact
-
-- **Smaller Bundle**: Centralized logic reduces code duplication
-- **Faster Validation**: Single validation path
-- **Better Tree Shaking**: Static methods easier to optimize
-
-## Example
+**Location**: `src/modules/cards/factory/types.ts`
 
 ```typescript
-// Factory creation with validation
-const card = CardFactory.createCreature(
-  "Dragon",
-  5, // energyCost
-  5, // power
-  5, // toughness
-  {
-    rarity: "rare",
-    description: "A powerful dragon"
-  }
-);
-// Validation happens automatically
-// Type safety guaranteed
+export interface CardFactoryStrategy {
+  createCard(cardData: CardDefinition): CardDefinition;
+}
 ```
 
+### Strategy Implementations
+
+**Location**: `src/modules/cards/factory/strategies/`
+
+| Strategy | File | Purpose |
+|----------|------|---------|
+| `CreatureCardFactory` | `creature-card.ts` | Validates power/toughness, sets `canAttack: true` |
+| `SpellCardFactory` | `spell-card.ts` | Validates spell effect |
+| `EnchantmentCardFactory` | `enchantment-card.ts` | Validates persistent abilities |
+| `ArtifactCardFactory` | `artifact-card.ts` | Validates artifact abilities |
+
+## Why This Pattern?
+
+The Factory + Strategy combination provides:
+- **Centralized validation** - Base card rules in one place
+- **Type-specific logic** - Each card type has its own factory strategy
+- **Open/Closed Principle** - Add new card types without modifying CardFactory
+
+## Benefits for This TCG
+
+### 1. Single Point of Validation
+All cards pass through `validateBaseCard()` which ensures:
+- Required fields exist (name, type, rarity, description)
+- Energy cost is valid integer 0-10
+- No card bypasses validation
+
+### 2. Type-Specific Rules Isolated
+```typescript
+// CreatureCardFactory validates creature-specific rules
+class CreatureCardFactory implements CardFactoryStrategy {
+  createCard(cardDefinition: CardDefinition): CreatureCard {
+    validateRequiredFields(cardDefinition, ['power', 'toughness']);
+    const power = validatePositiveNumber(cardDefinition.power, 'Power');
+    const toughness = validatePositiveNumber(cardDefinition.toughness, 'Toughness');
+
+    return {
+      ...cardDefinition,
+      type: 'creature',
+      power,
+      toughness,
+      abilities: cardDefinition.abilities || [],
+      canAttack: true,
+    };
+  }
+}
+```
+
+### 3. Easy to Extend
+Adding a new card type (e.g., "land") requires:
+1. Create `LandCardFactory implements CardFactoryStrategy`
+2. Add validation for land-specific fields
+3. No changes to existing code
+
+## Runtime Benefits
+
+- **Fail-fast**: Invalid cards throw at creation time, not during gameplay
+- **Type safety**: Each factory returns properly typed card (CreatureCard, SpellCard, etc.)
+- **Memory efficiency**: Factories are lightweight, no duplication of validation logic
+
+## Example Usage
+
+```typescript
+// Create factories for each card type
+const creatureFactory = new CardFactory(new CreatureCardFactory());
+const spellFactory = new CardFactory(new SpellCardFactory());
+
+// Create a creature card
+const dragon = creatureFactory.createCard({
+  name: "Fire Elemental",
+  type: "creature",
+  rarity: "common",
+  description: "A blazing elemental",
+  energyCost: 3,
+  power: 3,
+  toughness: 3
+});
+// Returns CreatureCard with canAttack: true
+
+// Create a spell card
+const fireball = spellFactory.createCard({
+  name: "Fireball",
+  type: "spell",
+  rarity: "common",
+  description: "Deal 3 damage",
+  energyCost: 3,
+  effect: { type: "damage", target: "any", value: 3 }
+});
+// Returns SpellCard with validated effect
+```
+
+## Related Patterns
+
+- **Strategy Pattern** - `CardFactoryStrategy` implementations
+- **Builder Pattern** - `defineCard()` uses factories internally

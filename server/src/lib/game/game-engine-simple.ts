@@ -129,7 +129,7 @@ export class GameEngine {
         gameId: gameSession.id,
         currentTurn: 1,
         currentPlayerIndex: 0,
-        phase: 'untap',
+        phase: 'draw',
         step: 'beginning',
         players: gamePlayers,
         cards: [],
@@ -505,7 +505,6 @@ export class GameEngine {
     }
 
     // Reset phase and step for new player (start with untap, then move to draw)
-    gameState.phase = 'untap';
     gameState.step = 'beginning';
 
     // Start new turn for the new player (gain energy)

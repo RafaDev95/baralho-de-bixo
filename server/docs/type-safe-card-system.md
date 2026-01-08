@@ -7,18 +7,21 @@ The TCG project now features a fully type-safe card and deck system that replace
 ## Key Benefits
 
 ### Type Safety
+
 - ✅ **Compile-time error detection** - Catch errors before runtime
 - ✅ **IDE autocomplete and refactoring** - Full IntelliSense support
 - ✅ **Impossible to reference non-existent cards** - TypeScript prevents typos
-- ✅ **Mana cost consistency enforced by types** - No more fire/red confusion
+- ✅ **Energy cost validated by types** - Must be integer 0-10
 
 ### Developer Experience
+
 - ✅ **Easy to add new cards** - Copy-paste template with type safety
 - ✅ **Reusable abilities across cards** - Plugin-based ability system
 - ✅ **Clear validation errors with line numbers** - Better debugging
 - ✅ **Better code organization** - Logical file structure
 
 ### Maintainability
+
 - ✅ **Single source of truth for types** - No duplication
 - ✅ **Refactoring-friendly** - IDE can find all usages
 - ✅ **Easy to find card usages** - Go to definition works
@@ -27,6 +30,7 @@ The TCG project now features a fully type-safe card and deck system that replace
 ## Architecture
 
 ### File Structure
+
 ```
 src/modules/cards/
 ├── definitions/                    # TypeScript card definitions
@@ -70,49 +74,52 @@ src/modules/decks/
 ### Creating Cards
 
 #### Creature Card
+
 ```typescript
 import { defineCard } from '../factory/card-definition-builder';
 import { quickStrike } from '../abilities';
 
 export const flameImp = defineCard({
-  name: "Flame Imp",
-  rarity: "common",
-  type: "creature",
-  description: "A small but aggressive imp",
+  name: 'Flame Imp',
+  rarity: 'common',
+  type: 'creature',
+  description: 'A small but aggressive imp',
   energyCost: 1,
   power: 2,
   toughness: 1,
-  abilities: [quickStrike]
+  abilities: [quickStrike],
 });
 ```
 
 #### Spell Card
+
 ```typescript
 export const fireball = defineCard({
-  name: "Fireball",
-  rarity: "common",
-  type: "spell",
-  description: "Deal 3 damage to target creature or player",
+  name: 'Fireball',
+  rarity: 'common',
+  type: 'spell',
+  description: 'Deal 3 damage to target creature or player',
   energyCost: 3,
   effect: {
-    type: "damage",
-    target: "any",
-    value: 3
-  }
+    type: 'damage',
+    target: 'any',
+    value: 3,
+  },
 });
 ```
 
 #### Enchantment Card
+
 ```typescript
 import { burningCycle } from '../abilities';
 
 export const eternalFlame = defineCard({
-  name: "Eternal Flame",
-  rarity: "rare",
-  type: "enchantment",
-  description: "At the start of your turn, deal 1 damage to each player",
+  name: 'Eternal Flame',
+  rarity: 'rare',
+  type: 'enchantment',
+  description: 'At the start of your turn, deal 1 damage to each player',
   energyCost: 3,
-  abilities: [burningCycle]
+  abilities: [burningCycle],
 });
 ```
 
@@ -129,8 +136,8 @@ export const quickStrike = defineAbility({
   effect: {
     type: 'damage',
     target: 'player',
-    value: 2
-  }
+    value: 2,
+  },
 });
 ```
 
@@ -149,13 +156,14 @@ export const monoRedAggro = defineDeck({
     { card: fireElemental, count: 3 },
     { card: fireball, count: 4 },
     // ... more cards
-  ]
+  ],
 });
 ```
 
 ## Type Definitions
 
 ### Card Types
+
 ```typescript
 // Base card interface
 interface BaseCardDefinition {
@@ -186,19 +194,19 @@ interface SpellCardDefinition extends BaseCardDefinition {
 }
 ```
 
-### Mana Cost System
+### Energy Cost System
+
+Cards use a simple energy cost system:
+
 ```typescript
-interface ManaCostDefinition {
-  red?: number;
-  blue?: number;
-  green?: number;
-  white?: number;
-  black?: number;
-  generic: number; // Always required
-}
+// Energy cost is a simple integer 0-10
+energyCost: number; // 0 = free, 10 = maximum cost
 ```
 
+Players start with 1 energy and gain +1 per turn (max 10). Energy resets to max each turn.
+
 ### Ability System
+
 ```typescript
 interface AbilityDefinition {
   id: string;
@@ -219,31 +227,48 @@ interface AbilityDefinition {
 ## Validation
 
 ### Compile-Time Validation
+
 The system provides automatic validation at compile time:
 
 ```typescript
 // ❌ This will fail at compile time
 const invalidCard = defineCard({
-  name: "Test",
-  type: "creature",
-  manaCost: { red: -1 }, // Invalid negative mana
+  name: 'Test',
+  type: 'creature',
+  rarity: 'common',
+  description: 'Test creature',
+  energyCost: 2,
   power: 2,
-  toughness: 1
-  // Missing required fields will cause TypeScript errors
+  // Missing toughness - TypeScript error!
 });
 ```
 
 ### Runtime Validation
+
 Additional runtime validation ensures data integrity:
 
 ```typescript
 // ❌ This will throw at runtime
 defineCard({
-  name: "Test",
-  type: "creature",
-  manaCost: { red: 1, generic: 0 },
+  name: 'Test',
+  type: 'creature',
+  rarity: 'common',
+  description: 'Test creature',
+  energyCost: 15, // Invalid! Must be 0-10
+  power: 2,
+  toughness: 1,
+});
+// Error: Invalid energy cost: 15. Must be an integer between 0 and 10.
+
+// ❌ Also throws at runtime
+defineCard({
+  name: 'Test',
+  type: 'creature',
+  rarity: 'common',
+  description: 'Test creature',
+  energyCost: 2,
   power: -1, // Invalid negative power
-  toughness: 1
+  toughness: 1,
 });
 // Error: Invalid power: -1. Must be a non-negative integer.
 ```
@@ -251,27 +276,47 @@ defineCard({
 ## Migration from JSON
 
 ### Before (JSON)
+
 ```json
 {
   "name": "Flame Imp",
   "type": "creature",
-  "manaCost": { "fire": 1, "generic": 0 },
+  "rarity": "common",
+  "cost": 1,
   "power": 2,
   "toughness": 1
 }
 ```
 
+Problems with JSON approach:
+
+- Typos in card names not caught until runtime
+- No autocomplete or refactoring
+- No type checking on cost, power, toughness values
+
 ### After (TypeScript)
+
 ```typescript
+import { quickStrike } from '../abilities';
+
 export const flameImp = defineCard({
-  name: "Flame Imp",
-  type: "creature",
-  manaCost: { red: 1, generic: 0 }, // Consistent naming
+  name: 'Flame Imp',
+  type: 'creature',
+  rarity: 'common',
+  description: 'A small but aggressive imp',
+  energyCost: 1, // Simple integer 0-10
   power: 2,
   toughness: 1,
-  abilities: [quickStrike] // Type-safe ability reference
+  abilities: [quickStrike], // Type-safe ability reference
 });
 ```
+
+Benefits:
+
+- Compile-time validation
+- IDE autocomplete
+- Rename refactoring works across codebase
+- Direct ability references (not strings)
 
 ## System Architecture
 
@@ -288,6 +333,7 @@ The system includes comprehensive tests covering:
 - ✅ Type safety enforcement
 
 Run tests with:
+
 ```bash
 bun test tests/type-safe-system.test.ts
 ```
@@ -295,18 +341,21 @@ bun test tests/type-safe-system.test.ts
 ## Best Practices
 
 ### Adding New Cards
+
 1. **Choose the right file** - Add to appropriate category (creatures/spells/etc.)
 2. **Use existing abilities** - Reuse abilities from the ability registry
-3. **Follow naming conventions** - Use consistent mana type names (red, blue, etc.)
+3. **Follow naming conventions** - Use consistent card type and rarity values
 4. **Add to exports** - Export from the appropriate index.ts file
 
 ### Creating New Abilities
+
 1. **Define in appropriate file** - Combat abilities in `combat-abilities.ts`
 2. **Use unique IDs** - Ensure ability IDs are unique across the system
 3. **Include all required fields** - Name, description, trigger, effect
 4. **Add to registry** - Export from the abilities index
 
 ### Building Decks
+
 1. **Use type-safe references** - Reference cards directly, not by name
 2. **Validate deck size** - Ensure minimum 15 cards
 3. **Test deck validation** - Use `validateDeckForPlay()` function
@@ -316,18 +365,22 @@ bun test tests/type-safe-system.test.ts
 ### Common Issues
 
 #### "Ability effect must have a target"
+
 - **Cause**: Ability definition missing `target` field
 - **Solution**: Add `target: 'self'` or appropriate target to effect
 
 #### "Deck must have at least 15 cards"
+
 - **Cause**: Deck doesn't meet minimum size requirement
 - **Solution**: Add more cards or increase counts
 
 #### Import errors
+
 - **Cause**: Missing exports in index.ts files
 - **Solution**: Add `export * from './filename'` to appropriate index.ts
 
 ### Debug Tips
+
 - Use TypeScript strict mode for better error detection
 - Check console for runtime validation errors
 - Use IDE "Go to Definition" to trace card references
@@ -336,6 +389,7 @@ bun test tests/type-safe-system.test.ts
 ## Future Enhancements
 
 ### Planned Features
+
 - **Card Images**: Support for card artwork
 - **Advanced Search**: Full-text search with filters
 - **Deck Analytics**: Win rates and performance metrics
@@ -343,21 +397,10 @@ bun test tests/type-safe-system.test.ts
 - **Format Support**: Standard, modern, legacy formats
 
 ### Extensibility
+
 The system is designed to be easily extensible:
 
 - **New Card Types**: Add new interfaces extending `BaseCardDefinition`
 - **New Abilities**: Add to ability registry with proper typing
 - **New Effects**: Extend `EffectType` union type
 - **New Triggers**: Add to `AbilityTrigger` union type
-
-## Contributing
-
-When contributing to the card system:
-
-1. **Follow TypeScript best practices**
-2. **Add comprehensive tests**
-3. **Update documentation**
-4. **Maintain backward compatibility**
-5. **Use consistent naming conventions**
-
-For questions or issues, refer to the project repository or create an issue.

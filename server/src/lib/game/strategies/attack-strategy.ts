@@ -1,9 +1,9 @@
 /**
  * Attack Strategy Pattern
- * 
+ *
  * Encapsulates different attack behaviors for creatures.
  * Allows easy extension of attack types without modifying existing code.
- * 
+ *
  * Benefits:
  * - Open/Closed Principle: Open for extension, closed for modification
  * - Single Responsibility: Each strategy handles one attack type
@@ -19,10 +19,7 @@ export interface AttackStrategy {
   /**
    * Calculate attack damage and effects
    */
-  attack(
-    attackerPower: number,
-    context?: Record<string, unknown>
-  ): AttackResult;
+  attack(attackerPower: number): AttackResult;
 
   /**
    * Get strategy name
@@ -39,10 +36,7 @@ export class DirectAttackStrategy implements AttackStrategy {
     return 'direct';
   }
 
-  attack(
-    attackerPower: number,
-    _context?: Record<string, unknown>
-  ): AttackResult {
+  attack(attackerPower: number): AttackResult {
     return {
       damage: attackerPower,
     };
@@ -57,10 +51,7 @@ export class DoubleStrikeStrategy implements AttackStrategy {
     return 'double_strike';
   }
 
-  attack(
-    attackerPower: number,
-    _context?: Record<string, unknown>
-  ): AttackResult {
+  attack(attackerPower: number): AttackResult {
     return {
       damage: attackerPower * 2,
       effects: ['double_strike'],
@@ -82,10 +73,7 @@ export class PiercingAttackStrategy implements AttackStrategy {
     return 'piercing';
   }
 
-  attack(
-    attackerPower: number,
-    _context?: Record<string, unknown>
-  ): AttackResult {
+  attack(attackerPower: number): AttackResult {
     return {
       damage: attackerPower + this.pierceAmount,
       effects: ['piercing'],
@@ -131,4 +119,3 @@ export class AttackStrategyFactory {
     this.strategies.set(name, strategy);
   }
 }
-
